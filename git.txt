@@ -1,0 +1,68 @@
+* git 服务器
+1、切换到root用户
+
+stevenrao@server:~$  su - root 
+2、创建git组
+
+root@server:~$  groupadd git
+root@server:~$  groupadd user 
+3、添加git账户
+
+root@server:~$ useradd git -g git -m -s /bin/bash
+root@server:~$ usermod -G git,user git #把git同时加入git组和user组 
+root@server:~$ passwd git #设置密码
+
+4、添加到sudoers用户中去，尽量不要用root操作
+
+root@server:~$ vim /etc/sudoers #加上下面一句 git ALL=(ALL:ALL) ALL 
+root@server:~$ su - git #切换到git用户下工作 
+5、安装3个软件包
+
+git@server:~$ sudo apt-get install git git-core ssh 
+6、建立一个空白仓库
+
+git@server:~$ mkdir project.git
+git@server:~$ cd project.git
+git@server:~/project.git$ git --bare 
+init Initialized empty Git repository in /home/git/project.git/ 
+
+7、再添加几个账户, 本样例账户为stevenrao
+
+git@server:~/project.git$ cd ~
+git@server:~$ sudo useradd stevenrao -g user -m -s /bin/bash
+git@server:~$ sudo usermod -G git,user stevenrao #把stevenrao同时加入git组和user组 
+git@server:~$ sudo passwd stevenrao #设置密码 
+8、配置stevenrao用户秘钥（秘钥生成参考后面git client 配置中的2,3步骤）
+
+git@server:~$  mkdir /home/git/.ssh
+git@server:~$ vim /home/git/.ssh/authorized_keys
+sh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAp1s5dDRyMeY7q6mRlQz5DbfKC/Ebtl5/gdanOaASjnNtJPULuTyVIj3UmYzZFVaVO+3yC31+cQTGWp2bXzKEuXqIUxhygvOCr+vwfRK8FrpXOLLF5WWQYd6UgpV6/6mgRPuVVDa39zqGwKEVBgoIpiVYRBSIywbO0Qf9SGQV4CevEny8aGTZCE/UHq19ec5w9jrsvij5zt xyFlvfjIaDOb8F/b3IqZ1v5PB5UHiJaZqE0xjxFiA6wtlprkrNOQKyBI44MCjw8P964+ED+w2I4n8TisCyok5FGBn66HzdBV59166NZfP+4CFScO8hDXpUnWPvpgjhtWUQeYCMLUp5eQ== stevenrao@ubuntu 
+9、配置git config
+
+git@server:~/project.git$ vim /home/git/project.git/config 
+[core]
+        repositoryformatversion = 0 filemode = true bare = true (添加下面两行)
+[receive]
+        denyCurrentBranch = ignore 
+10、重启ssh服务
+
+git@server:~$  /etc/init.d/ssh restart
+
+# ============
+第四步，初始化Git仓库：
+
+先选定一个目录作为Git仓库，假定是/srv/sample.git，在/srv目录下输入命令：
+
+$ sudo git init --bare sample.git
+Git就会创建一个裸仓库，裸仓库没有工作区，因为服务器上的Git仓库纯粹是为了共享，所以不让用户直接登录到服务器上去改工作区，并且服务器上的Git仓库通常都以.git结尾。然后，把owner改为git：
+
+$ sudo chown -R git:git sample.git
+第五步，禁用shell登录：
+
+出于安全考虑，第二步创建的git用户不允许登录shell，这可以通过编辑/etc/passwd文件完成。找到类似下面的一行：
+
+git:x:1001:1001:,,,:/home/git:/bin/bash
+改为：
+
+git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell
+这样，git用户可以正常通过ssh使用git，但无法登录shell，因为我们为git用户指定的git-shell每次一登录就自动退出。
