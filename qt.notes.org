@@ -1,0 +1,451 @@
+# (insert "\n" buffer-file-name)
+* qmake: makefile, cmake , 用 QT：qmake 生成 makefile 文件
+   # some.pro 文件例子。 查看 QT Creator 的帮助。
+QT += core
+QT -= gui
+
+TARGET = test
+CONFIG   += console
+CONFIG   -= app_bundle
+TEMPLATE = app
+
+#INCLUDEPATH:应用程序所需的额外的包含路径列表
+INCLUDEPATH += ./lib #注：此时lib放在编译目标地址的源目录下面
+
+#DEPENDPATH:应用程序所依赖的搜索路径
+DEPENDPATH += ./lib 
+
+#-L添加目录，-l指定共享库名称
+LIBS += -L./lib -lbase
+
+SOURCES += main.cpp
+
+
+* poppler
+** 使用 poppler-qt
+   运行程序时，制定使用的库路径，因为系统中有其他版本，不指定会报错。
+   LD_LIBRARY_PATH="/usr/local/lib:/home/zsl/Qt/5.5/gcc/lib"
+   export LD_LIBRARY_PATH
+
+** 编译 poppler
+   # poppler.qt5.sh, 需要 source 执行该脚本, 编译 poppler qt5接口
+#!/bin/sh
+export QTDIR=/home/labwe/Qt5.2.1/5.2.1/gcc
+export PATH=$PATH:$QTDIR/bin
+export POPPLER_QT5_CFLAGS=-I$QTDIR/include/
+export POPPLER_QT5_LIBS="-L$QTDIR/lib/ -lQt5Core -lQt5Gui -lQt5Xml -lQt5Widgets"
+export POPPLER_QT5_TEST_CFLAGS=-I$QTDIR/include/
+export POPPLER_QT5_TEST_LIBS="-L$QTDIR/lib/ -lQt5Test"
+export MOCQT5="$QTDIR/bin/moc"
+
+pkg-config --libs poppler-qt5
+-L/usr/local/lib -lpoppler-qt5
+pkg-config --cflags poppler-qt5
+-I/usr/local/include/poppler/qt5 -I/usr/local/include/poppler
+
+
+* 工作计划 V2 2017-06-09 14:43:23 为java提供签名动态库
+** 动态使用 so
+   编译选项如下：gcc -rdynamic -o main main.c -ldl
+
+   Linux提供了一套API来动态装载库。下面列出了这些API： 
+   dlopen，打开一个库，并为使用该库做些准备。
+   dlsym，在打开的库中查找符号的值。
+   dlclose，关闭库。
+   dlerror，返回一个描述最后一次调用dlopen、dlsym，或dlclose的错误信息的字符串。
+   C语言用户需要包含头文件dlfcn.h才能使用上述API。
+
+   //函数指针 typedef int (*CAC_FUNC)(int, int);
+   #include <dlfcn.h>
+   void *dlopen(const char *filename, int flag);
+   RTLD_LAZY 暂缓决定，等有需要时再解出符号 
+   RTLD_NOW 立即决定，返回前解除所有未决定的符号。
+   char *dlerror(void);
+   void *dlsym(void *handle, const char *symbol);
+   int dlclose(void *handle);
+
+** 编译 linux 版印章库 GMESeal
+   # error
+GMSeal2Image.o: In function `x_init':
+GMSeal2Image.c:(.text.startup+0x0): multiple definition of `x_init'
+GMESeal.o:GMESeal.c:(.text.startup+0x0): first defined here
+GMSeal2Image.o: In function `x_fini':
+GMSeal2Image.c:(.text.exit+0x0): multiple definition of `x_fini'
+GMESeal.o:GMESeal.c:(.text.exit+0x0): first defined here
+collect2: error: ld returned 1 exit status
+# 注释掉 GMSeal2Image.c 中的 x_init 和 x_fini 定义，编译成功。
+
+** linux.so 编译选项 -fPIC
+   生产动态链接库，编译参数 gcc -fPIC -shared
+   在Linux系统中，动态链接文件称为动态共享对象（DSO，Dynamic Shared Objects）
+   简称共享对象，一般是以.so为扩展名的文件。
+   在Windows系统中，则称为动态链接库（Dynamic Linking Library），
+   很多以.dll为扩展名。这里只备忘Linux的共享对象。
+
+   在实现一共享对象时，最一般的编译链接命令行为： 
+   g++ -fPIC -shared test.cc -o lib.so
+   或者是：
+   g++ -fPIC test.cpp -c -o test.o
+   ld -shared test.o -o lib.so
+   上面的命令行中-shared表明产生共享库，而-fPIC则表明使用地址无关代码。PIC：Position Independent Code.    
+   Linux下编译共享库时，必须加上-fPIC参数，否则在链接时会有错误提示
+   
+** JNI or no
+利用JNI调用本地代码的方法来实现一个计算Int数组总和的功能
+
+使用JNI调用本地代码，整个开发流程主要包括以下几个步骤：
+1、创建一个Java类（IntArray.java）；
+2、使用javac编译该类（生成IntArray.class）；
+3、使用javah -jni 产生头文件（生成IntArray.h）;
+4、使用本地代码实现头文件中定义的方法（编写IntArray.c）;
+5、编译生成本地动态库（生成libIntArray.so）；
+6、使用Java运行程序。
+
+* 学习计划 2017-06-08 16:33:02
+1. 全面概要的了解，概览全貌，了解其思想和哲学
+   # 方法：查阅资料
+2. 动手实践具体例子：知其然。各种类型应用的体验，各种模块和组件的使用。
+3. 源码阅读，知其所以然。
+
+* 资料
+  Qt 使用Poppler实现pdf阅读器 http://blog.csdn.net/chy555chy/article/details/51613545
+
+  Qt5中可以用QPdfWriter实现 http://doc.qt.io/qt-5/qpdfwriter.html
+  http://blog.csdn.net/chlk118/article/details/72511157
+  #include <QPdfWriter>
+  
+  Qt5中新出来的类QPdfWriter，可以很快实现导出pdf，只需要调用QPainter绘画文字、图片即可。
+  QPdfWriter中还有如下方法：
+  void setCreator(const QString & creator)//设置PDF作者
+  bool setPageLayout(const QPageLayout & newPageLayout)//设置新页面的页面布局
+  bool setPageMargins(const QMarginsF & margins)//设置页边距
+  bool setPageMargins(const QMarginsF & margins, QPageLayout::Unit units)
+  bool setPageOrientation(QPageLayout::Orientation orientation)
+  bool setPageSize(const QPageSize & pageSize)//设置页面大小A4,B4
+  void setResolution(int resolution)//设置分辨率
+  void setTitle(const QString & title)//设置标题
+  实例：
+  [cpp] view plain copy print?
+  //Qt5 pdfwriter生成pdf  
+  QFile pdf_file("QPdfWriter.pdf");  
+  pdf_file.open(QIODevice::WriteOnly);  
+  QPdfWriter *pdf_writer = new QPdfWriter(&pdf_file);  
+  QPainter *pdf_painter= new QPainter(pdf_writer);  
+  pdf_writer->setPageSize(QPagedPaintDevice::A5);  
+  pdf_painter->drawText(QRect(100, 100, 2000, 200), "pdf writer1");//第一个页面  
+  pdf_writer->newPage();  
+  pdf_painter->drawText(QRect(100, 100, 2000, 200), "pdf writer2");//第二个页面  
+  delete pdf_painter;  
+  delete pdf_writer;  
+  pdf_file.close(); 
+
+http://9291927.blog.51cto.com/9281927/1867974
+QT事件处理机制 http://9291927.blog.51cto.com/9281927/1868744
+QT信号与槽机制 http://9291927.blog.51cto.com/9281927/1868745
+QT5.6Notepad http://9291927.blog.51cto.com/9281927/1883071
+QT-哲学 http://www.cnblogs.com/findumars/category/659296.html
+QT学习之路2 https://www.devbean.net/2012/08/qt-study-road-2-qt-intro/
+QT Quick http://blog.csdn.net/foruok/article/details/28634543
+http://blog.51cto.com/zt/20 QT学习之路
+
+# How to use the Poppler Qt5 interface library in three easy steps
+Programmer who would like to use the Poppler Qt5 interface library simply need to add the following line to their C++ source files:
+
+#include <poppler-qt5.h>
+A PDF document can then be loaded as follows:
+
+QString filename;
+Poppler::Document* document = Poppler::Document::load(filename);
+if (!document || document->isLocked()) {
+  // ... error message ....
+  delete document;
+  return;
+}
+Pages can be rendered to QImages with the following commands:
+
+// Paranoid safety check
+if (document == 0) {
+  // ... error message ...
+  return;
+}
+// Access page of the PDF file
+Poppler::Page* pdfPage = document->page(pageNumber);  // Document starts at page 0
+if (pdfPage == 0) {
+  // ... error message ...
+  return;
+}
+// Generate a QImage of the rendered page
+QImage image = pdfPage->renderToImage(xres, yres, x, y, width, height);
+if (image.isNull()) {
+  // ... error message ...
+  return;
+}
+// ... use image ...
+// after the usage, the page must be deleted
+delete pdfPage;
+
+Finally, don't forget to destroy the document:
+delete document;
+
+
+** Cairo是非常流行的开源2D图形渲染引擎库，它支持包括X-Windos，Win32，图像，pdf在内的各种输出设备。
+   已被广泛的使用在多个平台上来渲染图形界面，包括Firefox/Webkit-EFL/GTK+/Poppler等等。
+Cairo的基本绘图模型与概念
+在使用Cairo编程前，我们应该对于Cairo的基本绘图模型做一了解。这些模包括：表面（surfac），源（source)，遮盖(mask)，路径(path),上下文(context)和函数(verb)。
+表面(surface)
+Surface是Cair绘图的目标区域，在Cairo中使用cairo_surface_t表示。前面讲到Cair支持多种输出设备，因此我们绘图的目标区域可能是一张png图象也可能是一个pdf文件。不同目标的绘制的底层实现各不相同，而surfac对这些绘图的目标进行了一个抽象。因此，我们在创建了相应的surface后，只需要调用统一的函数对surface进行绘制，而不需要关心其后端(backend)的具体实现。
+源(source)
+Source指的是我们绘图是的具体的材料与格式，它包括画笔的粗细、颜色等等。在Cairo中，source不光可以是简的颜色，也可以是一种图案（patter）比如渐变色，甚至可以是一个表面（surface)。
+遮盖（mask）
+Mask相当于我们在绘图过程，用一张挖空了某些部分的纸遮挡在画布上。这样，在绘图过程中，只有挖空的部分会被我们所使用的源影响到，其余部分不受影响。
+路径（path）
+Path是指Cairo的绘制表面上一些虚拟的路径，它可能是一条线段，一个闭合的四边形，也可能是更加复杂的曲线。Path可以由Cairo的函数（在Cairo中被称为verb）所创建。但是，由于Path只是虚拟的路径，所以对Path的创建并不代表对表面绘制。接下来，我们还需要使用绘制函数（Cairo里称为drawing verb)进行绘制。比如，我们可以通过cairo_rectangle函数创建一个闭合的长方形的路径，然后通过cairo_fill函数填充这个长方形。
+上下文(context)
+Context是Cairo的核心结构，在Cairo中使用cairo_t来表示。它记录了当前状态下，与绘制有关的各种信息，包括之前介绍过的表面、源、遮盖、字体等等。 在任何绘制之前，我们都必须先创建一个cair_t结构，同时将它绑定到一个绘制表面上(surface)。下面的代码段创建了一个cairo_t，并将其绑定到一个640x480的png图象上。
+[cpp] view plain copy
+cairo_surface_t *surface;  
+cairo_t *cr;  
+  
+surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 640, 480);  
+cr = cairo_create (surface);  
+函数(verb)
+Cairo中与绘制相关的函数被称为verb。目前Cairo支持五种drawing verb，分别是stroke(画线)， fill(填充)，text（文字），paint（滤镜），mask（遮盖）。其中，paint相当于是整个源进行了一次操作，比如cairo_paint_with_alpha函数可以设置一个alpha值，来对整个图象进行灰度的减少。
+变换(transformation)
+Cairo还提供类似OpenGL的坐标变换操作。变换操作包括：平移(cairo_translate)，伸缩(cairo_scale)，旋转(cairo_rotate)。我们也可以通过cairo_transform函数来指定一个复杂的变换。
+
+绘制helloworld到helloworld.pdf上。
+[cpp] view plain copy
+#include <cairo.h>  
+#include <cairo-pdf.h>  
+int  
+main (int argc, char *argv[])  
+{  
+    cairo_surface_t *surface;  
+    cairo_t *cr;  
+    cairo_text_extents_t te;  
+  
+  
+   /* Prepare drawing area */  
+    int width = 200;  
+    int height = 120;  
+        
+    surface = cairo_pdf_surface_create ("helloworld.pdf", width, height);  
+    cr = cairo_create (surface);  
+  
+  
+    /* Drawing code goes here */  
+    cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);  
+    cairo_select_font_face (cr, "Georgia",  
+        CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);  
+    cairo_set_font_size (cr, 20);  
+    cairo_text_extents (cr, "helloworld", &te);  
+    cairo_move_to (cr, width/2 - te.width / 2 - te.x_bearing,  
+          height/2 - te.height / 2 - te.y_bearing);  
+    cairo_show_text (cr, "helloworld");  
+  
+  
+    cairo_destroy (cr);  
+    cairo_surface_destroy (surface);  
+  
+    return 0;  
+}
+
+gcc编译
+使用gcc编译调用了cairo的源文件时，应指定cairo的头文件目录和库文件所在目录。假设源文件文件名为cairotest.c，cairo.h等头文件所在目录为/usr/include/cairo，cairo库文件所在目录为/usr/local/lib，则可以使用以下命令编译：
+[plain] view plain copy
+gcc cairotest.c -o cairotest -I/usr/include/cairo -L/usr/local/lib/ -lcairo  
+我们也可以使用pkg-config来配置cairo的目录，然后使用如下命令来编译：
+[plain] view plain copy
+gcc -o cairotest $(pkg-config --cflags --libs cairo) cairotest.c  
+
+绘制一个矩形到rectangle.png图片上。
+[cpp] view plain copy
+#include <cairo.h>  
+  
+int  
+main (int argc, char *argv[])  
+{  
+    cairo_surface_t *surface;  
+    cairo_t *cr;  
+  
+    int width = 640;  
+    int height = 480;  
+    surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);  
+    cr = cairo_create (surface);  
+  
+    /* Drawing code goes here */  
+    cairo_set_line_width (cr, 10);  
+    cairo_set_source_rgb (cr, 0, 0, 0);  
+    cairo_rectangle (cr, width/4, height/4, width/2, height/2);  
+    cairo_stroke (cr);  
+  
+    /* Write output and clean up */  
+    cairo_surface_write_to_png (surface, "rectangle.png");  
+    cairo_destroy (cr);  
+    cairo_surface_destroy (surface);  
+  
+    return 0;  
+}  
+
+编译安装Cairo
+Ubuntu安装cairo的稳定版：
+sudo apt-get install libcairo2-dev  
+
+使用Cairo的最新版，从git上下载源代码，并编译安装。
+
+git clone git://anongit.freedesktop.org/git/cairo  
+cd cairo  
+mkdir cairobuild  
+./autogen.sh #这里可以加上配置选项  
+make   
+sudo make install
+
+
+** 2017-06-09 10:50:50 java  , linux so
+   # 先做添加签名域， 计算签名的功能， 以 so 方式提供给 java调用
+http://blog.csdn.net/oh_mourinho/article/details/52691398
+Oracle JNI Document
+http://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/jniTOC.html
+1. 编译C++为动态和静态库 so or a
+2. 测试环境 JDK 安装
+   直接下载jdk压缩包方式安装(这里只介绍jdk7的,jdk8 的原理完全一致)
+   分为下面5个步骤
+   1.官网下载JDK  jdk-8u131-linux-i586.tar.gz
+   2.解压缩,放到指定目录
+   3.配置环境变量
+   4.设置系统默认JDK
+   1. 测试jdk
+
+修改环境变量:　　
+sudo vim ~/.bashrc
+文件的末尾追加下面内容:
+
+#set oracle jdk environment
+export JAVA_HOME=/usr/lib/jvm/jdk1.7.0_60  ## 这里要注意目录要换成自己解压的jdk 目录
+export JRE_HOME=${JAVA_HOME}/jre  
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib  
+export PATH=${JAVA_HOME}/bin:$PATH  
+
+使环境变量马上生效
+source ~/.bashrc
+
+测试jdk, 显示版本信息，则成功
+java -version
+
+** 学习 Qt 开发 d:/study/Qt/notes.org
+http://blog.csdn.net/foruok/article/details/28634543
+http://blog.csdn.net/ubuntutouch/article/details/51451757
+http://blog.csdn.net/u012419303/article/details/45319249
+http://blog.csdn.net/u012419303/article/category/3138565
+http://blog.csdn.net/u012419303/article/details/45896263
+http://blog.csdn.net/u010002704/article/details/40995797
+
+Qt Quick 简单教程
+http://blog.csdn.net/foruok/article/details/28859415
+
+
+* 笔记
+** QT开发，有如下三种方式： 哪种兼容性最好呢？
+1、使用QT GUI框架，单纯硬编码
+2、使用QT Designer做UI界面,类似于MFC一样拖控件，然后再使用C++写逻辑。
+3、采用QML做UI，JavaScript写逻辑，C++写后台，三种语言混合编程。
+** QML对象一般使用下面的顺序进行构造： 
+   a. id
+   b. 属性声明
+   c. 信号声明
+   d. JavaScript函数
+   e. 对象属性
+   f. 状态
+   g. 状态切换
+
+Rectangle {  
+    anchors.left: parent.left; anchors.right: parent.right  
+    //可写成下面形式，提升可读性
+    anchors {  
+        top: parent.top; bottom: parent.bottom  
+    }  
+}
+
+QML中所有可视项目都继承自Item。
+
+** event vs. signal/slots
+事件处理流程：
+某个事件发生------>exec()循环会接收到这个事件------>
+创建一个事件对象，并将对象传递给QObject::event()------> 
+在QWidget::event()函数中，分配给特定的事件处理函数------>
+在QButton的事件处理函数中emit(clicked消息)
+
+signal发送的方式：emit
+event发送的方式：
+1：窗口系统事件；（QEvent::Type中列出的）
+2：由sendEvent()/postEvent()手动发送；
+event与signal的关系：
+两者没有必然的关系。只是有些事件发生时，在事件处理函数中会调用emit发送一个信号。
+
+** QML pk. widgets
+
+   # QML与QWidget简单的联合使用（QQuickWidget衔接）
+   http://blog.csdn.net/u014597198/article/category/6370911
+   如果碰到这种情况，软件整体并不复杂也不需要太多炫酷的效果，此时我们选择QWidget体系来做。
+   但是，可能某个小部件又非常需要炫酷的效果，QWidget并不是我们此时想要的，
+   可以用一个简单的类QQuickWidget调用QML来实现这种效果。只需要两步哦~
+   
+   1、首先添加库
+   QT       += quickwidgets
+   
+   2、代码
+   
+   #include <QQuickWidget>
+   
+   QQuickWidget* m_quickWidget = Q_NULLPTR;
+   m_quickWidget = new QQuickWidget(this); // this基类为QWidget
+   m_quickWidget->move(你需要的位置);
+   m_quickWidget->resize(你需要的尺寸);
+   
+   //很关键，默认的是SizeViewToRootObject，需要设置到View
+   m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+   
+   QUrl source("qrc:你需要的QML文件.qml");
+    m_quickWidget->setSource(source);
+
+	# Qt Quick 是 Qt 提供的一种高级用户界面技术
+	使用它可轻松地为移动和嵌入式设备创建流畅的用户界面。
+	在 Android 设备上， Qt Quick 应用默认使用 OpenGL ES ，渲染效率很高，
+	可以用它创建非常炫非常酷非常迷人的界面。
+
+ Qt Quick 模块是开发 QML 应用的标准库，提供了使用 QML 创建用户界面所需的一切东西，包括可视化类型、交互类型、动画、模型与视图、粒子效果与着色效果等等。
+
+    Qt Quick 提供了两组 API ：
+QML API ，它提供了使用 QML 语言创建用户界面所需的 QML 类型。
+C++ API ，供开发者使用 C++ 扩展 QML 应用。
+Qt Quick 包含下列主题：
+
+可视化的 Canvas
+用户输入
+元素定位与布局
+状态、过渡和动画
+数据模型、视图和数据存储
+粒子和图形特效
+方便类型
+    要使用 Qt Quick ，必须知道怎样使用 QML 语言来撰写 QML 应用。 QML 是对 JavaScript 的一种扩展，是一种说明性语言，用来描述基于 Qt 对象系统的用户界面。 QML 提供了高可读性的、声明式的、类 Json 的语法，支持结合了动态属性绑定的 JavaScript 表达式。
+
+    在介绍 Qt Quick 之前，我们先要介绍 QML 的语法，了解怎样撰写 QML 文件。
+
+	# Qt Quick 之 QML 与 C++ 混合编程详解
+	http://blog.csdn.net/foruok/article/details/32698603
+
+	widget 应用中使用 QML 的两种方式：
+	# 1. 可以直接拖拽 QQuickWidget 控件到widget窗体
+	# 2. 代码动态创建
+	QQuickWidget *m_quickWidget=new QQuickWidget();
+    QUrl source("qrc:/ui/dynamic.qml");
+    m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView );
+    m_quickWidget->setSource(source);
+    ui->dynamicQmlEmber->addWidget(m_quickWidget);
+	
+
+* 实例
+** widgets + QML
+1. 窗口 + 按钮 + ？
+2. 按钮点击加载一个图片
+3. 图片在QML中处理

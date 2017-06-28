@@ -1,0 +1,392 @@
+* 程序主要参考项目 poppler, xpdf
+  “GNU PDF”	GNU GPL	开发中的开源C语言库；完成时会提供实现PDF 1.7规范所有特性的功能。
+  （由于Poppler的可用性，2011年10月6日，GNU PDF不再被FSF列为“高优先级计划”。）
+  git clone git://git.savannah.gnu.org/pdf.git
+
+** poppler
+#include <poppler-qt5.h>
+
+QString filename;
+// A PDF document can then be loaded as follows:
+Poppler::Document* document = Poppler::Document::load(filename);
+if (!document || document->isLocked()) {
+  // ... error message ....
+  delete document;
+  return;
+}
+
+// Pages can be rendered to QImages with the following commands:
+
+// Paranoid safety check
+if (document == 0) {
+  // ... error message ...
+  return;
+}
+// Access page of the PDF file
+Poppler::Page* pdfPage = document->page(pageNumber);  // Document starts at page 0
+if (pdfPage == 0) {
+  // ... error message ...
+  return;
+}
+// Generate a QImage of the rendered page
+QImage image = pdfPage->renderToImage(xres, yres, x, y, width, height);
+if (image.isNull()) {
+  // ... error message ...
+  return;
+}
+// ... use image ...
+// after the usage, the page must be deleted
+delete pdfPage;
+// Finally, don't forget to destroy the document:
+delete document;
+
+* pdf doc-format Bugs
+1. /Resources 少写了最后的一个 s, 提示找不到资源
+2. page /Annots 数组中引用了已经删除的对象
+3. 
+* pdf reference
+http://www.greatbear.cn/article/id153
+** 增量更新程序类
+1. PDF文件打开和解析
+2. 增量更新部分的生成：xref, trailer。计算偏移量
+   5 0 obj<</CreationDate(D:20170616134022+08'00')/ModDate(D:20170619094638+08'00')>>endobj
+   trailer<</Size 22/Root 7 0 R/Info 5 0 R /Prev 1162/ID[???？？？]>>
+
+   7 0 obj<</Names 8 0 R/Outlines 1 0 R/Metadata 4 0 R/Pages 2 0 R/Type/Catalog>>endobj
+   7 0 obj<</Names 8 0 R/Outlines 1 0 R/Metadata 43 0 R/AcroForm 26 0 R/Pages 2 0 R/Type/Catalog>>endobj
+   43 0 obj<</Subtype/XML/Length 3057/Type/Metadata>>stream ?
+   /Metadata (optional)
+*** example 添加空白签名域
+1. Info: 5 0 obj<</CreationDate(D:20170616134022+08'00')/ModDate(D:20170619094638+08'00')>>endobj
+2. trailer<</Size 22/Root 7 0 R/Info 5 0 R /Prev 1162>>
+3. AcroForm in Catalog
+   7 0 obj<</Names 8 0 R/Outlines 1 0 R/AcroForm 26 0 R/Pages 2 0 R/Type/Catalog>>endobj
+4. AcroFrom Dictionary
+   26 0 obj<</Fields[30 0 R]>>endobj
+5. Form Field
+   30 0 obj<</FT/Sig/Type/Annot/Rect[185.155 687.001 259.217 719.344]/F 4/T/(Signature1)/AP<</N 42 0 R>>
+   /Subtype/Widget/P 9 0 R>>endobj
+6. Appearance
+   42 0 obj<</Subtype/Form/Length 40/Resources<</ProcSet[/PDF]>>/Type/XObject/BBox[0.0 0.0 74.0621 32.3435]/FormType 1>>
+   stream
+   0.75 1 0.75 rg
+   0 0 74.0621 32.3435 re
+   f
+   endstream
+   endobj
+
+*** 26 0 obj /AcroForm, FDF(Forms Data Format)
+	# The contents and properties of a document’s interactive form shall be defined
+	# by an interactive form dictionarythat shall be referenced from the AcroForm entry in the document catalogue.
+	<</Fields[30 0 R]/DA(/Helv 0 Tf 0 g )/DR<</Font<</AdobeSongStd-Light 31 0 R/Helv 28 0 R/ZaDb 27 0 R>>
+    /Encoding<</PDFDocEncoding 29 0 R>>>>>>endobj
+1. DR (Optional) A resource dictionary.
+2. DA (Optional) A document-wide default value for the DA attribute of variable text fields.
+**** 30 0 obj: Annotations : Widget Annotations
+	 <</Rect[185.155 687.001 259.217 719.344]/Subtype/Widget/TU(???)/F 4/P 9 0 R/T(Signature1)
+     /DA(/AdobeSongStd-Light 0 Tf 0 g)/FT/Sig/Type/Annot/MK<</BG[0.75 1.0 0.75]>>/AP<</N 42 0 R>>>>endobj
+	 # /TU (optional)
+	 # /Rect (Required) The annotation rectangle, defining the location of the annotation on the page in default user space units.
+	 # /P An indirect reference to the page object with which this annotation is associated.
+	 # /F Annotation flags
+	 # /V field's value, a signature dictionary
+	 # /DA (Required) The default appearance string that shall be used in formatting the text.
+	 The annotation dictionary’s AP entry, if present, shall take precedence over the DA entry;
+	 # /AP appearance dictionary. /N /R /D 三种状态的显示
+	 # /Subtype In some cases, a Subtype entry (sometimes abbreviated S) may be used
+	   to further identify a specialized subcategory of the general type.
+	   The value of the Type or Subtype entry shall always be a name.
+	 # /DA (optional)
+***** 42 0 obj
+	  <</Subtype/Form/Length 40/Matrix[1.0 0.0 0.0 1.0 0.0 0.0]/Resources<</ProcSet[/PDF]>>/Type/XObject/BBox[0.0 0.0 74.0621 32.3435]/FormType 1>>
+	  stream
+	  0.75 1 0.75 rg
+	  0 0 74.0621 32.3435 re
+	  f
+	  endstream
+	  endobj
+	  # /BBox (Required) An array of four numbers in the form coordinate system,
+	  giving the coordinates of the left, bottom, right, and top of the form XObject’s bounding box.
+	  # /Matrix (Optional) An array of six numbers specifying the form matrix, which maps form space into user space.
+	  Default value: the identity matrix [1 0 0 1 0 0].
+**** 31 0 obj
+	 <</Type/Font/Subtype/Type0/DescendantFonts 32 0 R/Name/AdobeSongStd-Light/BaseFont/AdobeSongStd-Light/Encoding/UniGB-UCS2-H>>endobj
+***** 32 0 obj
+	  [33 0 R]endobj
+***** 33 0 obj
+	  <</Subtype/CIDFontType0/FontDescriptor 34 0 R/BaseFont/AdobeSongStd-Light
+	  /W[0[1000 207 270 342 467 462 797 710 239]9 10 374 11[423 605 238 375 238 334]17 26 462 27 28 238 29 31 605 32[344 748 684 560 695 739 563 511 729 793 318 312 666 526 896 758 772 544 772 628 465 607 753 711 972 647 620 607 374 333 374 606 500 239 417 503 427 529 415 264 444 518 241 230 495 228 793 527]80 81 524 82[504 338 336 277 517 450 652 466 452 407 370 258 370 605]22353 22354 462 22357[500]]
+	  /CIDSystemInfo 35 0 R/DW 1000/Type/Font>>endobj
+****** 34 0 obj
+	   <</StemV 40/FontName/AdobeSongStd-Light/FontStretch/Normal/FontWeight 300/Flags 34/Descent -254/FontBBox[-134 -254 1001 905]/Ascent 905/FontFamily(Adobe Song Std)/CapHeight 626/XHeight 447/Type/FontDescriptor/ItalicAngle 0>>endobj
+****** 35 0 obj<</Supplement 4/Ordering(GB1)/Registry(Adobe)>>endobj
+
+**** 27 0 obj
+	 <</Type/Font/Subtype/Type1/Name/ZaDb/BaseFont/ZapfDingbats>>endobj
+**** 28 0 obj
+	 <</Type/Font/Subtype/Type1/Name/Helv/BaseFont/Helvetica/Encoding 29 0 R>>endobj
+**** 29 0 obj
+	 <</Differences[24/breve/caron/circumflex/dotaccent/hungarumlaut/ogonek/ring/tilde 39/quotesingle 96/grave 128/bullet/dagger/daggerdbl/ellipsis/emdash/endash/florin/fraction/guilsinglleft/guilsinglright/minus/perthousand/quotedblbase/quotedblleft/quotedblright/quoteleft/quoteright/quotesinglbase/trademark/fi/fl/Lslash/OE/Scaron/Ydieresis/Zcaron/dotlessi/lslash/oe/scaron/zcaron 160/Euro 164/currency 166/brokenbar 168/dieresis/copyright/ordfeminine 172/logicalnot/.notdef/registered/macron/degree/plusminus/twosuperior/threesuperior/acute/mu 183/periodcentered/cedilla/onesuperior/ordmasculine 188/onequarter/onehalf/threequarters 192/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla/Egrave/Eacute/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex/Idieresis/Eth/Ntilde/Ograve/Oacute/Ocircumflex/Otilde/Odieresis/multiply/Oslash/Ugrave/Uacute/Ucircumflex/Udieresis/Yacute/Thorn/germandbls/agrave/aacute/acircumflex/atilde/adieresis/aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave/iacute/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex/otilde/odieresis/divide/oslash/ugrave/uacute/ucircumflex/udieresis/yacute/thorn/ydieresis]/Type/Encoding>>endobj
+
+   10 0 obj[11 0 R 14 0 R 15 0 R 16 0 R 17 0 R 18 0 R 19 0 R 20 0 R 21 0 R 22 0 R]endobj
+   10 0 obj[11 0 R 14 0 R 15 0 R 16 0 R 17 0 R 18 0 R 19 0 R 20 0 R 21 0 R 22 0 R 30 0 R]endobj
+   
+3. 添加对象
+4. 写入PDF文件
+** 两部分： 签名值和签名域， 显示部分 Interactive Form -- Signature Fields
+   # 签名域的显示
+   27 0 obj<</Rect[148.0 713.0 238.0 768.0]/Subtype/Widget/F 132/P 25 0 R/T(Signature2)/V 42 0 R
+   /DA(/Helv 0 Tf 0 g)/FT/Sig/Type/Annot/MK<<>>/AP<</N 28 0 R>>>>endobj
+
+** Signature information is contained in a signature dictionary, whose entries are
+   # 签名数据选择如下 9 项
+1. /SubFilter/adobe.pkcs7.detached,/adobe.pkcs7.sha1
+   A name that describes the encoding of the signature value and key information in the signature dictionary.
+2. /Filter/Adobe.PPKLite
+   The name of the preferred signature handler to use when validating this signature.
+   If the Prop_Build entry is not present, it is also the name of the signature handler that was used to create the signature.
+3. /Contents<...hexadecimal string> The signature value.
+4. /Name(Sursen Company)
+   The name of the person or authority signing the document.
+5. /ByteRange[0 6990 17640 51276 ]
+   An array of pairs of integers (starting byte offset, length in bytes) describing the exact byte range for the digest calculation.
+6. /Type/Sig
+   The type of PDF object that this dictionary describes; if present, must be Sig for a signature dictionary.
+7. /ContactInfo(13701234565)
+8. /Porp_Build
+   A dictionary that can be used by a signature handler to record information
+   that captures the state of the computer environment used for signing,
+   such as the name of the handler used to create the signature, software build date, version, and operating system.
+   <</Filter<</Name/liboes/R 20170612/Date(Jun 12 2017 14:27:38)>>/App<</Name/ssreader/OS[/linux]/R 20170613>>>>
+9. /Reason(I agree ...) The reason for the signing, such as ( I agree … ).
+
+** 删除对象时 xref 第一段，不再是偏移量，而是对象id？
+   The cross-reference entry for object number 0 is updated
+   because it is the head of the linked list of free entries
+   and must now point to the entry for the newly freed object number 8.
+   The entry for object number 8 points to the entry for object number 9 (the next free entry),
+   while the entry for object number 9 is the last free entry in the cross-reference table,
+   indicated by the fact that it points back to object number 0.
+
+xref
+0 1
+0000000008 65535 f
+7 3
+0000002124 00000 n
+0000000009 00001 f
+0000000000 00001 f
+
+** 增量更新（Incremental Update）
+直接修改对象的代价很大
+ “2.2.7 Incremental Update”
+ “3.4.5 Incremental Updates”
+# “G.6 Updating Example”
+简要的说，每进行一次修改，都只须在文档的结尾添加一些内容。
+可见每次更新必然包括交叉引用表、trailer。
+增量更新中，交叉引用表不必包含原表的所有行，只须列出本次修改的那些行。
+为了更清晰的说明这个问题，需要说明一下trailer。
+
+trailer
+<<key1 value1 … keyn valuen>>
+startxref
+Byte_offset_of_last_cross-reference_section
+%%EOF
+
+trailer用来说明交叉引用表的位置（十进制偏移），%%EOF标记文档的结束。
+trailer dictionary中包含了其他一些文档信息：
+Size：交叉引用表中的入口数
+Prev：上个交叉引用表的偏移
+Root：根对象相关Encrypt：加密相关等。
+
+注意Prev，它相当于单链表的指针域，把文档中所有的交叉引用表链接起来。
+链表的首节点是最后一个交叉引用表（偏移最大），尾节点为第一个交叉引用表（偏移最小）。
+
+显然尾节点的trailer不含Perv项。
+读取交叉引用表应遍历此链表，且对于同一个对象的相应行，最近更新的那些行才是有效的。
+至此可以清晰的理解“增量”的含义，不得不说这是处理修改非常高效的方式。
+
+** 结构
+*** File Structure
+header: %PDF-1.0/1.7
+body : objects
+Cross-reference table: xref
+trailer: dictionary,startxref,location,%%EOF
+# or
+xref-stream: /Type/XRef,stream,startxref,location,%%EOF [no xref,trailer]
+*** Document Structure
+
+** 对象
+Boolean Objects（布尔对象）
+true或false
+
+Numeric Objects（数字对象）
+PDF提供两种数字对象，整数（integer）和实数（real）。
+123 43445 +17 ?98 0（整数）
+34.5 -3.62 +123.6 4. -.002 0.0（实数）
+
+String Objects（字符串对象）
+有两种惯例（convention）：
+文字串（literal character），用()括起来，如：(This is a string)；
+十六进制数据（hexadecimal data），用<>括起来，如：<4E6F762073686D6F7A206B6120706F702E>
+
+Name Objects（名称对象）
+由一串字符唯一定义（uniquely defined）的原子符号（atomic symbol），以"/"开头。简单的例子如：
+/Outlines
+就是一个名称对象。
+
+Array Objects（数组对象）
+对象的一维（one-dimensional collection）有序集合。
+数组对象的元素可以是numbers, strings, dictionaries或其他对象，甚至是另外的数组：
+[549 3.14 false (Ralph) /SomeName]
+
+Dictionary Objects（字典对象）
+由"对象对"组成的对象表。"对象对"的第一个称为"键"，第二个称为"值"。键必须是名称对象，值可以是任何对象。如：
+<</Length 4285/Filter/FlateDecode>>
+包含了两对键-值组。
+
+Stream Objects（流对象）
+类似字符串的字节序列，但可以增量读出（read incrementally）。而字符串只能作为一个整体一次读出。对象流具有如下的形式：
+dictionary
+stream
+…Zero or more bytes…
+endstream
+stream关键字之后应该有行结束符，形式为CRLF或LF，而不能只有一个CR。文档建议，流数据结束之前endstream关键字之后应该有行结束符。dictionary中指明了流数据的字节数，不包含行结束符。
+
+Null Object（空对象）
+空对象用null表示，引用一个不存在的对象相当于引用了null对象。如果将一个dictionary对象的条目值设为null，等同于忽略该条目。
+
+Indirect Objects（间接对象）
+"间接对象"，在字面意义上理解有些别扭。间接对象有如下的定义形式：
+12 0 obj
+(Brillig)
+endobj
+12是对象号，0是版本号。之所以称其为间接对象，是因为可以使用对象号和版本号引用它。如：
+/Outlines 1 0 R
+R为refer之意。似乎“间接对象”理解为“对对象的间接引用”比较合适，然而文档又指出上述“间接对象”的定义形式。总之，间接对象与上述对象并列。
+关于版本号，对于一个新建的文档，任何对象的版本号是0。简单的说，版本号记录利用某个对象号创建对象的次数。版本号在如下过程中递增：
+对象被删除后其定义仍然保留在文档中，但是交叉引用表中用于定位该对象的行改变，使用状态变为删除（f），且版本号加1。待使用该被删对象的对象号创建一个新的对象时，可重新利用交叉引用表中的相应行，新对象的版本号即该行所记录的版本号。
+
+* doit: PDF文件格式 sample, 见 PDF reference 的附录
+# 注释
+# 1 0 obj
+▲　这是一个PDF中的“对象”，它的特点是：以obj开始，以endobj结尾。PDF文档都是以对象为单位组织其结构的。 
+△　“1  0  obj”中的“1”是对象编号，每个对象的编号是唯一的；“0”是对象的生成号，每当我们修改了PDF中的对象时，它会自增1。 
+△　中间的“<<  >>”称为“字典”，里面有许多“键-值”对的描述信息。 
+△　其中，“/Type  /Catalog”说明了该对象的类型是/Catalog（即“目录”对象），它是PDF文档的根对象。 
+△　“/Type”中除了有“/Catalog（目录对象）”外，还有“/Outlines（书签大纲对象）”、“/Pages （页面组对象）”以及“页面组对△　象/Pages”中含有的若干“/Page（页面对象）”等。 
+△　“2 0 R”和“3 0 R”都是对对象的“间接引用”。“2 0 R”就是在引用“2 0 obj”对象，“3 0 R”就是在引用“3 0 obj”对象。 
+
+# 2 0 obj
+▲　这是的一个“/Outlines（书签大纲对象）”。 
+△　“/Count  0”说明没有此书签个数为0，即没有书签。（以后我再详细分析）
+
+# 3 0 obj
+▲　这是的PDF中的“/Pages （页面组对象）”，它有两个主要的选项“/Kids”和“/Count”。 
+△　“/Kids”说明了这个/Pages是由哪些/Page组成的，后面的“[4 0 R]”是一个数组，里面的“4 0 R”就是一个“/Page（页面对象）”，[]里可以有多个/Page对象组成。 
+△　“/Count  1”说明了/Pages对象里含有/Page对象的个数，这要与[]中的对象数目一致，这里表明这个PDF文件只有一页。 
+
+# 4 0 obj
+▲　这是“/Page（页面对象）”，它是属于“3 0 R”这个“/Pages （页面组对象）”的，这可以由它的“/Parent  3 0 R”看出来。 
+
+△　“/MediaBox”标识了该页的大小，单位为磅（注：1英寸=72磅=2.54厘米）。 
+△　“/Contents  5 0 R”就是指页面的具体内容是“5 0 obj”对象。 
+△　“Resources << /ProcSet  6 0 R /Font  << /F1  7 0 R  >> >> >> ”表明该页包含的一系列资源，包括“字体对象”和“PDF的内容类型”为文本型TEXT。 
+
+# 5 0 obj
+▲　这是/Page页面的具体内容。 
+△　“<<  /Length  73  >> ”表示其后的stream和endstream之间的二进制流的长度（注：单位为“字节”）。 
+△　“/F1  28  Tf”表示选择由“7 0 obj”定义的字体，字号大小为28。（以后再详述） 
+△　“100 100 Td”表明要显示的字符位置，它以页面左下角为原点。 
+△　“6 Tr”为字体的样式修饰，“6”代表“填充字体内部并描边”。 
+△　“1 0 0 rg”和“0 0 1 RG”分别设置“填充颜色”和“边框颜色”。“填充颜色”用小写的“rg”，“边框颜色”用大写的“RG”。“1 0 0”表示“红、绿、蓝”三种色调的百分比，这里红色是1，就是100%的红。 
+△　(Hello Word !)'是要打印的字符文本。目前，只能是英文，如要显示中文字，必须要引入中字的字符。（以后再详述） 
+
+# 6 0 obj
+▲　这个对象说明了PDF的内容类型为纯文本，如果是图片类型的，要改为“[/PDF /Image]” 
+
+# 7 0 obj
+▲　这是一个字体对象，以后再详述。 
+
+# xref
+▲　这是PDF文件的“交叉引用表”，如果这个表被破坏，那整个PDF文档就不能被Adobe Acrobat Reader打开了，
+   但Foxit Reader的容错率比较强，它还是可以打开的，所以建议大家把上面的文件保存成Ex001.PDF后，用Foxit Reader打开。 
+△　第二行“0  8”这两个数，第一个“0”表示“交叉引用表”的起始对象号（这个文件是0，为PDF自定义的对象0，无特殊作用），第二个“8”表示“交叉引用表”的对象总数（包含刚才自定义的0对象）。 
+△　其余的8行，每行为一个对象。 
+△　“0000000000  65535  f”这一行比较特殊。“0000000000”表示该对象在的起始位置为0，生成数为65535，f表示该对象未被引用，这是PDF的规定。free
+△　剩下的7行中，n表示该对象已被引用。 
+
+注：在读取对象信息的时候，就是靠着这个交叉引用表找到各对象位置进行解析的。 
+
+
+# trailer
+▲　这是PDF文件的“文件尾”部分，以trailer对象的开始，“trailer <<  >>”里面是一个字典。 
+△　“/Size  8”表示该PDF文件中的obj对象总数。 
+△　“/Root 1 0 R”表示该PDF文件中的根对象，为“1 0 obj”。 
+△　“Startxref 625”表示“交叉引用表”的偏移地址，可以用它来定位PDF文档中所有的对象的相对地址。 
+△　一般放在文件最后，是文件结束标志。 
+
+以上是我今天一天读PDF Reference的笔记。
+
+
+今天，讨论PDF Reference中书签的代码。 
+下面，我们的目标写代码，建立如下图所示的一个书签。
+
+对应的代码如下： 
+
+21 0 obj 
+<< /Type /Outlines 
+/First 22 0 R 
+/Last 29 0 R 
+/Count 6 
+>> 
+endobj 
+
+对象21是“根结点”，根结点没有Parent和Next结点，也没有Title。 
+
+22 0 obj 
+<< /Title ( Document ) 
+/Parent 21 0 R 
+/Next 29 0 R 
+/First 25 0 R 
+/Last 28 0 R 
+/Count 4 
+/Dest [ 3 0 R /XYZ 0 792 0 ] 
+>> 
+endobj 
+
+（A）对象22，是“中间结点”（即“非根结点、叶子结点”），所以有First和Last，以表明其下子孙对象是从“对象25”到“对象28”，共有4个。 
+（B）在同级结点中，它有“无前趋结点（Prev）”，但有“后继结点（Next）——对象29”。 
+（C）/Dest 后面跟的参数是对书签的定位，参数形式如下： 
+    /Dest [ page对象 /XYZ 页面X坐标 页面Y坐标 页面大小] 
+    如果，其中某一项的值为null，说明该值的取值仍按照当前的值，不加以改变。
+
+下面的代码一样分析，这里不再详述。 
+
+25 0 obj 
+<< /Title ( Section 1 ) 
+/Parent 22 0 R 
+/Next 26 0 R 
+/Dest [ 3 0 R /XYZ null 701 null ] 
+>> 
+endobj 
+26 0 obj 
+<< /Title ( Section 2 ) 
+/Parent 22 0 R 
+/Prev 25 0 R 
+/Next 28 0 R 
+/First 27 0 R 
+/Last 27 0 R 
+/Count 1 
+/Dest [ 3 0 R /XYZ null 680 null ] 
+>> 
+endobj 
+
+# 小结： 
+/Title ( 标题名 ) ——书签标题名称 
+/Parent 22 0 R ——根结点无Parent 
+/Prev 25 0 R ——当前结点对象的“前趋对象” 
+/Next 28 0 R ——当前结点对象的“后继对象” 
+/First 27 0 R ——如果当前结点非叶子结点，则表明“子孙结点的开始” 
+/Last 27 0 R ——如果当前结点非叶子结点，则表明“子孙结点的结束” 
+/Count 1 ——如果当前结点非叶子结点，则表明“子孙结点的总数” 
+/Dest [ 3 0 R /XYZ null 680 null ] —— 定位页面。
