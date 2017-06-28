@@ -45,7 +45,7 @@ pkg-config --cflags poppler-qt5
 
 
 * 工作计划 V2 2017-06-09 14:43:23 为java提供签名动态库
-** 动态使用 so
+** DONE 动态使用 so
    编译选项如下：gcc -rdynamic -o main main.c -ldl
 
    Linux提供了一套API来动态装载库。下面列出了这些API： 
@@ -64,7 +64,7 @@ pkg-config --cflags poppler-qt5
    void *dlsym(void *handle, const char *symbol);
    int dlclose(void *handle);
 
-** 编译 linux 版印章库 GMESeal
+** DONE 编译 linux 版印章库 GMESeal
    # error
 GMSeal2Image.o: In function `x_init':
 GMSeal2Image.c:(.text.startup+0x0): multiple definition of `x_init'
