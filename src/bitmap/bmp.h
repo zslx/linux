@@ -1,5 +1,5 @@
 /*************************
-*bmp.hÎÄ¼ş
+*bmp.hæ–‡ä»¶
 *************************/
 
 #ifndef __BMP_H__
@@ -15,39 +15,39 @@
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
 
-//ÎÄ¼şÍ·½á¹¹Ìå
+//æ–‡ä»¶å¤´ç»“æ„ä½“
 typedef struct 
 { 
-  unsigned char bfType[2];    //ÎÄ¼şÀàĞÍ
-  unsigned long bfSize;     //Î»Í¼´óĞ¡
-  unsigned short bfReserved1;  //Î»0 
-  unsigned short bfReserved2;  //Î»0
-  unsigned long bfOffBits;    //µ½Êı¾İÆ«ÒÆÁ¿
-} __attribute__((packed)) BitMapFileHeader;   //Ê¹±àÒëÆ÷²»ÓÅ»¯£¬Æä´óĞ¡Îª14×Ö½Ú 
+  unsigned char bfType[2];    //æ–‡ä»¶ç±»å‹
+  unsigned long bfSize;     //ä½å›¾å¤§å°
+  unsigned short bfReserved1;  //ä½0 
+  unsigned short bfReserved2;  //ä½0
+  unsigned long bfOffBits;    //åˆ°æ•°æ®åç§»é‡
+} __attribute__((packed)) BitMapFileHeader;   //ä½¿ç¼–è¯‘å™¨ä¸ä¼˜åŒ–ï¼Œå…¶å¤§å°ä¸º14å­—èŠ‚ 
 
-//ĞÅÏ¢Í·½á¹¹Ìå
+//ä¿¡æ¯å¤´ç»“æ„ä½“
 typedef struct 
 { 
-  unsigned long biSize;          // BitMapFileHeader ×Ö½ÚÊı
-  long biWidth;                 //Î»Í¼¿í¶È 
-  long biHeight;              //Î»Í¼¸ß¶È£¬ÕıÎ»ÕıÏò£¬·´Ö®Îªµ¹Í¼ 
-  unsigned short biPlanes;        //ÎªÄ¿±êÉè±¸ËµÃ÷Î»ÃæÊı£¬ÆäÖµ½«×ÜÊÇ±»ÉèÎª1
-  unsigned short biBitCount;        //ËµÃ÷±ÈÌØÊı/ÏóËØ£¬Îª1¡¢4¡¢8¡¢16¡¢24¡¢»ò32¡£ 
-  unsigned long biCompression;       //Í¼ÏóÊı¾İÑ¹ËõµÄÀàĞÍÃ»ÓĞÑ¹ËõµÄÀàĞÍ£ºBI_RGB 
-  unsigned long biSizeImage;      //ËµÃ÷Í¼ÏóµÄ´óĞ¡£¬ÒÔ×Ö½ÚÎªµ¥Î» 
-  long biXPelsPerMeter;           //ËµÃ÷Ë®Æ½·Ö±æÂÊ 
-  long biYPelsPerMeter;        //ËµÃ÷´¹Ö±·Ö±æÂÊ 
-  unsigned long biClrUsed;       //ËµÃ÷Î»Í¼Êµ¼ÊÊ¹ÓÃµÄ²ÊÉ«±íÖĞµÄÑÕÉ«Ë÷ÒıÊı
-  unsigned long biClrImportant;    //¶ÔÍ¼ÏóÏÔÊ¾ÓĞÖØÒªÓ°ÏìµÄË÷ÒıÊı£¬0¶¼ÖØÒª¡£ 
+  unsigned long biSize;          // BitMapFileHeader å­—èŠ‚æ•°
+  long biWidth;                 //ä½å›¾å®½åº¦ 
+  long biHeight;              //ä½å›¾é«˜åº¦ï¼Œæ­£ä½æ­£å‘ï¼Œåä¹‹ä¸ºå€’å›¾ 
+  unsigned short biPlanes;        //ä¸ºç›®æ ‡è®¾å¤‡è¯´æ˜ä½é¢æ•°ï¼Œå…¶å€¼å°†æ€»æ˜¯è¢«è®¾ä¸º1
+  unsigned short biBitCount;        //è¯´æ˜æ¯”ç‰¹æ•°/è±¡ç´ ï¼Œä¸º1ã€4ã€8ã€16ã€24ã€æˆ–32ã€‚ 
+  unsigned long biCompression;       //å›¾è±¡æ•°æ®å‹ç¼©çš„ç±»å‹æ²¡æœ‰å‹ç¼©çš„ç±»å‹ï¼šBI_RGB 
+  unsigned long biSizeImage;      //è¯´æ˜å›¾è±¡çš„å¤§å°ï¼Œä»¥å­—èŠ‚ä¸ºå•ä½ 
+  long biXPelsPerMeter;           //è¯´æ˜æ°´å¹³åˆ†è¾¨ç‡ 
+  long biYPelsPerMeter;        //è¯´æ˜å‚ç›´åˆ†è¾¨ç‡ 
+  unsigned long biClrUsed;       //è¯´æ˜ä½å›¾å®é™…ä½¿ç”¨çš„å½©è‰²è¡¨ä¸­çš„é¢œè‰²ç´¢å¼•æ•°
+  unsigned long biClrImportant;    //å¯¹å›¾è±¡æ˜¾ç¤ºæœ‰é‡è¦å½±å“çš„ç´¢å¼•æ•°ï¼Œ0éƒ½é‡è¦ã€‚ 
 } __attribute__((packed)) BitMapInfoHeader; 
 
-//ÏñËØµã½á¹¹Ìå
+//åƒç´ ç‚¹ç»“æ„ä½“
 typedef struct 
 { 
-  unsigned char Blue;      //¸ÃÑÕÉ«µÄÀ¶É«·ÖÁ¿ 
-  unsigned char Green;     //¸ÃÑÕÉ«µÄÂÌÉ«·ÖÁ¿ 
-  unsigned char Red;          //¸ÃÑÕÉ«µÄºìÉ«·ÖÁ¿ 
-  unsigned char Reserved;    //±£ÁôÖµ£¨ÁÁ¶È£©   
+  unsigned char Blue;      //è¯¥é¢œè‰²çš„è“è‰²åˆ†é‡ 
+  unsigned char Green;     //è¯¥é¢œè‰²çš„ç»¿è‰²åˆ†é‡ 
+  unsigned char Red;          //è¯¥é¢œè‰²çš„çº¢è‰²åˆ†é‡ 
+  unsigned char Reserved;    //ä¿ç•™å€¼ï¼ˆäº®åº¦ï¼‰   
 } __attribute__((packed)) RgbQuad;
 
 int show_photo(const char *fbp, struct fb_var_screeninfo *scrinfo, const char *bmpname);

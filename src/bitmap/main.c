@@ -1,5 +1,5 @@
 /*************************
-*main.cÎÄ¼ş
+*main.cæ–‡ä»¶
 *************************/
 #include "bmp.h"
 
@@ -7,11 +7,12 @@ int main()
 {
   int devfb, filefb;
   struct fb_var_screeninfo scrinfo;
+  struct fb_fix_screeninfo fix;
   unsigned long screensize;
   char *fbp ;
   char bmpname[20] = {0};
 
-  //´ò¿ªÉè±¸ÎÄ¼ş
+  //æ‰“å¼€è®¾å¤‡æ–‡ä»¶
   devfb = open("/dev/fb0", O_RDWR);
   if(!devfb)
   {
@@ -19,16 +20,16 @@ int main()
     return -1;
   }
   //printf("devfb open OK! %d\r\n", devfb);
- 
 
-  //»ñÈ¡ÆÁÄ»ĞÅÏ¢
+  //è·å–å±å¹•ä¿¡æ¯
 
-  //ÈôÆÁÄ»ÏÔÊ¾ÇøÓò´óĞ¡²»ºÏÊÊ£¬¿ÉÓÃioctl(devfb, FBIOPUT_VSCREENINFO, &scrinfo)ÉèÖÃ
+  //è‹¥å±å¹•æ˜¾ç¤ºåŒºåŸŸå¤§å°ä¸åˆé€‚ï¼Œå¯ç”¨ioctl(devfb, FBIOPUT_VSCREENINFO, &scrinfo)è®¾ç½®
   if(ioctl(devfb, FBIOGET_VSCREENINFO, &scrinfo))
   {
     printf("get screen infomation error!\r\n");
     return -1;
   }
+  ioctl(devfb, FBIOGET_FSCREENINFO, &fix); //æ˜¾ç¤ºç¼“å­˜ä¿¡æ¯ï¼ˆframebuffï¼‰
 
   //printf(".xres=%d, .yres=%d, .bit=%d\r\n",scrinfo.xres, scrinfo.yres, scrinfo.bits_per_pixel);
 
@@ -41,12 +42,15 @@ int main()
   }
 
 
-  //¼ÆËãĞèÒªµÄÓ³ÉäÄÚ´æ´óĞ¡
+  //è®¡ç®—éœ€è¦çš„æ˜ å°„å†…å­˜å¤§å°
   screensize = scrinfo.xres_virtual * scrinfo.yres_virtual * scrinfo.bits_per_pixel / 8;
-  //printf("screensize=%lu!\r\n", screensize);
-  
-  //ÄÚ´æÓ³Éä
-  fbp = (char *)mmap(NULL, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, devfb, 0);
+  printf("screensize=%lu! %lu\r\n", screensize, fix.smem_len);
+
+  // //å†…å­˜æ˜ å°„
+  // fbp = (char *)mmap(NULL, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, devfb, 0);
+
+  fbp = (char*)mmap(NULL, fix.smem_len, PROT_READ | PROT_WRITE, MAP_SHARED, devfb, 0); //ç³»ç»Ÿè°ƒç”¨mmap()ç”¨æ¥å®ç°å†…å­˜æ˜ å°„IO    
+
   if(-1 == (int)fbp)
   {
     printf("mmap error!\r\n");
@@ -55,19 +59,18 @@ int main()
   
   scanf("%s", bmpname);
   
-  //ÏÔÊ¾Í¼Æ¬
+  //æ˜¾ç¤ºå›¾ç‰‡
   show_photo(fbp, &scrinfo, bmpname);
 
- 
 
-  //È¡ÏûÓ³Éä£¬¹Ø±ÕÎÄ¼ş
+  //å–æ¶ˆæ˜ å°„ï¼Œå…³é—­æ–‡ä»¶
   munmap(fbp, screensize);
   close(devfb);
 
   return 0;
 }
 
-// *ËµÃ÷£º1.Í¼Æ¬ÊÇ24Î»»ò32Î»bmpÍ¼
-//     2.ÆÁÄ»ÊÇ32Î»ÆÁÄ»
-//     3.²»Í¬µÄÉè±¸£¬¿ÉÄÜÉè±¸ÎÄ¼ş²»Í¬
-//     4.ĞèÒªÔÚrootÓÃ»§ÏÂÖ´ĞĞ
+// *è¯´æ˜ï¼š1.å›¾ç‰‡æ˜¯24ä½æˆ–32ä½bmpå›¾
+//     2.å±å¹•æ˜¯32ä½å±å¹•
+//     3.ä¸åŒçš„è®¾å¤‡ï¼Œå¯èƒ½è®¾å¤‡æ–‡ä»¶ä¸åŒ
+//     4.éœ€è¦åœ¨rootç”¨æˆ·ä¸‹æ‰§è¡Œ

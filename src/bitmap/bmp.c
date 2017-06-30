@@ -1,13 +1,13 @@
 /*************************
-*bmp.cÎÄ¼ş
+*bmp.cæ–‡ä»¶
 *************************/
 #include "bmp.h"
 
 /*************************
 
-*fbp£¬Ó³ÉäÄÚ´æÆğÊ¼µØÖ·
-*scrinfo£¬ÆÁÄ»ĞÅÏ¢½á¹¹Ìå
-*bmpname£¬.bmpÎ»Í¼ÎÄ¼şÃû
+*fbpï¼Œæ˜ å°„å†…å­˜èµ·å§‹åœ°å€
+*scrinfoï¼Œå±å¹•ä¿¡æ¯ç»“æ„ä½“
+*bmpnameï¼Œ.bmpä½å›¾æ–‡ä»¶å
 
 *************************/
 int show_photo(const char *fbp, struct fb_var_screeninfo *scrinfo, const char *bmpname)
@@ -17,15 +17,15 @@ int show_photo(const char *fbp, struct fb_var_screeninfo *scrinfo, const char *b
 
   int line_x = 0, line_y = 0;
   unsigned long tmp = 0;
-  int xres = scrinfo->xres_virtual;    //ÆÁÄ»¿í£¨ĞéÄâ£©
-  int bits_per_pixel = scrinfo->bits_per_pixel;  //ÆÁÄ»Î»Êı
+  int xres = scrinfo->xres_virtual;    //å±å¹•å®½ï¼ˆè™šæ‹Ÿï¼‰
+  int bits_per_pixel = scrinfo->bits_per_pixel;  //å±å¹•ä½æ•°
   BitMapFileHeader FileHead;
   BitMapInfoHeader InfoHead;
   RgbQuad rgb;    
 
   unsigned long location = 0;
 
-  //´ò¿ª.bmpÎÄ¼ş
+  //æ‰“å¼€.bmpæ–‡ä»¶
   FILE *fb = fopen(bmpname, "rb");
   if (fb == NULL)
   {
@@ -33,7 +33,7 @@ int show_photo(const char *fbp, struct fb_var_screeninfo *scrinfo, const char *b
     return -1;
   }
 
-  //¶ÁÎÄ¼şĞÅÏ¢
+  //è¯»æ–‡ä»¶ä¿¡æ¯
   if (1 != fread( &FileHead, sizeof(BitMapFileHeader),1, fb))
   {
     printf("read BitMapFileHeader error!\n");
@@ -47,7 +47,7 @@ int show_photo(const char *fbp, struct fb_var_screeninfo *scrinfo, const char *b
     return -1;
   }
   
-  //¶ÁÎ»Í¼ĞÅÏ¢
+  //è¯»ä½å›¾ä¿¡æ¯
   if (1 != fread( (char *)&InfoHead, sizeof(BitMapInfoHeader),1, fb))
   {
     printf("read BitMapInfoHeader error!\n");
@@ -55,13 +55,13 @@ int show_photo(const char *fbp, struct fb_var_screeninfo *scrinfo, const char *b
     return -1;
   }
   
-  //Ìø×ªÖÁÊı¾İÇø
+  //è·³è½¬è‡³æ•°æ®åŒº
   fseek(fb, FileHead.bfOffBits, SEEK_SET);
   
-  int len = InfoHead.biBitCount / 8;    //Ô­Í¼Ò»¸öÏñËØÕ¼¼¸×Ö½Ú
-  int bits_len = bits_per_pixel / 8;    //ÆÁÄ»Ò»¸öÏñËØÕ¼¼¸×Ö½Ú
+  int len = InfoHead.biBitCount / 8;    //åŸå›¾ä¸€ä¸ªåƒç´ å å‡ å­—èŠ‚
+  int bits_len = bits_per_pixel / 8;    //å±å¹•ä¸€ä¸ªåƒç´ å å‡ å­—èŠ‚
 
-//Ñ­»·ÏÔÊ¾
+//å¾ªç¯æ˜¾ç¤º
   while(!feof(fb))
   {
     tmp = 0;
@@ -70,7 +70,7 @@ int show_photo(const char *fbp, struct fb_var_screeninfo *scrinfo, const char *b
     if (len != fread((char *)&rgb, 1, len, fb))
       break;
   
-    //¼ÆËã¸ÃÏñËØÔÚÓ³ÉäÄÚ´æÆğÊ¼µØÖ·µÄÆ«ÒÆÁ¿
+    //è®¡ç®—è¯¥åƒç´ åœ¨æ˜ å°„å†…å­˜èµ·å§‹åœ°å€çš„åç§»é‡
     location = line_x * bits_len + (InfoHead.biHeight - line_y - 1) * xres * bits_len;
   
     tmp |= rgb.Reserved << 24 | rgb.Red << 16 | rgb.Green << 8 | rgb.Blue;
