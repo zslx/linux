@@ -66,3 +66,13 @@ git:x:1001:1001:,,,:/home/git:/bin/bash
 
 git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell
 这样，git用户可以正常通过ssh使用git，但无法登录shell，因为我们为git用户指定的git-shell每次一登录就自动退出。
+
+局域网访问
+如果服务器的IP是192.168.1.18，那么局域网的机器就可以通过下面的方式访问了：
+# 拷贝私钥id_rsa到.ssh目录
+mv id_rsa ~/.ssh
+# 如果提示权限不对（bad permission 或者 permission too open），请按如下配置
+cd ~/.ssh
+chmod 700 id_rsa
+# 团队成员访问git仓库
+git clone git@192.168.1.18:~/git-repo/ANDROID_CODE.git

@@ -1,0 +1,24 @@
+* CxImage
+  is a C++ class to load, save, display, transform BMP,
+  JPEG, GIF, PNG, TIFF, MNG, ICO, PCX, TGA, WMF, WBMP, JBG, J2K images.
+  http://www.xdp.it/cximage/
+
+
+#重新生成 aclocal.m4  
+aclocal  
+#重新生成configure文件  
+autoconf -i -v -f  
+# 删除原来的makefile  
+find ./ -name Makefile -exec rm -rf {} \;  
+# 重新生成Makefile  
+./configure   
+
+Linux 编译总结：
+1、 修改 ./cximage/CxImage/tif_xfile.cpp 代码  
+2、 aclocal  
+3、 autoconf -i -v -f  
+4、 automake --add-mising  
+5、 find ./ -name Makefile -exec rm -rf {} \;  
+6、 CPPFLAGS="=-fPIC"   ./configure --with-extra-includes=/home/cximage599c/cximage/jasper/include/  
+CPPFLAGS 根据实际需要添加。  
+7、 make; make install
