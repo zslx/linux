@@ -1,198 +1,205 @@
+* æ¯å¤©ç•™ç‚¹æ—¶é—´ç£¨åˆ€ï¼šä»Žæ€»ä½“å®¡è§†ã€å­¦ä¹ æˆ–å·©å›ºæ·±åŒ–ã€ç†Ÿèƒ½ç”Ÿå·§ã€‚
+1. emacs, notes.org
+2. git
+3. Vipassana
 * linux users
-** ¿ª·¢»·¾³£ºgit emacs gcc qmake sshd
-   https://git-scm.com/book/zh/v2
-   https://man.openbsd.org/sshd
-   git clone /home/git/project.git
-   git clone ssh://user@host/home/git/project.git
-*** .gitignore
-	Ê×ÏÈÒªÇ¿µ÷Ò»µã£¬Õâ¸öÎÄ¼þµÄÍêÕûÎÄ¼þÃû¾ÍÊÇ¡°.gitignore¡±£¬×¢Òâ×îÇ°ÃæÓÐ¸ö¡°.¡±¡£
-	ÕâÑùÃ»ÓÐÀ©Õ¹ÃûµÄÎÄ¼þÔÚWindowsÏÂ²»Ì«ºÃ´´½¨£¬ÕâÀï¸ø³öwin7µÄ´´½¨·½·¨£º
-	´´½¨Ò»¸öÎÄ¼þ£¬ÎÄ¼þÃûÎª£º¡°.gitignore.¡±£¬×¢ÒâÇ°ºó¶¼ÓÐÒ»¸öµã¡£±£´æÖ®ºóÏµÍ³»á×Ô¶¯ÖØÃüÃûÎª¡°.gitignore¡±¡£
-	Ò»°ãÀ´ËµÃ¿¸öGitÏîÄ¿ÖÐ¶¼ÐèÒªÒ»¸ö¡°.gitignore¡±ÎÄ¼þ£¬Õâ¸öÎÄ¼þµÄ×÷ÓÃ¾ÍÊÇ¸æËßGitÄÄÐ©ÎÄ¼þ²»ÐèÒªÌí¼Óµ½°æ±¾¹ÜÀíÖÐ¡£
-
-ÏÂÃæÎÒÃÇ¿´¿´³£ÓÃµÄ¹æÔò£º
-
-/mtk/ ¹ýÂËÕû¸öÎÄ¼þ¼Ð
-*.zip ¹ýÂËËùÓÐ.zipÎÄ¼þ
-/mtk/do.c ¹ýÂËÄ³¸ö¾ßÌåÎÄ¼þ
-
-ºÜ¼òµ¥°É£¬±»¹ýÂËµôµÄÎÄ¼þ¾Í²»»á³öÏÖÔÚÄãµÄGitHub¿âÖÐÁË£¬µ±È»±¾µØ¿âÖÐ»¹ÓÐ£¬Ö»ÊÇpushµÄÊ±ºò²»»áÉÏ´«¡£
-
-ÐèÒª×¢ÒâµÄÊÇ£¬gitignore»¹¿ÉÒÔÖ¸¶¨Òª½«ÄÄÐ©ÎÄ¼þÌí¼Óµ½°æ±¾¹ÜÀíÖÐ£º
-
-!*.zip
-!/mtk/one.txt
-
-Î¨Ò»µÄÇø±ð¾ÍÊÇ¹æÔò¿ªÍ·¶àÁËÒ»¸ö¸ÐÌ¾ºÅ£¬Git»á½«Âú×ãÕâÀà¹æÔòµÄÎÄ¼þÌí¼Óµ½°æ±¾¹ÜÀíÖÐ¡£
-
-ÎªÊ²Ã´ÒªÓÐÁ½ÖÖ¹æÔòÄØ£¿ÏëÏóÒ»¸ö³¡¾°£ºÎÒÃÇÖ»ÐèÒª¹ÜÀí/mtk/Ä¿Â¼ÖÐµÄone.txtÎÄ¼þ£¬Õâ¸öÄ¿Â¼ÖÐµÄÆäËûÎÄ¼þ¶¼²»ÐèÒª¹ÜÀí¡£
-ÄÇÃ´ÎÒÃÇ¾ÍÐèÒªÊ¹ÓÃ£º
-
-/mtk/
-!/mtk/one.txt
-
-¼ÙÉèÎÒÃÇÖ»ÓÐ¹ýÂË¹æÔòÃ»ÓÐÌí¼Ó¹æÔò£¬ÄÇÃ´ÎÒÃÇ¾ÍÐèÒª°Ñ/mtk/Ä¿Â¼ÏÂ³ýÁËone.txtÒÔÍâµÄËùÓÐÎÄ¼þ¶¼Ð´³öÀ´£¡
-
-×îºóÐèÒªÇ¿µ÷µÄÒ»µãÊÇ£¬Èç¹ûÄã²»É÷ÔÚ´´½¨.gitignoreÎÄ¼þÖ®Ç°¾ÍpushÁËÏîÄ¿£¬ÄÇÃ´¼´Ê¹ÄãÔÚ.gitignoreÎÄ¼þÖÐÐ´ÈëÐÂµÄ¹ýÂË¹æÔò£¬ÕâÐ©¹æÔòÒ²²»»áÆð×÷ÓÃ£¬GitÈÔÈ»»á¶ÔËùÓÐÎÄ¼þ½øÐÐ°æ±¾¹ÜÀí¡£
-
-¼òµ¥À´Ëµ£¬³öÏÖÕâÖÖÎÊÌâµÄÔ­Òò¾ÍÊÇGitÒÑ¾­¿ªÊ¼¹ÜÀíÕâÐ©ÎÄ¼þÁË£¬ËùÒÔÄãÎÞ·¨ÔÙÍ¨¹ý¹ýÂË¹æÔò¹ýÂËËüÃÇ¡£
-git rm --cached FILENAME
-ËùÒÔ´ó¼ÒÒ»¶¨ÒªÑø³ÉÔÚÏîÄ¿¿ªÊ¼¾Í´´½¨.gitignoreÎÄ¼þµÄÏ°¹ß£¬·ñÔòÒ»µ©push£¬´¦ÀíÆðÀ´»á·Ç³£Âé·³¡£
-
-1¡¢ÅäÖÃÓï·¨£º
-¡¡¡¡ÒÔÐ±¸Ü¡°/¡±¿ªÍ·±íÊ¾Ä¿Â¼£»
-¡¡¡¡ÒÔÐÇºÅ¡°*¡±Í¨Åä¶à¸ö×Ö·û£»
-¡¡¡¡ÒÔÎÊºÅ¡°?¡±Í¨Åäµ¥¸ö×Ö·û
-¡¡¡¡ÒÔ·½À¨ºÅ¡°[]¡±°üº¬µ¥¸ö×Ö·ûµÄÆ¥ÅäÁÐ±í£»
-¡¡¡¡ÒÔÌ¾ºÅ¡°!¡±±íÊ¾²»ºöÂÔ(¸ú×Ù)Æ¥Åäµ½µÄÎÄ¼þ»òÄ¿Â¼£»
-
-¡¡¡¡´ËÍâ£¬git ¶ÔÓÚ .ignore ÅäÖÃÎÄ¼þÊÇ°´ÐÐ´ÓÉÏµ½ÏÂ½øÐÐ¹æÔòÆ¥ÅäµÄ£¬ÒâÎ¶×ÅÈç¹ûÇ°ÃæµÄ¹æÔòÆ¥ÅäµÄ·¶Î§¸ü´ó£¬ÔòºóÃæµÄ¹æÔò½«²»»áÉúÐ§£»
-
-2¡¢Ê¾Àý£º
-¡¡¡¡£¨1£©¹æÔò£ºfd1/*
-¡¡¡¡¡¡¡¡  ËµÃ÷£ººöÂÔÄ¿Â¼ fd1 ÏÂµÄÈ«²¿ÄÚÈÝ£»×¢Òâ£¬²»¹ÜÊÇ¸ùÄ¿Â¼ÏÂµÄ /fd1/ Ä¿Â¼£¬»¹ÊÇÄ³¸ö×ÓÄ¿Â¼ /child/fd1/ Ä¿Â¼£¬¶¼»á±»ºöÂÔ£»
-¡¡¡¡£¨2£©¹æÔò£º/fd1/*
-¡¡¡¡¡¡¡¡  ËµÃ÷£ººöÂÔ¸ùÄ¿Â¼ÏÂµÄ /fd1/ Ä¿Â¼µÄÈ«²¿ÄÚÈÝ£»
-¡¡¡¡£¨3£©¹æÔò£º
-/*
-!.gitignore
-!/fw/bin/
-!/fw/sf/
-ËµÃ÷£ººöÂÔÈ«²¿ÄÚÈÝ£¬µ«ÊÇ²»ºöÂÔ .gitignore ÎÄ¼þ¡¢¸ùÄ¿Â¼ÏÂµÄ /fw/bin/ ºÍ /fw/sf/ Ä¿Â¼£»
-
-# Óï·¨¹æ·¶
-¿ÕÐÐ»òÊÇÒÔ#¿ªÍ·µÄÐÐ¼´×¢ÊÍÐÐ½«±»ºöÂÔ¡£
-¿ÉÒÔÔÚÇ°ÃæÌí¼ÓÕýÐ±¸Ü/À´±ÜÃâµÝ¹é,ÏÂÃæµÄÀý×ÓÖÐ¿ÉÒÔºÜÃ÷°×µÄ¿´³öÀ´ÓëÏÂÒ»ÌõµÄÇø±ð¡£
-¿ÉÒÔÔÚºóÃæÌí¼ÓÕýÐ±¸Ü/À´ºöÂÔÎÄ¼þ¼Ð£¬ÀýÈçbuild/¼´ºöÂÔbuildÎÄ¼þ¼Ð¡£
-¿ÉÒÔÊ¹ÓÃ!À´·ñ¶¨ºöÂÔ£¬¼´±ÈÈçÔÚÇ°ÃæÓÃÁË*.apk£¬È»ºóÊ¹ÓÃ!a.apk£¬ÔòÕâ¸öa.apk²»»á±»ºöÂÔ¡£
-*ÓÃÀ´Æ¥ÅäÁã¸ö»ò¶à¸ö×Ö·û£¬Èç*.[oa]ºöÂÔËùÓÐÒÔ".o"»ò".a"½áÎ²£¬*~ºöÂÔËùÓÐÒÔ~½áÎ²µÄÎÄ¼þ£¨ÕâÖÖÎÄ¼þÍ¨³£±»Ðí¶à±à¼­Æ÷±ê¼ÇÎªÁÙÊ±ÎÄ¼þ£©
-[]ÓÃÀ´Æ¥ÅäÀ¨ºÅÄÚµÄÈÎÒ»×Ö·û£¬Èç[abc]£¬Ò²¿ÉÒÔÔÚÀ¨ºÅÄÚ¼ÓÁ¬½Ó·û£¬Èç[0-9]Æ¥Åä0ÖÁ9µÄÊý
-?ÓÃÀ´Æ¥Åäµ¥¸ö×Ö·û¡£
-À´¸öÀõ×Ó£º
-# ºöÂÔ .a ÎÄ¼þ
-*.a
-# µ«·ñ¶¨ºöÂÔ lib.a, ¾¡¹ÜÒÑ¾­ÔÚÇ°ÃæºöÂÔÁË .a ÎÄ¼þ
-!lib.a
-# ½öÔÚµ±Ç°Ä¿Â¼ÏÂºöÂÔ TODO ÎÄ¼þ£¬ µ«²»°üÀ¨×ÓÄ¿Â¼ÏÂµÄ subdir/TODO
-/TODO
-# ºöÂÔ build/ ÎÄ¼þ¼ÐÏÂµÄËùÓÐÎÄ¼þ
-build/
-# ºöÂÔ doc/notes.txt, ²»°üÀ¨ doc/server/arch.txt
-doc/*.txt
-# ºöÂÔËùÓÐµÄ .pdf ÎÄ¼þ ÔÚ doc/ directory ÏÂµÄ
-doc/**/*.pdf
-
-** ÓÃ»§ºÍ×éµÄ¸ÅÄî
-1. ÓÃ»§
-   ÓÃ»§ÊÇÄÜ¹»»ñÈ¡ÏµÍ³×ÊÔ´µÄÈ¨ÏÞµÄ¼¯ºÏ.
-2. ÓÃ»§×éµÄ·ÖÀà:
-   a. ¹ÜÀíÔ± root  :¾ßÓÐÊ¹ÓÃÏµÍ³ËùÓÐÈ¨ÏÞµÄÓÃ»§,ÆäUID Îª0.
-   b. ÆÕÍ¨ÓÃ»§  : ¼´Ò»°ãÓÃ»§,ÆäÊ¹ÓÃÏµÍ³µÄÈ¨ÏÞÊÜÏÞ,ÆäUIDÎª500-60000Ö®¼ä.
-   c. ÏµÍ³ÓÃ»§ :±£ÕÏÏµÍ³ÔËÐÐµÄÓÃ»§,Ò»°ã²»Ìá¹©ÃÜÂëµÇÂ¼ÏµÍ³,ÆäUIDÎª1-499Ö®¼ä.
+** ç”¨æˆ·å’Œç»„çš„æ¦‚å¿µ
+1. ç”¨æˆ·
+   ç”¨æˆ·æ˜¯èƒ½å¤ŸèŽ·å–ç³»ç»Ÿèµ„æºçš„æƒé™çš„é›†åˆ.
+2. ç”¨æˆ·ç»„çš„åˆ†ç±»:
+   a. ç®¡ç†å‘˜ root  :å…·æœ‰ä½¿ç”¨ç³»ç»Ÿæ‰€æœ‰æƒé™çš„ç”¨æˆ·,å…¶UID ä¸º0.
+   b. æ™®é€šç”¨æˆ·  : å³ä¸€èˆ¬ç”¨æˆ·,å…¶ä½¿ç”¨ç³»ç»Ÿçš„æƒé™å—é™,å…¶UIDä¸º500-60000ä¹‹é—´.
+   c. ç³»ç»Ÿç”¨æˆ· :ä¿éšœç³»ç»Ÿè¿è¡Œçš„ç”¨æˆ·,ä¸€èˆ¬ä¸æä¾›å¯†ç ç™»å½•ç³»ç»Ÿ,å…¶UIDä¸º1-499ä¹‹é—´.
  
-3. ÓëÓÃ»§ÓÐ¹ØµÄÎÄ¼þ/etc/passwd£¬/etc/shadow
-   a. /etc/passwdÎÄ¼þ£º
-      Æä¸ñÊ½£ºaccount£ºpassword£ºUID:GID:GECOS:diretory:shell
-      account: ÓÃ»§Ãû»òÕÊºÅ
-      password £ºÓÃ»§ÃÜÂëÕ¼Î»·û
-      UID£ºÓÃ»§µÄIDºÅ
-      GID£ºÓÃ»§ËùÔÚ×éµÄIDºÅ
-      GECOS:ÓÃ»§µÄÏêÏ¸ÐÅÏ¢£¨ÈçÐÕÃû£¬ÄêÁä£¬µç»°µÈ£©
-      diretory£ºÓÃ»§ËùµÄ¼ÒÄ¿Â¼
-      shell£ºÓÃ»§ËùÔÚµÄ±à³Ì»·¾³
+3. ä¸Žç”¨æˆ·æœ‰å…³çš„æ–‡ä»¶/etc/passwdï¼Œ/etc/shadow
+   a. /etc/passwdæ–‡ä»¶ï¼š
+      å…¶æ ¼å¼ï¼šaccountï¼špasswordï¼šUID:GID:GECOS:diretory:shell
+      account: ç”¨æˆ·åæˆ–å¸å·
+      password ï¼šç”¨æˆ·å¯†ç å ä½ç¬¦
+      UIDï¼šç”¨æˆ·çš„IDå·
+      GIDï¼šç”¨æˆ·æ‰€åœ¨ç»„çš„IDå·
+      GECOS:ç”¨æˆ·çš„è¯¦ç»†ä¿¡æ¯ï¼ˆå¦‚å§“åï¼Œå¹´é¾„ï¼Œç”µè¯ç­‰ï¼‰
+      diretoryï¼šç”¨æˆ·æ‰€çš„å®¶ç›®å½•
+      shellï¼šç”¨æˆ·æ‰€åœ¨çš„ç¼–ç¨‹çŽ¯å¢ƒ
    b. /etc/shadow
-      Æä¸ñÊ½£ºaccount£ºpassword£º×î½ü¸ü¸ÄÃÜÂëµÄÈÕÆÚ£ºÃÜÂë²»¿É¸ü¸ÃµÄÌìÊý£ºÃÜÂëÐèÒªÖØÐÂ¸ü¸ÄµÄÌìÊý£ºÃÜÂë¸ü¸ÄÇ°µÄ¾¯¸æÆÚÏÞ£ºÃÜÂë¹ýÆÚµÄ¿íÏÞÊ±¼ä£ºÕÊºÅÊ§Ð§ÈÕÆÚ£º±£Áô
-4. ÓÃ»§×é
-   ÓÃ»§×é·ÖÀà;
-   a. ÆÕÍ¨ÓÃ»§×é:¿ÉÒÔ¼ÓÈë¶à¸öÓÃ»§
-   b. ÏµÍ³×é:Ò»°ã¼ÓÈëÒ»Ð©ÏµÍ³ÓÃ»§
-   c. Ë½ÓÐ×é(Ò²³Æ»ù±¾×é):µ±´´½¨ÓÃ»§Ê±,Èç¹ûÃ»ÓÐÎªÆäÖ¸Ã÷ËùÊô×é,Ôò¾ÍÎªÆä¶¨ÒåÒ»¸öË½ÓÐµÄÓÃ»§×é,ÆðÃû³ÆÓëÓÃ»§ÃûÍ¬Ãû.
-×¢:Ë½ÓÐ×é¿ÉÒÔ±ä³ÉÆÕÍ¨ÓÃ»§×é,µ±°ÑÆäËûÓÃ»§¼ÓÈëµ½¸Ã×éÖÐ,ÔòÆä¾Í±ä³ÉÁËÆÕÍ¨×é
-5. ×éÊÇÈ¨ÏÞµÄÈÝÆ÷
-   ÈçÆÕÍ¨ÓÃ»§ a,b,c ËùÊô×égrp,ÔòËüÃÇ»á¼Ì³Ð×égrpµÄÈ¨ÏÞ
+      å…¶æ ¼å¼ï¼šaccountï¼špasswordï¼šæœ€è¿‘æ›´æ”¹å¯†ç çš„æ—¥æœŸï¼šå¯†ç ä¸å¯æ›´è¯¥çš„å¤©æ•°ï¼šå¯†ç éœ€è¦é‡æ–°æ›´æ”¹çš„å¤©æ•°ï¼šå¯†ç æ›´æ”¹å‰çš„è­¦å‘ŠæœŸé™ï¼šå¯†ç è¿‡æœŸçš„å®½é™æ—¶é—´ï¼šå¸å·å¤±æ•ˆæ—¥æœŸï¼šä¿ç•™
+4. ç”¨æˆ·ç»„
+   ç”¨æˆ·ç»„åˆ†ç±»;
+   a. æ™®é€šç”¨æˆ·ç»„:å¯ä»¥åŠ å…¥å¤šä¸ªç”¨æˆ·
+   b. ç³»ç»Ÿç»„:ä¸€èˆ¬åŠ å…¥ä¸€äº›ç³»ç»Ÿç”¨æˆ·
+   c. ç§æœ‰ç»„(ä¹Ÿç§°åŸºæœ¬ç»„):å½“åˆ›å»ºç”¨æˆ·æ—¶,å¦‚æžœæ²¡æœ‰ä¸ºå…¶æŒ‡æ˜Žæ‰€å±žç»„,åˆ™å°±ä¸ºå…¶å®šä¹‰ä¸€ä¸ªç§æœ‰çš„ç”¨æˆ·ç»„,èµ·åç§°ä¸Žç”¨æˆ·ååŒå.
+æ³¨:ç§æœ‰ç»„å¯ä»¥å˜æˆæ™®é€šç”¨æˆ·ç»„,å½“æŠŠå…¶ä»–ç”¨æˆ·åŠ å…¥åˆ°è¯¥ç»„ä¸­,åˆ™å…¶å°±å˜æˆäº†æ™®é€šç»„
+5. ç»„æ˜¯æƒé™çš„å®¹å™¨
+   å¦‚æ™®é€šç”¨æˆ· a,b,c æ‰€å±žç»„grp,åˆ™å®ƒä»¬ä¼šç»§æ‰¿ç»„grpçš„æƒé™
  
-6. Óë×éÓÐ¹ØµÄÎÄ¼þ:/etc/group£¬/etc/gshadow
-    /etc/groupÎÄ¼þ£º Æä¸ñÊ½:group_name:passwoerd:GID:user_list
-     group_name:×éÃû
-     passwoerd:×éÃÜÂë
-     GID:×éµÄIDºÅ
-     user_list£ºÒÔgroup_nameÎª¸½¼Ó×éµÄÓÃ»§ÁÐ±í
-7. ÐÞ¸ÄÓÃ»§¼°ÓÃ»§×éµÄÃüÁî£ºuseradd£¬usermod£¬ groupdd£¬userdel
-   a£®Ôö¼ÓÓÃ»§ £ºuseradd [options] username
-      options£º
-                   1£®-u £ºUID
-                   2£®-g £ºGID
-                   3£®-d £ºÖ¸¶¨ÓÃ»§¼ÒÄ¿Â¼£¬Ä¬ÈÏÊÇ/home/username
-                   4£®-s £ºÖ¸¶¨ÓÃ»§ËùÔÚµÄshell»·¾³
-                   5£®-G£ºÖ¸¶¨ÓÃ»§µÄ¸½¼Ó×é
-       ÀýÈçÔö¼ÓÒ»ÓÃ»§wendy UIDÎª1888 ¼ÒÄ¿Â¼/home/oracle£¬shellÎª/bin/sh
-            #useradd ¨Cu 1888 ¨Cd /home/oracle ¨Cs /bin/sh wendy
-    b£®ÐÞ¸ÄÓÃ»§£ºusermod  [options] username
-            options£º
-                   1£®-u £ºUID
-                   2£®-g £ºGID
-                   3£®-d £ºÖ¸¶¨ÓÃ»§¼ÒÄ¿Â¼£¬Ä¬ÈÏÊÇ/home/username
-                         -m Óë-b Ò»ÆðÓÃ±íÊ¾°ÑÓÃ»§¼ÒÄ¿Â¼µÄÄÚÈÝÒ²ÒÆ×ß
-                   4£®-s £ºÖ¸¶¨ÓÃ»§ËùÔÚµÄshell»·¾³
-                   5£®-G£ºÖ¸¶¨ÓÃ»§µÄ¸½¼Ó×é
+6. ä¸Žç»„æœ‰å…³çš„æ–‡ä»¶:/etc/groupï¼Œ/etc/gshadow
+    /etc/groupæ–‡ä»¶ï¼š å…¶æ ¼å¼:group_name:passwoerd:GID:user_list
+     group_name:ç»„å
+     passwoerd:ç»„å¯†ç 
+     GID:ç»„çš„IDå·
+     user_listï¼šä»¥group_nameä¸ºé™„åŠ ç»„çš„ç”¨æˆ·åˆ—è¡¨
+7. ä¿®æ”¹ç”¨æˆ·åŠç”¨æˆ·ç»„çš„å‘½ä»¤ï¼šuseraddï¼Œusermodï¼Œ groupddï¼Œuserdel
+   aï¼Žå¢žåŠ ç”¨æˆ· ï¼šuseradd [options] username
+      optionsï¼š
+                   1ï¼Ž-u ï¼šUID
+                   2ï¼Ž-g ï¼šGID
+                   3ï¼Ž-d ï¼šæŒ‡å®šç”¨æˆ·å®¶ç›®å½•ï¼Œé»˜è®¤æ˜¯/home/username
+                   4ï¼Ž-s ï¼šæŒ‡å®šç”¨æˆ·æ‰€åœ¨çš„shellçŽ¯å¢ƒ
+                   5ï¼Ž-Gï¼šæŒ‡å®šç”¨æˆ·çš„é™„åŠ ç»„
+       ä¾‹å¦‚å¢žåŠ ä¸€ç”¨æˆ·wendy UIDä¸º1888 å®¶ç›®å½•/home/oracleï¼Œshellä¸º/bin/sh
+            #useradd â€“u 1888 â€“d /home/oracle â€“s /bin/sh wendy
+    bï¼Žä¿®æ”¹ç”¨æˆ·ï¼šusermod  [options] username
+            optionsï¼š
+                   1ï¼Ž-u ï¼šUID
+                   2ï¼Ž-g ï¼šGID
+                   3ï¼Ž-d ï¼šæŒ‡å®šç”¨æˆ·å®¶ç›®å½•ï¼Œé»˜è®¤æ˜¯/home/username
+                         -m ä¸Ž-b ä¸€èµ·ç”¨è¡¨ç¤ºæŠŠç”¨æˆ·å®¶ç›®å½•çš„å†…å®¹ä¹Ÿç§»èµ°
+                   4ï¼Ž-s ï¼šæŒ‡å®šç”¨æˆ·æ‰€åœ¨çš„shellçŽ¯å¢ƒ
+                   5ï¼Ž-Gï¼šæŒ‡å®šç”¨æˆ·çš„é™„åŠ ç»„
  
-       ÀýÈçÐÞ¸ÄÓÃ»§wendy UIDÎª1000 ¼ÒÄ¿Â¼/oracle£¬shellÎª/bin/bash
-          #usermod ¨Cu 1000 ¨Cd  /oracle ¨Cs /bin/bash -m wendy
-          #usermod -G git,user steven #°ÑstevenÍ¬Ê±¼ÓÈëgit×éºÍuser×é 
-     c£®Ôö¼ÓÓÃ»§×é£ºgroupadd   [options] groupname
+       ä¾‹å¦‚ä¿®æ”¹ç”¨æˆ·wendy UIDä¸º1000 å®¶ç›®å½•/oracleï¼Œshellä¸º/bin/bash
+          #usermod â€“u 1000 â€“d  /oracle â€“s /bin/bash -m wendy
+          #usermod -G git,user steven #æŠŠstevenåŒæ—¶åŠ å…¥gitç»„å’Œuserç»„ 
+     cï¼Žå¢žåŠ ç”¨æˆ·ç»„ï¼šgroupadd   [options] groupname
            options
-                   1£®-g £ºGID
-        ÀýÈçÔö¼ÓÓÃ»§×égrp UIDÎª1001
-          #groupadd ¨Cg 1001 grp
-     d£®É¾³ýÓÃ»§£ºuserdel   [options]username
+                   1ï¼Ž-g ï¼šGID
+        ä¾‹å¦‚å¢žåŠ ç”¨æˆ·ç»„grp UIDä¸º1001
+          #groupadd â€“g 1001 grp
+     dï¼Žåˆ é™¤ç”¨æˆ·ï¼šuserdel   [options]username
             options
-              1£®-r £ºÁ¬Í¬¼ÒÄ¿Â¼Ò»ÆðÉ¾³ý
-       ÀýÈçÉ¾³ýÓÃ»§wendy¼°¼ÒÄ¿Â¼
-           #userdel ¨Cr wendy
+              1ï¼Ž-r ï¼šè¿žåŒå®¶ç›®å½•ä¸€èµ·åˆ é™¤
+       ä¾‹å¦‚åˆ é™¤ç”¨æˆ·wendyåŠå®¶ç›®å½•
+           #userdel â€“r wendy
+** å¼€å‘çŽ¯å¢ƒï¼šgit emacs gcc qmake sshd
 ** useradd
-1.×÷ÓÃ
-useraddÃüÁîÓÃÀ´½¨Á¢ÓÃ»§ÕÊºÅºÍ´´½¨ÓÃ»§µÄÆðÊ¼Ä¿Â¼£¬Ê¹ÓÃÈ¨ÏÞÊÇÖÕ¼«ÓÃ»§¡£
-2.¸ñÊ½
-useradd [£­d home] [£­s shell] [£­c comment] [£­m [£­k template]] [£­f inactive] [£­e expire ] [£­p passwd] [£­r] name
-3.Ö÷Òª²ÎÊý
-£­g£ºÖ¸¶¨ÓÃ»§ËùÊôµÄÆðÊ¼Èº×é¡£
-£­m£º×Ô¶¯½¨Á¢ÓÃ»§µÄµÇÈëÄ¿Â¼¡£
-£­s£ºÖ¸¶¨ÓÃ»§µÇÈëºóËùÊ¹ÓÃµÄshell¡£
-£­c£º¼ÓÉÏ±¸×¢ÎÄ×Ö£¬±¸×¢ÎÄ×Ö±£´æÔÚpasswdµÄ±¸×¢À¸ÖÐ¡£ 
-£­d£ºÖ¸¶¨ÓÃ»§µÇÈëÊ±µÄÆôÊ¼Ä¿Â¼¡£
-£­D£º±ä¸üÔ¤ÉèÖµ¡£
-£­e£ºÖ¸¶¨ÕËºÅµÄÓÐÐ§ÆÚÏÞ£¬È±Ê¡±íÊ¾ÓÀ¾ÃÓÐÐ§¡£
-£­f£ºÖ¸¶¨ÔÚÃÜÂë¹ýÆÚºó¶àÉÙÌì¼´¹Ø±Õ¸ÃÕËºÅ¡£
-£­G£ºÖ¸¶¨ÓÃ»§ËùÊôµÄ¸½¼ÓÈº×é¡£
-£­M£º²»Òª×Ô¶¯½¨Á¢ÓÃ»§µÄµÇÈëÄ¿Â¼¡£
-£­n£ºÈ¡Ïû½¨Á¢ÒÔÓÃ»§Ãû³ÆÎªÃûµÄÈº×é¡£
-£­r£º½¨Á¢ÏµÍ³ÕËºÅ¡£
-£­u£ºÖ¸¶¨ÓÃ»§IDºÅ¡£
-4.ËµÃ÷
-useradd¿ÉÓÃÀ´½¨Á¢ÓÃ»§ÕËºÅ£¬ËûºÍadduserÃüÁîÊÇÏàÍ¬µÄ¡£ÕËºÅ½¨ºÃÖ®ºó£¬ÔÙÓÃpasswdÉè¶¨ÕËºÅµÄÃÜÂë¡£Ê¹ÓÃuseraddÃüÁîËù½¨Á¢µÄÕËºÅ£¬Êµ¼ÊÉÏÊÇ±£´æÔÚ/etc/passwdÎÄ±¾ÎÄ¼þÖÐ¡£
-5.Ó¦ÓÃÊµÀý
-½¨Á¢Ò»¸öÐÂÓÃ»§ÕË»§£¬²¢ÉèÖÃID£º
-££useradd david -u 544
-ÐèÒªËµÃ÷µÄÊÇ£¬Éè¶¨IDÖµÊ±¾¡Á¿Òª´óÓÚ500£¬ÒÔÃâ³åÍ»¡£ÒòÎªLinux°²×°ºó»á½¨Á¢Ò»Ð©ÌØ±ðÓÃ»§£¬Ò»°ã0µ½499Ö®¼äµÄÖµÁô¸øbin¡¢mailÕâÑùµÄÏµÍ³ÕËºÅ¡£
+1.ä½œç”¨
+useraddå‘½ä»¤ç”¨æ¥å»ºç«‹ç”¨æˆ·å¸å·å’Œåˆ›å»ºç”¨æˆ·çš„èµ·å§‹ç›®å½•ï¼Œä½¿ç”¨æƒé™æ˜¯ç»ˆæžç”¨æˆ·ã€‚
+2.æ ¼å¼
+useradd [ï¼d home] [ï¼s shell] [ï¼c comment] [ï¼m [ï¼k template]] [ï¼f inactive] [ï¼e expire ] [ï¼p passwd] [ï¼r] name
+3.ä¸»è¦å‚æ•°
+ï¼gï¼šæŒ‡å®šç”¨æˆ·æ‰€å±žçš„èµ·å§‹ç¾¤ç»„ã€‚
+ï¼mï¼šè‡ªåŠ¨å»ºç«‹ç”¨æˆ·çš„ç™»å…¥ç›®å½•ã€‚
+ï¼sï¼šæŒ‡å®šç”¨æˆ·ç™»å…¥åŽæ‰€ä½¿ç”¨çš„shellã€‚
+ï¼cï¼šåŠ ä¸Šå¤‡æ³¨æ–‡å­—ï¼Œå¤‡æ³¨æ–‡å­—ä¿å­˜åœ¨passwdçš„å¤‡æ³¨æ ä¸­ã€‚ 
+ï¼dï¼šæŒ‡å®šç”¨æˆ·ç™»å…¥æ—¶çš„å¯å§‹ç›®å½•ã€‚
+ï¼Dï¼šå˜æ›´é¢„è®¾å€¼ã€‚
+ï¼eï¼šæŒ‡å®šè´¦å·çš„æœ‰æ•ˆæœŸé™ï¼Œç¼ºçœè¡¨ç¤ºæ°¸ä¹…æœ‰æ•ˆã€‚
+ï¼fï¼šæŒ‡å®šåœ¨å¯†ç è¿‡æœŸåŽå¤šå°‘å¤©å³å…³é—­è¯¥è´¦å·ã€‚
+ï¼Gï¼šæŒ‡å®šç”¨æˆ·æ‰€å±žçš„é™„åŠ ç¾¤ç»„ã€‚
+ï¼Mï¼šä¸è¦è‡ªåŠ¨å»ºç«‹ç”¨æˆ·çš„ç™»å…¥ç›®å½•ã€‚
+ï¼nï¼šå–æ¶ˆå»ºç«‹ä»¥ç”¨æˆ·åç§°ä¸ºåçš„ç¾¤ç»„ã€‚
+ï¼rï¼šå»ºç«‹ç³»ç»Ÿè´¦å·ã€‚
+ï¼uï¼šæŒ‡å®šç”¨æˆ·IDå·ã€‚
+4.è¯´æ˜Ž
+useraddå¯ç”¨æ¥å»ºç«‹ç”¨æˆ·è´¦å·ï¼Œä»–å’Œadduserå‘½ä»¤æ˜¯ç›¸åŒçš„ã€‚è´¦å·å»ºå¥½ä¹‹åŽï¼Œå†ç”¨passwdè®¾å®šè´¦å·çš„å¯†ç ã€‚ä½¿ç”¨useraddå‘½ä»¤æ‰€å»ºç«‹çš„è´¦å·ï¼Œå®žé™…ä¸Šæ˜¯ä¿å­˜åœ¨/etc/passwdæ–‡æœ¬æ–‡ä»¶ä¸­ã€‚
+5.åº”ç”¨å®žä¾‹
+å»ºç«‹ä¸€ä¸ªæ–°ç”¨æˆ·è´¦æˆ·ï¼Œå¹¶è®¾ç½®IDï¼š
+ï¼ƒuseradd david -u 544
+éœ€è¦è¯´æ˜Žçš„æ˜¯ï¼Œè®¾å®šIDå€¼æ—¶å°½é‡è¦å¤§äºŽ500ï¼Œä»¥å…å†²çªã€‚å› ä¸ºLinuxå®‰è£…åŽä¼šå»ºç«‹ä¸€äº›ç‰¹åˆ«ç”¨æˆ·ï¼Œä¸€èˆ¬0åˆ°499ä¹‹é—´çš„å€¼ç•™ç»™binã€mailè¿™æ ·çš„ç³»ç»Ÿè´¦å·ã€‚
 
-££useradd Oracle -g oinstall -G dba
-ÐÂ´´½¨Ò»¸öoracleÓÃ»§£¬Õâ³õÊ¼ÊôÓÚoinstall×é£¬ÇÒÍ¬Ê±ÈÃËûÒ²ÊôÓÚdba×é¡£
+ï¼ƒuseradd Oracle -g oinstall -G dba
+æ–°åˆ›å»ºä¸€ä¸ªoracleç”¨æˆ·ï¼Œè¿™åˆå§‹å±žäºŽoinstallç»„ï¼Œä¸”åŒæ—¶è®©ä»–ä¹Ÿå±žäºŽdbaç»„ã€‚
 
-££useradd tomcat  -d /var/servlet/service -s /sbin/nologin
-ÎÞ·¨Ê¹ÓÃshell£¬ÇÒÆäÓÃ»§Ä¿Â¼ÖÁ/var/servlet/service
+ï¼ƒuseradd tomcat  -d /var/servlet/service -s /sbin/nologin
+æ— æ³•ä½¿ç”¨shellï¼Œä¸”å…¶ç”¨æˆ·ç›®å½•è‡³/var/servlet/service
 
 * linux commands
 find . -type f -name \*.h
 
+* git & hub
+   https://git-scm.com/book/zh/v2
+   https://man.openbsd.org/sshd
+   git clone /home/git/project.git
+   git clone ssh://user@host/home/git/project.git
+** git server and users
+** .gitignore
+	é¦–å…ˆè¦å¼ºè°ƒä¸€ç‚¹ï¼Œè¿™ä¸ªæ–‡ä»¶çš„å®Œæ•´æ–‡ä»¶åå°±æ˜¯â€œ.gitignoreâ€ï¼Œæ³¨æ„æœ€å‰é¢æœ‰ä¸ªâ€œ.â€ã€‚
+	è¿™æ ·æ²¡æœ‰æ‰©å±•åçš„æ–‡ä»¶åœ¨Windowsä¸‹ä¸å¤ªå¥½åˆ›å»ºï¼Œè¿™é‡Œç»™å‡ºwin7çš„åˆ›å»ºæ–¹æ³•ï¼š
+	åˆ›å»ºä¸€ä¸ªæ–‡ä»¶ï¼Œæ–‡ä»¶åä¸ºï¼šâ€œ.gitignore.â€ï¼Œæ³¨æ„å‰åŽéƒ½æœ‰ä¸€ä¸ªç‚¹ã€‚ä¿å­˜ä¹‹åŽç³»ç»Ÿä¼šè‡ªåŠ¨é‡å‘½åä¸ºâ€œ.gitignoreâ€ã€‚
+	ä¸€èˆ¬æ¥è¯´æ¯ä¸ªGité¡¹ç›®ä¸­éƒ½éœ€è¦ä¸€ä¸ªâ€œ.gitignoreâ€æ–‡ä»¶ï¼Œè¿™ä¸ªæ–‡ä»¶çš„ä½œç”¨å°±æ˜¯å‘Šè¯‰Gitå“ªäº›æ–‡ä»¶ä¸éœ€è¦æ·»åŠ åˆ°ç‰ˆæœ¬ç®¡ç†ä¸­ã€‚
+
+ä¸‹é¢æˆ‘ä»¬çœ‹çœ‹å¸¸ç”¨çš„è§„åˆ™ï¼š
+
+/mtk/ è¿‡æ»¤æ•´ä¸ªæ–‡ä»¶å¤¹
+*.zip è¿‡æ»¤æ‰€æœ‰.zipæ–‡ä»¶
+/mtk/do.c è¿‡æ»¤æŸä¸ªå…·ä½“æ–‡ä»¶
+
+å¾ˆç®€å•å§ï¼Œè¢«è¿‡æ»¤æŽ‰çš„æ–‡ä»¶å°±ä¸ä¼šå‡ºçŽ°åœ¨ä½ çš„GitHubåº“ä¸­äº†ï¼Œå½“ç„¶æœ¬åœ°åº“ä¸­è¿˜æœ‰ï¼Œåªæ˜¯pushçš„æ—¶å€™ä¸ä¼šä¸Šä¼ ã€‚
+
+éœ€è¦æ³¨æ„çš„æ˜¯ï¼Œgitignoreè¿˜å¯ä»¥æŒ‡å®šè¦å°†å“ªäº›æ–‡ä»¶æ·»åŠ åˆ°ç‰ˆæœ¬ç®¡ç†ä¸­ï¼š
+
+!*.zip
+!/mtk/one.txt
+
+å”¯ä¸€çš„åŒºåˆ«å°±æ˜¯è§„åˆ™å¼€å¤´å¤šäº†ä¸€ä¸ªæ„Ÿå¹å·ï¼ŒGitä¼šå°†æ»¡è¶³è¿™ç±»è§„åˆ™çš„æ–‡ä»¶æ·»åŠ åˆ°ç‰ˆæœ¬ç®¡ç†ä¸­ã€‚
+
+ä¸ºä»€ä¹ˆè¦æœ‰ä¸¤ç§è§„åˆ™å‘¢ï¼Ÿæƒ³è±¡ä¸€ä¸ªåœºæ™¯ï¼šæˆ‘ä»¬åªéœ€è¦ç®¡ç†/mtk/ç›®å½•ä¸­çš„one.txtæ–‡ä»¶ï¼Œè¿™ä¸ªç›®å½•ä¸­çš„å…¶ä»–æ–‡ä»¶éƒ½ä¸éœ€è¦ç®¡ç†ã€‚
+é‚£ä¹ˆæˆ‘ä»¬å°±éœ€è¦ä½¿ç”¨ï¼š
+
+/mtk/
+!/mtk/one.txt
+
+å‡è®¾æˆ‘ä»¬åªæœ‰è¿‡æ»¤è§„åˆ™æ²¡æœ‰æ·»åŠ è§„åˆ™ï¼Œé‚£ä¹ˆæˆ‘ä»¬å°±éœ€è¦æŠŠ/mtk/ç›®å½•ä¸‹é™¤äº†one.txtä»¥å¤–çš„æ‰€æœ‰æ–‡ä»¶éƒ½å†™å‡ºæ¥ï¼
+
+æœ€åŽéœ€è¦å¼ºè°ƒçš„ä¸€ç‚¹æ˜¯ï¼Œå¦‚æžœä½ ä¸æ…Žåœ¨åˆ›å»º.gitignoreæ–‡ä»¶ä¹‹å‰å°±pushäº†é¡¹ç›®ï¼Œé‚£ä¹ˆå³ä½¿ä½ åœ¨.gitignoreæ–‡ä»¶ä¸­å†™å…¥æ–°çš„è¿‡æ»¤è§„åˆ™ï¼Œè¿™äº›è§„åˆ™ä¹Ÿä¸ä¼šèµ·ä½œç”¨ï¼ŒGitä»ç„¶ä¼šå¯¹æ‰€æœ‰æ–‡ä»¶è¿›è¡Œç‰ˆæœ¬ç®¡ç†ã€‚
+
+ç®€å•æ¥è¯´ï¼Œå‡ºçŽ°è¿™ç§é—®é¢˜çš„åŽŸå› å°±æ˜¯Gitå·²ç»å¼€å§‹ç®¡ç†è¿™äº›æ–‡ä»¶äº†ï¼Œæ‰€ä»¥ä½ æ— æ³•å†é€šè¿‡è¿‡æ»¤è§„åˆ™è¿‡æ»¤å®ƒä»¬ã€‚
+git rm --cached FILENAME
+æ‰€ä»¥å¤§å®¶ä¸€å®šè¦å…»æˆåœ¨é¡¹ç›®å¼€å§‹å°±åˆ›å»º.gitignoreæ–‡ä»¶çš„ä¹ æƒ¯ï¼Œå¦åˆ™ä¸€æ—¦pushï¼Œå¤„ç†èµ·æ¥ä¼šéžå¸¸éº»çƒ¦ã€‚
+
+1ã€é…ç½®è¯­æ³•ï¼š
+ã€€ã€€ä»¥æ–œæ â€œ/â€å¼€å¤´è¡¨ç¤ºç›®å½•ï¼›
+ã€€ã€€ä»¥æ˜Ÿå·â€œ*â€é€šé…å¤šä¸ªå­—ç¬¦ï¼›
+ã€€ã€€ä»¥é—®å·â€œ?â€é€šé…å•ä¸ªå­—ç¬¦
+ã€€ã€€ä»¥æ–¹æ‹¬å·â€œ[]â€åŒ…å«å•ä¸ªå­—ç¬¦çš„åŒ¹é…åˆ—è¡¨ï¼›
+ã€€ã€€ä»¥å¹å·â€œ!â€è¡¨ç¤ºä¸å¿½ç•¥(è·Ÿè¸ª)åŒ¹é…åˆ°çš„æ–‡ä»¶æˆ–ç›®å½•ï¼›
+
+ã€€ã€€æ­¤å¤–ï¼Œgit å¯¹äºŽ .ignore é…ç½®æ–‡ä»¶æ˜¯æŒ‰è¡Œä»Žä¸Šåˆ°ä¸‹è¿›è¡Œè§„åˆ™åŒ¹é…çš„ï¼Œæ„å‘³ç€å¦‚æžœå‰é¢çš„è§„åˆ™åŒ¹é…çš„èŒƒå›´æ›´å¤§ï¼Œåˆ™åŽé¢çš„è§„åˆ™å°†ä¸ä¼šç”Ÿæ•ˆï¼›
+
+2ã€ç¤ºä¾‹ï¼š
+ã€€ã€€ï¼ˆ1ï¼‰è§„åˆ™ï¼šfd1/*
+ã€€ã€€ã€€ã€€  è¯´æ˜Žï¼šå¿½ç•¥ç›®å½• fd1 ä¸‹çš„å…¨éƒ¨å†…å®¹ï¼›æ³¨æ„ï¼Œä¸ç®¡æ˜¯æ ¹ç›®å½•ä¸‹çš„ /fd1/ ç›®å½•ï¼Œè¿˜æ˜¯æŸä¸ªå­ç›®å½• /child/fd1/ ç›®å½•ï¼Œéƒ½ä¼šè¢«å¿½ç•¥ï¼›
+ã€€ã€€ï¼ˆ2ï¼‰è§„åˆ™ï¼š/fd1/*
+ã€€ã€€ã€€ã€€  è¯´æ˜Žï¼šå¿½ç•¥æ ¹ç›®å½•ä¸‹çš„ /fd1/ ç›®å½•çš„å…¨éƒ¨å†…å®¹ï¼›
+ã€€ã€€ï¼ˆ3ï¼‰è§„åˆ™ï¼š
+/*
+!.gitignore
+!/fw/bin/
+!/fw/sf/
+è¯´æ˜Žï¼šå¿½ç•¥å…¨éƒ¨å†…å®¹ï¼Œä½†æ˜¯ä¸å¿½ç•¥ .gitignore æ–‡ä»¶ã€æ ¹ç›®å½•ä¸‹çš„ /fw/bin/ å’Œ /fw/sf/ ç›®å½•ï¼›
+
+# è¯­æ³•è§„èŒƒ
+ç©ºè¡Œæˆ–æ˜¯ä»¥#å¼€å¤´çš„è¡Œå³æ³¨é‡Šè¡Œå°†è¢«å¿½ç•¥ã€‚
+å¯ä»¥åœ¨å‰é¢æ·»åŠ æ­£æ–œæ /æ¥é¿å…é€’å½’,ä¸‹é¢çš„ä¾‹å­ä¸­å¯ä»¥å¾ˆæ˜Žç™½çš„çœ‹å‡ºæ¥ä¸Žä¸‹ä¸€æ¡çš„åŒºåˆ«ã€‚
+å¯ä»¥åœ¨åŽé¢æ·»åŠ æ­£æ–œæ /æ¥å¿½ç•¥æ–‡ä»¶å¤¹ï¼Œä¾‹å¦‚build/å³å¿½ç•¥buildæ–‡ä»¶å¤¹ã€‚
+å¯ä»¥ä½¿ç”¨!æ¥å¦å®šå¿½ç•¥ï¼Œå³æ¯”å¦‚åœ¨å‰é¢ç”¨äº†*.apkï¼Œç„¶åŽä½¿ç”¨!a.apkï¼Œåˆ™è¿™ä¸ªa.apkä¸ä¼šè¢«å¿½ç•¥ã€‚
+*ç”¨æ¥åŒ¹é…é›¶ä¸ªæˆ–å¤šä¸ªå­—ç¬¦ï¼Œå¦‚*.[oa]å¿½ç•¥æ‰€æœ‰ä»¥".o"æˆ–".a"ç»“å°¾ï¼Œ*~å¿½ç•¥æ‰€æœ‰ä»¥~ç»“å°¾çš„æ–‡ä»¶ï¼ˆè¿™ç§æ–‡ä»¶é€šå¸¸è¢«è®¸å¤šç¼–è¾‘å™¨æ ‡è®°ä¸ºä¸´æ—¶æ–‡ä»¶ï¼‰
+[]ç”¨æ¥åŒ¹é…æ‹¬å·å†…çš„ä»»ä¸€å­—ç¬¦ï¼Œå¦‚[abc]ï¼Œä¹Ÿå¯ä»¥åœ¨æ‹¬å·å†…åŠ è¿žæŽ¥ç¬¦ï¼Œå¦‚[0-9]åŒ¹é…0è‡³9çš„æ•°
+?ç”¨æ¥åŒ¹é…å•ä¸ªå­—ç¬¦ã€‚
+æ¥ä¸ªæ —å­ï¼š
+# å¿½ç•¥ .a æ–‡ä»¶
+*.a
+# ä½†å¦å®šå¿½ç•¥ lib.a, å°½ç®¡å·²ç»åœ¨å‰é¢å¿½ç•¥äº† .a æ–‡ä»¶
+!lib.a
+# ä»…åœ¨å½“å‰ç›®å½•ä¸‹å¿½ç•¥ TODO æ–‡ä»¶ï¼Œ ä½†ä¸åŒ…æ‹¬å­ç›®å½•ä¸‹çš„ subdir/TODO
+/TODO
+# å¿½ç•¥ build/ æ–‡ä»¶å¤¹ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
+build/
+# å¿½ç•¥ doc/notes.txt, ä¸åŒ…æ‹¬ doc/server/arch.txt
+doc/*.txt
+# å¿½ç•¥æ‰€æœ‰çš„ .pdf æ–‡ä»¶ åœ¨ doc/ directory ä¸‹çš„
+doc/**/*.pdf
+
+
 * emacs
-  # ÎÒµÄ GitHub »ýÀÛÓë·ÖÏí¡£
+  # æˆ‘çš„ GitHub ç§¯ç´¯ä¸Žåˆ†äº«ã€‚
 https://github.com/lujun9972/emacs-document
-** ±àÂë
-1.²é¿´µ±Ç°bufferµÄ±àÂë£ºM-x describe-coding-system
-2.ÁÐ³öËùÓÐ±àÂë£ºC-x <RET> r <TAB>
-3.ÒÔÖ¸¶¨±àÂëÖØ¶Áµ±Ç°buffer£ºC-x <RET> r utf-8£¬£¨revert-buffer-with-coding-system£©
-4.¸Ä±äµ±Ç°bufferµÄ±àÂë£ºC-x <RET> f utf-8£¬£¨set-buffer-file-coding-system£©
-5.Éè¶¨ÏÂÒ»²½²Ù×÷µÄ±àÂë¸ñÊ½£ºC-x <RET> c£¬£¨universal-coding-system-argument£©
+** ç¼–ç 
+1.æŸ¥çœ‹å½“å‰bufferçš„ç¼–ç ï¼šM-x describe-coding-system
+2.åˆ—å‡ºæ‰€æœ‰ç¼–ç ï¼šC-x <RET> r <TAB>
+3.ä»¥æŒ‡å®šç¼–ç é‡è¯»å½“å‰bufferï¼šC-x <RET> r utf-8ï¼Œï¼ˆrevert-buffer-with-coding-systemï¼‰
+4.æ”¹å˜å½“å‰bufferçš„ç¼–ç ï¼šC-x <RET> f utf-8ï¼Œï¼ˆset-buffer-file-coding-systemï¼‰
+5.è®¾å®šä¸‹ä¸€æ­¥æ“ä½œçš„ç¼–ç æ ¼å¼ï¼šC-x <RET> cï¼Œï¼ˆuniversal-coding-system-argumentï¼‰
 ** elisp
 You can evaluate an expression and see its result in any of several ways, including:
 + Put your cursor after the last close-paren and type C-j (control + j)
@@ -248,7 +255,7 @@ Note that you do not (and cannot) use commas to separate the elements; use white
 Vectors can have mixed-type elements, and can be nested.
 You usually use the function make-vector to create them,
 since literal vectors are singletons, which can be surprising.
-# ²Ù×÷
+# æ“ä½œ
 (setq xyz ["str" 3.14 [() ?d] 'some])
 (aref xyz 2)
 (aset xyz 0 "zsl")
@@ -334,7 +341,7 @@ Easiest to show as a table...
 
 *** Statements
 This section has some recipes for simple Java-like statements.
-It's not comprehensive ¨C just some recipes to get you going.
+It's not comprehensive â€“ just some recipes to get you going.
 
 if/else
 Case 1: no else clause: (if test-expr expr)
@@ -356,7 +363,7 @@ you wrap them with a call to progn, which is like curly-braces in C or Java:
       (etc-etc-etc)))
 
 You don't need the progn around the else-expr
--¨C everything after the then-expr is considered to be part of the else-expr. Hence:
+-â€“ everything after the then-expr is considered to be part of the else-expr. Hence:
 (if (today-is-friday)
     (message "yay, friday")
   (message "not friday!")
@@ -370,7 +377,7 @@ Case 3: else-if clause: Just nest 'em. Or use cond (see below).
       (message "saturday!")  ; next then-expr
     (message ("weekday!")))) ; final else
 
-Case 4: no else-if, multiple body expressions ¨C use when:
+Case 4: no else-if, multiple body expressions â€“ use when:
 If you don't have an else-clause, then you can use the when macro, which provides an implicit progn:
 (when (> 5 1)
   (blah)
@@ -404,12 +411,12 @@ Unlike classic switch, cond can handle any test expression (it just checks them 
 The downside is that it doesn't have any special-casing for numbers, so you have to compare them to something.
 Here's one that does string compares:
 (cond
- ((equal value "foo")  ; case #1 ¨C notice it's a function call to `equal' so it's in parens
+ ((equal value "foo")  ; case #1 â€“ notice it's a function call to `equal' so it's in parens
   (message "got foo")  ; action 1
   (+ 2 2))             ; return value for case 1
- ((equal value "bar")  ; case #2 ¨C also a function call (to `+')
+ ((equal value "bar")  ; case #2 â€“ also a function call (to `+')
   nil)                 ; return value for case 2
- (t                    ; default case ¨C not a function call, just literal true
+ (t                    ; default case â€“ not a function call, just literal true
   'hello))             ; return symbol 'hello
 
 The final t default clause is optional. The first matching clause is executed,
@@ -459,10 +466,10 @@ You can have multiple let clauses in a function.
 Code written for performance often collects all declarations into a single let at the top,
 since it's a bit faster that way. Typically you should write your code for clarity first.
 
-*** Ñ§Ï°
+*** å­¦ä¹ 
 	http://www.woola.net/detail/2016-08-18-elisp.html
 
-*** ²¹³ä£¬Êý×é
+*** è¡¥å……ï¼Œæ•°ç»„
    _____________________________________________
    |                                             |
    |          Sequence                           |
@@ -480,14 +487,14 @@ since it's a bit faster that way. Typically you should write your code for clari
    |          |________________________________| |
    |_____________________________________________|
 
-** Evil ½« Emacs±äÎªVim
-   Evil-mode³öÏÖÁË. ËüÍêÃÀµÄÄ£ÄâÁËVim.
-   Evil-modeµÄ¿ª·¢Õß¹«¿ªÐû³ÆEvil-modeÓ¦¸ÃÓëVimÒ»Ä£Ò»Ñù,
-   ÈÎºÎ²»Ò»ÑùµÄµØ·½¶¼ÊÓÎªBUG.
-   È»ºóÓÐÒ»Ð©ÏàÊìµÄ×ÊÉîVimµ³Ò²¿ªÊ¼ÓÃÕâ¸öEvil-mode,ÓÚÊÇÎÒÖªµÀÁË,Õâ¸ömodeÈ·ÊµºÜ°ô.
+** Evil å°† Emacså˜ä¸ºVim
+   Evil-modeå‡ºçŽ°äº†. å®ƒå®Œç¾Žçš„æ¨¡æ‹Ÿäº†Vim.
+   Evil-modeçš„å¼€å‘è€…å…¬å¼€å®£ç§°Evil-modeåº”è¯¥ä¸ŽVimä¸€æ¨¡ä¸€æ ·,
+   ä»»ä½•ä¸ä¸€æ ·çš„åœ°æ–¹éƒ½è§†ä¸ºBUG.
+   ç„¶åŽæœ‰ä¸€äº›ç›¸ç†Ÿçš„èµ„æ·±Vimå…šä¹Ÿå¼€å§‹ç”¨è¿™ä¸ªEvil-mode,äºŽæ˜¯æˆ‘çŸ¥é“äº†,è¿™ä¸ªmodeç¡®å®žå¾ˆæ£’.
    https://github.com/lujun9972/emacs-document
 
-   EmacsÄ¬ÈÏÎÄ±¾¶ÔÏóÄÜÁ¦²»Ç¿, ÓÐÁËevilµÄÍØÕ¹ C-o di" ÇáÇáËÉËÉ¸ã¶¨~
+   Emacsé»˜è®¤æ–‡æœ¬å¯¹è±¡èƒ½åŠ›ä¸å¼º, æœ‰äº†evilçš„æ‹“å±• C-o di" è½»è½»æ¾æ¾æžå®š~
    http://www.kuqin.com/shuoit/20150727/347223.html
   (require 'package)
   (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
@@ -499,12 +506,12 @@ Then:
  (require 'evil)
  (evil-mode 1)
 
- Thanks Evil, °Ñ Emacs ´òÔì³ÉÁËÀíÏëµÄ ¡°Vim »¯µÄ Emacs Editor¡± 
- È»ºó»¹ÔÚ .bashrc ÀïÌí¼ÓÁËalias vi='emacs -nw'£¬
- ²»Òª¾À½áÊÇ Vim, Emacs »¹ÊÇ Evil£¬ËûÖ»ÊÇÎÒµÄ±à¼­Æ÷¡£
+ Thanks Evil, æŠŠ Emacs æ‰“é€ æˆäº†ç†æƒ³çš„ â€œVim åŒ–çš„ Emacs Editorâ€ 
+ ç„¶åŽè¿˜åœ¨ .bashrc é‡Œæ·»åŠ äº†alias vi='emacs -nw'ï¼Œ
+ ä¸è¦çº ç»“æ˜¯ Vim, Emacs è¿˜æ˜¯ Evilï¼Œä»–åªæ˜¯æˆ‘çš„ç¼–è¾‘å™¨ã€‚
 
- Ä¬ÈÏÅäÖÃÍêÈ«Ä£Äâ Vim£¬³ýÁËÓÃ Ctr-z À´ÇÐ»»Ä£Ê½¡£
- µ÷Õû³ÉÔÚ Insert Ä£Ê½ÏÂ»Ö¸´ Emacs ¼ü°ó¶¨£¬ÓÃ Esc ÍËµ½ Normal Ä£Ê½¡£
+ é»˜è®¤é…ç½®å®Œå…¨æ¨¡æ‹Ÿ Vimï¼Œé™¤äº†ç”¨ Ctr-z æ¥åˆ‡æ¢æ¨¡å¼ã€‚
+ è°ƒæ•´æˆåœ¨ Insert æ¨¡å¼ä¸‹æ¢å¤ Emacs é”®ç»‘å®šï¼Œç”¨ Esc é€€åˆ° Normal æ¨¡å¼ã€‚
  
  <N>C-e/C-y, <E>M-n/M-p
  <E>C-y/M-y yank, yank-pop
@@ -528,12 +535,12 @@ Then:
  (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
  (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
 
-** Ivy Ö»Íê³ÉÒ»¼þÊÂ£¬ÒÔ¼°¡£¡£¡£
+** Ivy åªå®Œæˆä¸€ä»¶äº‹ï¼Œä»¥åŠã€‚ã€‚ã€‚
    https://github.com/lujun9972/emacs-document/blob/master/advertisement/%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E4%BB%8EVim%E8%BF%81%E7%A7%BB%E5%88%B0Emacs+Evil.org
-   Ivy ÎªÊµÏÖ×îÐ¡»¯£¬¼òµ¥»¯£¬¿É¶¨ÖÆ»¯£¬¿É·¢ÏÖ»¯¶øÅ¬Á¦.
-   ÕâËÄ¸öÐÎÈÝ´Ê¸æËßÎÒÃÇºÜ¶àHelm ºÍIvy ÕâÁ½¸ö¹¤¾ß¼ä²»Í¬µÄÉè¼ÆÀíÄî¡£
+   Ivy ä¸ºå®žçŽ°æœ€å°åŒ–ï¼Œç®€å•åŒ–ï¼Œå¯å®šåˆ¶åŒ–ï¼Œå¯å‘çŽ°åŒ–è€ŒåŠªåŠ›.
+   è¿™å››ä¸ªå½¢å®¹è¯å‘Šè¯‰æˆ‘ä»¬å¾ˆå¤šHelm å’ŒIvy è¿™ä¸¤ä¸ªå·¥å…·é—´ä¸åŒçš„è®¾è®¡ç†å¿µã€‚
 
-   ÔÚÐ´ÕâÆªÎÄÕÂµÄÊ±ºò£¬Ivy Ö»ÓÐ´ó¸Å3400ÐÐ´úÂë£¬ÎªIvy Ëù´òÔìµÄÉúÌ¬ÏµÍ³£º¼´Swipter ºÍ Counsel Ò²Ö»ÓÐ7500 ÐÐ´úÂë
+   åœ¨å†™è¿™ç¯‡æ–‡ç« çš„æ—¶å€™ï¼ŒIvy åªæœ‰å¤§æ¦‚3400è¡Œä»£ç ï¼Œä¸ºIvy æ‰€æ‰“é€ çš„ç”Ÿæ€ç³»ç»Ÿï¼šå³Swipter å’Œ Counsel ä¹Ÿåªæœ‰7500 è¡Œä»£ç 
    git clone https://github.com/abo-abo/swiper.git
    cd swiper
    ## Only ivy ?
@@ -544,92 +551,92 @@ Then:
    cat *.el | wc -l
    # => 7526
 
-** À©Õ¹ÍÆ¼ö
+** æ‰©å±•æŽ¨è
    https://www.zhihu.com/question/21943533/answer/22145491
-   company È¡´úauto-complete,¸üÐÂºÜÆµ·±
-   yasnippet ´úÂëÄ£°å,¹Ø¼üÊÇ¿ÉÄÚÇ¶lisp´úÂëÖ´ÐÐ£¬Ì«Ç¿º·ÁË!½ÓÏÂÀ´Î¨Ò»µÄÏÞÖÆ¾ÍÊÇÄãµÄÏëÏóÁ¦ÁË
-   js2-mode javascript¿ª·¢ÉñÆ÷(sublimeÖ®Á÷ºÍËü¸ù±¾²»ÊÇÒ»¸öÊýÁ¿¼¶µÄ)
-   evil-mode °Ñemacs±ä³Évim£¬»ù±¾vimÓÐµÄËü¶¼ÓÐÁË±ÈÈçtext object£¬×î¿áµÄÊÇ¿ÉÒÔÐ´lisp×Ô¶¨Òåtext object
-   evil-leader ºÜ¼òµ¥µÄÒ»¸öplugin,µ«ÊÇÓÃºÃµÄ»°,ÈÃÄãÐ§ÂÊ³É±¶ÌáÉý.
-   evil-matchit ÔÚ³É¶ÔµÄtagÌøÀ´ÌøÈ¥, vimµÄmatchitÒÆÖ²°æµ«¸üÇ¿´ó(ÎÒÐ´µÄ)
-   evil-nerd-commenter °´ÐÐ×¢ÊÍ´úÂë, nerd-commentµÄÒÆÖ²°æ(ÎÒÐ´µÄ)
-   helmweb-mode Í¨³ÔhtmlËùÓÐÏà¹Ø
-   windows-numbering.el ×Ó´°¿ÚÌø×ªµÄÖÕ¼«·½°¸,ÓÃ¹ýËùÓÐµÄ±à¼­Æ÷,Ã»ÓÐ±ÈÕâ¸öºÃµÄÁË.
-   smex ²»ÓÃÔÙ¼Ç¿ì½Ý¼üÁË
-   # ====²¹³ä===
-   ÎÒÏÈÈëÎªÖ÷µØÈÏÎªÌáÎÊÕßÖ¸µÄÊÇÐèÒª°²×°µÄµÚÈý·½À©Õ¹,Emacs×Ô´øµÄÀ©Õ¹ÎÒ²¹³äÒ»ÏÂ£º
-   org-mode gtd¹¤¾ß,Éñ¼¶±ðµÄÈí¼þ,ºÍgit,vim,emacsÊÇÒ»¸öµµ´ÎµÄ
-   winner-mode undo´°¿ÚlayoutºÜÓÐÓÃ
-   gnus ÈÃÎÒÓÖ°®ÓÖºÞ,EmacsÆäËû²å¼þÌ«Å£±Æ, ºÍyasnippet½áºÏÓÃ,ºÍcompany-mode,ºÍevilµÈµÈ,ËùÒÔgnusÒª°éÎÒÖÕÉúÁË.
-   ido ÀàËÆÓÚhelm£¬ºÍhelm¸÷ÓÐÇ§ÇïÎÒ¶¼ÓÃ,ÎåÎå¿ª,²»¹ýhelmÓÐ¸öÈÃÎÒ°®ËÀµÄÉèÖÃ,¿ÉÒÔÑ¡ÔñºÎÊ±Ê¹ÓÃido,helm»òÕßÁ½Õß¶¼²»ÓÃ.
-   # ¿ªÔ´ÕæµÄ²»´íßÀ,ÊÀ½ç¼¶¸ßÊÖ¶¼ÊÇÐÊÐÊÏàÏ§µÄ.²»ÏñÄÇÐ©×¨ÓÐÈí¼þ,²ËÄñ¿ª·¢,¼´Ê¹ÊÇÍ¬Ò»¸ö¹«Ë¾,»¹Òª»¥ÏàÍùËÀÀïÆþ.
-   imenu ÏÔÊ¾µ±Ç°ÎÄ¼þº¯ÊýÁÐ±í,¿ÉÒÔÖ±½ÓÌø×ªµ½ÄÇÈ¥,ÍêÈ«¿ÉÅäÖÃ,Ö§³ÖËùÓÐÓïÑÔflymake ÊµÊ±Óï·¨¼ì²é,Í¨³ÔËùÓÐÓïÑÔ
-   flyspell Æ´Ð´¼ì²é,°®ËÀÁË,ÊÇÎÒ¼û¹ýµÄËùÓÐÆ´Ð´¼ì²é×îÇ¿´ó,Èç¹ûÄãÖªµÀÈçºÎÅäÖÃ.
-   # ====ÔÙ²¹³ä===
-   Ò²Ðí×îºÃµÄ²å¼þ¾ÍÊÇLispÓïÑÔ±¾Éí,Ç¿´ó,¼òµ¥Ò×Ñ§,ÆäÓï·¨¿´ËÆ¹îÒì,ÓÚÊÇ×Ô¶¯¹ýÂËÁË²ËÄñ.
-   ÎÒµÄÁíÒ»¸ö¾÷ÇÏ¾ÍÊÇÒ»µ©·¢¾õÒ»¸öºÃµÄ²å¼þ,Á¢¼´µ÷²éÔ­×÷Õß,
-   Îñ±Ø°ÑËûËùÓÐ¿ª·¢µÄÊ¹ÓÃµÄ¹¤¾ßµ÷²éÇå³þ.
-   ±ÈÈçmoozÎ¬»¤µÄµÄjs2-modeÈÃÎÒ°®²»ÊÍÊÖ,ÓÚÊÇÎÒµ÷²éËû¿ª·¢µÄÆäËû¹¤¾ß,
-   keysnail - firefoxÄ£Äâ³ÉEmacs,ÎÒÓÃ¹ýµÄÍ¬ÀàÈí¼þÖÐ×îºÃµÄ,Ï¸½ÚÎÞ¿ÉÌôÌÞ
-   percol - python¿ª·¢µÄÃüÁîÐÐ¹¤¾ß,Ìì²ÅµÄ×÷Æ·,ÎÒÏÖÔÚµÄ¹¤×÷Á÷Ö÷Òª¾Í¿¿Ëü,
-   Ã»ÓÐËüÎÒÐ§ÂÊÒª´ó´ó½µµÍ.
+   company å–ä»£auto-complete,æ›´æ–°å¾ˆé¢‘ç¹
+   yasnippet ä»£ç æ¨¡æ¿,å…³é”®æ˜¯å¯å†…åµŒlispä»£ç æ‰§è¡Œï¼Œå¤ªå¼ºæ‚äº†!æŽ¥ä¸‹æ¥å”¯ä¸€çš„é™åˆ¶å°±æ˜¯ä½ çš„æƒ³è±¡åŠ›äº†
+   js2-mode javascriptå¼€å‘ç¥žå™¨(sublimeä¹‹æµå’Œå®ƒæ ¹æœ¬ä¸æ˜¯ä¸€ä¸ªæ•°é‡çº§çš„)
+   evil-mode æŠŠemacså˜æˆvimï¼ŒåŸºæœ¬vimæœ‰çš„å®ƒéƒ½æœ‰äº†æ¯”å¦‚text objectï¼Œæœ€é…·çš„æ˜¯å¯ä»¥å†™lispè‡ªå®šä¹‰text object
+   evil-leader å¾ˆç®€å•çš„ä¸€ä¸ªplugin,ä½†æ˜¯ç”¨å¥½çš„è¯,è®©ä½ æ•ˆçŽ‡æˆå€æå‡.
+   evil-matchit åœ¨æˆå¯¹çš„tagè·³æ¥è·³åŽ», vimçš„matchitç§»æ¤ç‰ˆä½†æ›´å¼ºå¤§(æˆ‘å†™çš„)
+   evil-nerd-commenter æŒ‰è¡Œæ³¨é‡Šä»£ç , nerd-commentçš„ç§»æ¤ç‰ˆ(æˆ‘å†™çš„)
+   helmweb-mode é€šåƒhtmlæ‰€æœ‰ç›¸å…³
+   windows-numbering.el å­çª—å£è·³è½¬çš„ç»ˆæžæ–¹æ¡ˆ,ç”¨è¿‡æ‰€æœ‰çš„ç¼–è¾‘å™¨,æ²¡æœ‰æ¯”è¿™ä¸ªå¥½çš„äº†.
+   smex ä¸ç”¨å†è®°å¿«æ·é”®äº†
+   # ====è¡¥å……===
+   æˆ‘å…ˆå…¥ä¸ºä¸»åœ°è®¤ä¸ºæé—®è€…æŒ‡çš„æ˜¯éœ€è¦å®‰è£…çš„ç¬¬ä¸‰æ–¹æ‰©å±•,Emacsè‡ªå¸¦çš„æ‰©å±•æˆ‘è¡¥å……ä¸€ä¸‹ï¼š
+   org-mode gtdå·¥å…·,ç¥žçº§åˆ«çš„è½¯ä»¶,å’Œgit,vim,emacsæ˜¯ä¸€ä¸ªæ¡£æ¬¡çš„
+   winner-mode undoçª—å£layoutå¾ˆæœ‰ç”¨
+   gnus è®©æˆ‘åˆçˆ±åˆæ¨,Emacså…¶ä»–æ’ä»¶å¤ªç‰›é€¼, å’Œyasnippetç»“åˆç”¨,å’Œcompany-mode,å’Œevilç­‰ç­‰,æ‰€ä»¥gnusè¦ä¼´æˆ‘ç»ˆç”Ÿäº†.
+   ido ç±»ä¼¼äºŽhelmï¼Œå’Œhelmå„æœ‰åƒç§‹æˆ‘éƒ½ç”¨,äº”äº”å¼€,ä¸è¿‡helmæœ‰ä¸ªè®©æˆ‘çˆ±æ­»çš„è®¾ç½®,å¯ä»¥é€‰æ‹©ä½•æ—¶ä½¿ç”¨ido,helmæˆ–è€…ä¸¤è€…éƒ½ä¸ç”¨.
+   # å¼€æºçœŸçš„ä¸é”™å‘ƒ,ä¸–ç•Œçº§é«˜æ‰‹éƒ½æ˜¯æƒºæƒºç›¸æƒœçš„.ä¸åƒé‚£äº›ä¸“æœ‰è½¯ä»¶,èœé¸Ÿå¼€å‘,å³ä½¿æ˜¯åŒä¸€ä¸ªå…¬å¸,è¿˜è¦äº’ç›¸å¾€æ­»é‡ŒæŽ.
+   imenu æ˜¾ç¤ºå½“å‰æ–‡ä»¶å‡½æ•°åˆ—è¡¨,å¯ä»¥ç›´æŽ¥è·³è½¬åˆ°é‚£åŽ»,å®Œå…¨å¯é…ç½®,æ”¯æŒæ‰€æœ‰è¯­è¨€flymake å®žæ—¶è¯­æ³•æ£€æŸ¥,é€šåƒæ‰€æœ‰è¯­è¨€
+   flyspell æ‹¼å†™æ£€æŸ¥,çˆ±æ­»äº†,æ˜¯æˆ‘è§è¿‡çš„æ‰€æœ‰æ‹¼å†™æ£€æŸ¥æœ€å¼ºå¤§,å¦‚æžœä½ çŸ¥é“å¦‚ä½•é…ç½®.
+   # ====å†è¡¥å……===
+   ä¹Ÿè®¸æœ€å¥½çš„æ’ä»¶å°±æ˜¯Lispè¯­è¨€æœ¬èº«,å¼ºå¤§,ç®€å•æ˜“å­¦,å…¶è¯­æ³•çœ‹ä¼¼è¯¡å¼‚,äºŽæ˜¯è‡ªåŠ¨è¿‡æ»¤äº†èœé¸Ÿ.
+   æˆ‘çš„å¦ä¸€ä¸ªè¯€çªå°±æ˜¯ä¸€æ—¦å‘è§‰ä¸€ä¸ªå¥½çš„æ’ä»¶,ç«‹å³è°ƒæŸ¥åŽŸä½œè€…,
+   åŠ¡å¿…æŠŠä»–æ‰€æœ‰å¼€å‘çš„ä½¿ç”¨çš„å·¥å…·è°ƒæŸ¥æ¸…æ¥š.
+   æ¯”å¦‚moozç»´æŠ¤çš„çš„js2-modeè®©æˆ‘çˆ±ä¸é‡Šæ‰‹,äºŽæ˜¯æˆ‘è°ƒæŸ¥ä»–å¼€å‘çš„å…¶ä»–å·¥å…·,
+   keysnail - firefoxæ¨¡æ‹ŸæˆEmacs,æˆ‘ç”¨è¿‡çš„åŒç±»è½¯ä»¶ä¸­æœ€å¥½çš„,ç»†èŠ‚æ— å¯æŒ‘å‰”
+   percol - pythonå¼€å‘çš„å‘½ä»¤è¡Œå·¥å…·,å¤©æ‰çš„ä½œå“,æˆ‘çŽ°åœ¨çš„å·¥ä½œæµä¸»è¦å°±é å®ƒ,
+   æ²¡æœ‰å®ƒæˆ‘æ•ˆçŽ‡è¦å¤§å¤§é™ä½Ž.
 
-* xwindow ºÍ ×Ö·û½çÃæÇÐ»»
-  # Î´ÅäÖÃµÄ×Ö·û½çÃæ£¬²»Ö§³ÖÖÐÎÄ¡£
-** Ò»°ãÓÐ ALT+CTRL+F1----F6Îª×Ö·ûÖÕ¶Ë£¨×Ö·û½çÃæ£©£¬ALT+CTRL+F7ÎªÍ¼ÐÎ½çÃæ¡£
-   ²»Í¬µÄ·¢ÐÐ°æ±¾¿ÉÄÜÓÐÒ»Ð©²î±ð£¬µ«ÇÐ»»·½·¨¶¼ÊÇÒ»ÑùµÄ¡£
+* xwindow å’Œ å­—ç¬¦ç•Œé¢åˆ‡æ¢
+  # æœªé…ç½®çš„å­—ç¬¦ç•Œé¢ï¼Œä¸æ”¯æŒä¸­æ–‡ã€‚
+** ä¸€èˆ¬æœ‰ ALT+CTRL+F1----F6ä¸ºå­—ç¬¦ç»ˆç«¯ï¼ˆå­—ç¬¦ç•Œé¢ï¼‰ï¼ŒALT+CTRL+F7ä¸ºå›¾å½¢ç•Œé¢ã€‚
+   ä¸åŒçš„å‘è¡Œç‰ˆæœ¬å¯èƒ½æœ‰ä¸€äº›å·®åˆ«ï¼Œä½†åˆ‡æ¢æ–¹æ³•éƒ½æ˜¯ä¸€æ ·çš„ã€‚
 
-  1¡¢°´ALT+CTRL+F1ÇÐ»»µ½×Ö·û½çÃæ£¨LinuxÊµÌå»ú£©
-  Èç¹ûÊÇVMwareÐéÄâ»ú°²×°µÄlinuxÏµÍ³£¬ÔòÇÐ»»µ½×Ö·û½çÃæµÄÊ±ºòÐèÒªÒÔÏÂ²Ù×÷
+  1ã€æŒ‰ALT+CTRL+F1åˆ‡æ¢åˆ°å­—ç¬¦ç•Œé¢ï¼ˆLinuxå®žä½“æœºï¼‰
+  å¦‚æžœæ˜¯VMwareè™šæ‹Ÿæœºå®‰è£…çš„linuxç³»ç»Ÿï¼Œåˆ™åˆ‡æ¢åˆ°å­—ç¬¦ç•Œé¢çš„æ—¶å€™éœ€è¦ä»¥ä¸‹æ“ä½œ
   
-  °´ÏÂALT+CTRL+SPACE(¿Õ¸ñ)£¬ALT+CTRL²»ËÉ¿ª£¬ÔÙ°´F1¡£ÕâÑù¾Í¿ÉÒÔÇÐ»»µ½×Ö·û½çÃæÁË¡£
+  æŒ‰ä¸‹ALT+CTRL+SPACE(ç©ºæ ¼)ï¼ŒALT+CTRLä¸æ¾å¼€ï¼Œå†æŒ‰F1ã€‚è¿™æ ·å°±å¯ä»¥åˆ‡æ¢åˆ°å­—ç¬¦ç•Œé¢äº†ã€‚
   
-  2¡¢°´ALT+CTRL+F7ÇÐ»»µ½Í¼ÐÎ½çÃæ£¨LinuxÊµÌå»ú£©
+  2ã€æŒ‰ALT+CTRL+F7åˆ‡æ¢åˆ°å›¾å½¢ç•Œé¢ï¼ˆLinuxå®žä½“æœºï¼‰
   
-  Èç¹ûÊÇVMwareÐéÄâ»ú°²×°µÄLinuxÏµÍ³£¬ÔòÇÐ»»µ½Í¼ÐÎ½çÃæµÄÊ±ºòÐèÒªÒÔÏÂ²Ù×÷
+  å¦‚æžœæ˜¯VMwareè™šæ‹Ÿæœºå®‰è£…çš„Linuxç³»ç»Ÿï¼Œåˆ™åˆ‡æ¢åˆ°å›¾å½¢ç•Œé¢çš„æ—¶å€™éœ€è¦ä»¥ä¸‹æ“ä½œ
   
-  °´ÏÂALT+CTRL+SPACE(¿Õ¸ñ)£¬ALT+CTRL²»ËÉ¿ª£¬ÔÙ°´F7¡£ÕâÑù¾Í¿ÉÒÔÇÐ»»µ½Í¼ÐÎ½çÃæÁË¡£
+  æŒ‰ä¸‹ALT+CTRL+SPACE(ç©ºæ ¼)ï¼ŒALT+CTRLä¸æ¾å¼€ï¼Œå†æŒ‰F7ã€‚è¿™æ ·å°±å¯ä»¥åˆ‡æ¢åˆ°å›¾å½¢ç•Œé¢äº†ã€‚
     
-  Èç¹ûÏë Ubuntu ÔÚÃ¿´ÎÆô¶¯µ½ command prompt £¬¿ÉÒÔÊäÈëÒÔÏÂÖ¸Áî:
+  å¦‚æžœæƒ³ Ubuntu åœ¨æ¯æ¬¡å¯åŠ¨åˆ° command prompt ï¼Œå¯ä»¥è¾“å…¥ä»¥ä¸‹æŒ‡ä»¤:
   
-  $echo ¡°false¡± | sudo tee /etc/X11/default-display-manager
+  $echo â€œfalseâ€ | sudo tee /etc/X11/default-display-manager
   
-  µ±ÏÂ´Î¿ª»úÊ±£¬¾Í»áÒÔÃüÁîÐÐÄ£Ê½Æô¶¯£¨textÄ£Ê½£¬×Ö·û½çÃæµÇÂ¼£©£¬Èç¹ûÏë±ä»ØÍ¼ÐÎ½çÃæÆô¶¯£¨X windowsÆô¶¯£©£¬¿ÉÒÔÝ”Èë:
+  å½“ä¸‹æ¬¡å¼€æœºæ—¶ï¼Œå°±ä¼šä»¥å‘½ä»¤è¡Œæ¨¡å¼å¯åŠ¨ï¼ˆtextæ¨¡å¼ï¼Œå­—ç¬¦ç•Œé¢ç™»å½•ï¼‰ï¼Œå¦‚æžœæƒ³å˜å›žå›¾å½¢ç•Œé¢å¯åŠ¨ï¼ˆX windowså¯åŠ¨ï¼‰ï¼Œå¯ä»¥è¼¸å…¥:
   
-  $echo ¡°/usr/sbin/gdm¡± | sudo tee /etc/X11/default-display-manager
+  $echo â€œ/usr/sbin/gdmâ€ | sudo tee /etc/X11/default-display-manager
   
-  Èç¹ûÔÚUbuntnÒÔÃüÁîÐÐÄ£Ê½Æô¶¯£¬ÔÚ×Ö·ûÖÕ¶ËÏë»Øµ½Í¼ÐÎ½çÃæµÄ»°Ö»ÐèÒÔÏÂÃüÁî:
+  å¦‚æžœåœ¨Ubuntnä»¥å‘½ä»¤è¡Œæ¨¡å¼å¯åŠ¨ï¼Œåœ¨å­—ç¬¦ç»ˆç«¯æƒ³å›žåˆ°å›¾å½¢ç•Œé¢çš„è¯åªéœ€ä»¥ä¸‹å‘½ä»¤:
   $startx
 
 ** xterm/uxterm
-   XTermÊÇÒ»¸öX Window SystemÉÏµÄÖÕ¶ËÄ£ÄâÆ÷£¬ÓÃÀ´Ìá¹©¶à¸ö¶ÀÁ¢µÄSHELLÊäÈëÊä³ö¡£
-   ÐéÄâÖÕ¶ËXtermÊÇX11±ê×¼Ö¸¶¨µÄÐéÄâÖÕ¶Ë,ÀúÊ··Ç³£ÓÆ¾Ã¡£
-   XtermµÄÈ±µã:Xterm²»Ö§³ÖÖÐÎÄ¡£²»¹ýÎÒÃÇ¿ÉÒÔÓÃXtermµÄ±äÖÖUXterm¡£
-   # xterm µÄËùÓÐÏà¹ØÉèÖÃ¶¼ÔÚÒ»¸öÃû½Ð .Xdefaults µÄÅäÖÃÎÄ¼þÖÐ
-** ÐÂÖÕ¶Ë£º Tilda£¬ F1Ò»¼üºô³öµÄÖÕ¶Ë¡£
-** Ìí¼ÓÍê×ÖÌåºó, ¿ÉÒÔÓÃ xlsfonts ÃüÁî¼ì²éÒ»ÏÂÊÇ·ñÌí¼Ó³É¹¦
+   XTermæ˜¯ä¸€ä¸ªX Window Systemä¸Šçš„ç»ˆç«¯æ¨¡æ‹Ÿå™¨ï¼Œç”¨æ¥æä¾›å¤šä¸ªç‹¬ç«‹çš„SHELLè¾“å…¥è¾“å‡ºã€‚
+   è™šæ‹Ÿç»ˆç«¯Xtermæ˜¯X11æ ‡å‡†æŒ‡å®šçš„è™šæ‹Ÿç»ˆç«¯,åŽ†å²éžå¸¸æ‚ ä¹…ã€‚
+   Xtermçš„ç¼ºç‚¹:Xtermä¸æ”¯æŒä¸­æ–‡ã€‚ä¸è¿‡æˆ‘ä»¬å¯ä»¥ç”¨Xtermçš„å˜ç§UXtermã€‚
+   # xterm çš„æ‰€æœ‰ç›¸å…³è®¾ç½®éƒ½åœ¨ä¸€ä¸ªåå« .Xdefaults çš„é…ç½®æ–‡ä»¶ä¸­
+** æ–°ç»ˆç«¯ï¼š Tildaï¼Œ F1ä¸€é”®å‘¼å‡ºçš„ç»ˆç«¯ã€‚
+** æ·»åŠ å®Œå­—ä½“åŽ, å¯ä»¥ç”¨ xlsfonts å‘½ä»¤æ£€æŸ¥ä¸€ä¸‹æ˜¯å¦æ·»åŠ æˆåŠŸ
 
-* °²×°¹È¸èä¯ÀÀÆ÷£¬Ö»ÐèÒªÈýÐÐ´úÂë£º 
-´ò¿ªÖÕ¶Ë£¬ÊäÈë 
+* å®‰è£…è°·æ­Œæµè§ˆå™¨ï¼Œåªéœ€è¦ä¸‰è¡Œä»£ç ï¼š 
+æ‰“å¼€ç»ˆç«¯ï¼Œè¾“å…¥ 
 cd /tmp 
-¶ÔÓÚ¹È¸èChrome32Î»°æ±¾£¬Ê¹ÓÃÈçÏÂÁ´½Ó£º
+å¯¹äºŽè°·æ­ŒChrome32ä½ç‰ˆæœ¬ï¼Œä½¿ç”¨å¦‚ä¸‹é“¾æŽ¥ï¼š
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb
 
-¶ÔÓÚ64Î»°æ±¾¿ÉÒÔÊ¹ÓÃÈçÏÂÁ´½ÓÏÂÔØ£º
+å¯¹äºŽ64ä½ç‰ˆæœ¬å¯ä»¥ä½¿ç”¨å¦‚ä¸‹é“¾æŽ¥ä¸‹è½½ï¼š
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb 
-ÏÂÔØÍêºó£¬ÔËÐÐÈçÏÂÃüÁî°²×°¡£
+ä¸‹è½½å®ŒåŽï¼Œè¿è¡Œå¦‚ä¸‹å‘½ä»¤å®‰è£…ã€‚
 
 sudo dpkg -i google-chrome*; sudo apt-get -f install 
 
-* Ê¹ÓÃ so ÖÐµÄÀà£¬¾ßÌåµÄ×ö·¨ÊÇ£º
-1. ×¼±¸Ò»·ÝÍ·ÎÄ¼þ£¬¼ÓÈëÒ»¸ö´¿Ðé¸¸ÀàABase£¬²¢ÉùÃ÷createA,releaseA£»
-2. ÔÚÉú³ÉA.soµÄÊµÏÖÔ´ÂëÖÐ£¬Ð´ÒµÎñÀàAHello£¬¼Ì³ÐABase£¬²¢µ¼³öÉÏÃæÌáµ½µÄÁ½¸öº¯ÊýcreateA,releaseA£»
-3. ÐèÒªÊ¹ÓÃA.soµÄ´úÂë£¬Ê¹ÓÃdlopen´ò¿ªsoÎÄ¼þ,dlsymµ¼ÈëcreateA,releaseA, µ÷ÓÃcreateA·µ»ØABaseÖ¸ÕëÀàÐÍµÄÊµ¼ÊÊÇAHelloÀàÐÍµÄÊµÀý£¬±ã¿ÉÒÔÊ¹ÓÃÕâ¸öAHelloÀàÊµÀýÁË£»
-4. µ÷ÓÃraleaseAÊÍ·ÅAHelloÊµÀý¡£
+* ä½¿ç”¨ so ä¸­çš„ç±»ï¼Œå…·ä½“çš„åšæ³•æ˜¯ï¼š
+1. å‡†å¤‡ä¸€ä»½å¤´æ–‡ä»¶ï¼ŒåŠ å…¥ä¸€ä¸ªçº¯è™šçˆ¶ç±»ABaseï¼Œå¹¶å£°æ˜ŽcreateA,releaseAï¼›
+2. åœ¨ç”ŸæˆA.soçš„å®žçŽ°æºç ä¸­ï¼Œå†™ä¸šåŠ¡ç±»AHelloï¼Œç»§æ‰¿ABaseï¼Œå¹¶å¯¼å‡ºä¸Šé¢æåˆ°çš„ä¸¤ä¸ªå‡½æ•°createA,releaseAï¼›
+3. éœ€è¦ä½¿ç”¨A.soçš„ä»£ç ï¼Œä½¿ç”¨dlopenæ‰“å¼€soæ–‡ä»¶,dlsymå¯¼å…¥createA,releaseA, è°ƒç”¨createAè¿”å›žABaseæŒ‡é’ˆç±»åž‹çš„å®žé™…æ˜¯AHelloç±»åž‹çš„å®žä¾‹ï¼Œä¾¿å¯ä»¥ä½¿ç”¨è¿™ä¸ªAHelloç±»å®žä¾‹äº†ï¼›
+4. è°ƒç”¨raleaseAé‡Šæ”¾AHelloå®žä¾‹ã€‚
 
-×¢Òâ£º
-1. »ùÀàÊÇ´¿ÐéÀà£¬²»È»±àÒëÆ÷ÔõÃ´ÔÚ±àÒëµÄÊ±ºòÖªµÀAHelloµÄÊµÏÖÔÚÄÄÀï£¿
-2. º¯Êýµ¼Èë³öÐèÒª¼ÓÉÏextern ¡°C¡±·ÀÖ¹µ¼³öÃû×Ö±»ÐÞ¸Ä¡£
+æ³¨æ„ï¼š
+1. åŸºç±»æ˜¯çº¯è™šç±»ï¼Œä¸ç„¶ç¼–è¯‘å™¨æ€Žä¹ˆåœ¨ç¼–è¯‘çš„æ—¶å€™çŸ¥é“AHelloçš„å®žçŽ°åœ¨å“ªé‡Œï¼Ÿ
+2. å‡½æ•°å¯¼å…¥å‡ºéœ€è¦åŠ ä¸Šextern â€œCâ€é˜²æ­¢å¯¼å‡ºåå­—è¢«ä¿®æ”¹ã€‚
 
 class shape{ public:
    virtual void draw()=0;
@@ -647,9 +654,9 @@ extern "C" void destroy(shape* p) {
 }
 
 * libtool link warning xxx was moved.
-  ´ò¿ª xxx.la ²é¿´ libdir µÄÂ·¾¶ÊÇ·ñÕýÈ·£¿
-* LinuxÏÂÈçºÎ´¦Àí°üº¬¿Õ¸ñºÍÌØÊâ×Ö·ûµÄÎÄ¼þÃû
-°üº¬ÌØÊâ×Ö·ûµÄÎÄ¼þÃûµÄÀý×Ó£¬²¢²»³£¼û£º
+  æ‰“å¼€ xxx.la æŸ¥çœ‹ libdir çš„è·¯å¾„æ˜¯å¦æ­£ç¡®ï¼Ÿ
+* Linuxä¸‹å¦‚ä½•å¤„ç†åŒ…å«ç©ºæ ¼å’Œç‰¹æ®Šå­—ç¬¦çš„æ–‡ä»¶å
+åŒ…å«ç‰¹æ®Šå­—ç¬¦çš„æ–‡ä»¶åçš„ä¾‹å­ï¼Œå¹¶ä¸å¸¸è§ï¼š
 
 #232.txt
 #bkf.txt
@@ -661,296 +668,296 @@ extern "C" void destroy(shape* p) {
 --321.txt
 --bk34.txt
 ...
-Ò»¸öÏÔ¶øÒ×¼ûµÄÎÊÌâÊÇ - ÔÚÕâ¸öÐÇÇòÉÏÓÐË­»á´´½¨ºÍ´¦Àí°üº¬¾®ºÅ(#)£¬·ÖºÅ(;)£¬ÆÆÕÛºÅ(-)»òÆäËûÌØÊâ×Ö·ûµÄÎÄ¼þ/ÎÄ¼þ¼Ð°¡£¡
+ä¸€ä¸ªæ˜¾è€Œæ˜“è§çš„é—®é¢˜æ˜¯ - åœ¨è¿™ä¸ªæ˜Ÿçƒä¸Šæœ‰è°ä¼šåˆ›å»ºå’Œå¤„ç†åŒ…å«äº•å·(#)ï¼Œåˆ†å·(;)ï¼Œç ´æŠ˜å·(-)æˆ–å…¶ä»–ç‰¹æ®Šå­—ç¬¦çš„æ–‡ä»¶/æ–‡ä»¶å¤¹å•Šï¼
 
-ÎÒºÍÄãÏëµÄÒ»Ñù£¬ÕâÖÖÎÄ¼þÃûÈ·Êµ²»³£¼û£¬²»¹ýÔÚÄã±ØÐëµÃ´¦ÀíÕâÖÖÎÄ¼þÃûµÄÊ±ºòÄãµÄ shell Ò²²»Ó¦¸Ã³ö´í»ò°Õ¹¤¡£¶øÇÒ¼¼ÊõÉÏÀ´Ëµ£¬Linux ÏÂµÄÒ»ÇÐ±ÈÈçÎÄ¼þ¼Ð¡¢Çý¶¯Æ÷»òÆäËûËùÓÐµÄ¶¼±»µ±×÷ÎÄ¼þ´¦Àí¡£
+æˆ‘å’Œä½ æƒ³çš„ä¸€æ ·ï¼Œè¿™ç§æ–‡ä»¶åç¡®å®žä¸å¸¸è§ï¼Œä¸è¿‡åœ¨ä½ å¿…é¡»å¾—å¤„ç†è¿™ç§æ–‡ä»¶åçš„æ—¶å€™ä½ çš„ shell ä¹Ÿä¸åº”è¯¥å‡ºé”™æˆ–ç½¢å·¥ã€‚è€Œä¸”æŠ€æœ¯ä¸Šæ¥è¯´ï¼ŒLinux ä¸‹çš„ä¸€åˆ‡æ¯”å¦‚æ–‡ä»¶å¤¹ã€é©±åŠ¨å™¨æˆ–å…¶ä»–æ‰€æœ‰çš„éƒ½è¢«å½“ä½œæ–‡ä»¶å¤„ç†ã€‚
 
-´¦ÀíÃû×Ö°üº¬ÆÆÕÛºÅ(-)µÄÎÄ¼þ
-´´½¨ÒÔÆÆÕÛºÅ(-)¿ªÍ·µÄÎÄ¼þ£¬±ÈÈç -abx.txt¡£
+å¤„ç†åå­—åŒ…å«ç ´æŠ˜å·(-)çš„æ–‡ä»¶
+åˆ›å»ºä»¥ç ´æŠ˜å·(-)å¼€å¤´çš„æ–‡ä»¶ï¼Œæ¯”å¦‚ -abx.txtã€‚
 
 $ touch -abc.txt
-²âÊÔÊä³ö
+æµ‹è¯•è¾“å‡º
 touch: invalid option -- 'b'
 Try 'touch --help' for more information.
-³öÏÖÉÏÃæ´íÎóµÄÔ­ÒòÊÇ£¬shell °ÑÆÆÕÛºÅ(-)Ö®ºóµÄÄÚÈÝÈÏ×÷²ÎÊýÁË£¬¶øºÜÃ÷ÏÔÃ»ÓÐÕâÑùµÄ²ÎÊý£¬ËùÒÔ±¨´í¡£
+å‡ºçŽ°ä¸Šé¢é”™è¯¯çš„åŽŸå› æ˜¯ï¼Œshell æŠŠç ´æŠ˜å·(-)ä¹‹åŽçš„å†…å®¹è®¤ä½œå‚æ•°äº†ï¼Œè€Œå¾ˆæ˜Žæ˜¾æ²¡æœ‰è¿™æ ·çš„å‚æ•°ï¼Œæ‰€ä»¥æŠ¥é”™ã€‚
 
-Òª½â¾öÕâ¸öÎÊÌâ£¬ÎÒÃÇµÃ¸æËß Bash shell£¨ÊÇµÄ£¬ÕâÀïÒÔ¼°±¾ÎÄºóÃæµÄ´ó¶àÊýÀý×Ó¶¼ÊÇ»ùÓÚ BASH »·¾³£©²»Òª½«ÌØÊâ×Ö·û£¨ÕâÀïÊÇÆÆÕÛºÅ£©ºóµÄ×Ö·û½âÊÍÎª²ÎÊý¡£
+è¦è§£å†³è¿™ä¸ªé—®é¢˜ï¼Œæˆ‘ä»¬å¾—å‘Šè¯‰ Bash shellï¼ˆæ˜¯çš„ï¼Œè¿™é‡Œä»¥åŠæœ¬æ–‡åŽé¢çš„å¤§å¤šæ•°ä¾‹å­éƒ½æ˜¯åŸºäºŽ BASH çŽ¯å¢ƒï¼‰ä¸è¦å°†ç‰¹æ®Šå­—ç¬¦ï¼ˆè¿™é‡Œæ˜¯ç ´æŠ˜å·ï¼‰åŽçš„å­—ç¬¦è§£é‡Šä¸ºå‚æ•°ã€‚
 
-ÓÐÁ½ÖÖ·½·¨½â¾öÕâ¸ö´íÎó£º
+æœ‰ä¸¤ç§æ–¹æ³•è§£å†³è¿™ä¸ªé”™è¯¯ï¼š
 
-$ touch -- -abc.txt     [·½·¨ #1]
-$ touch ./-abc.txt      [·½·¨ #2]
-Äã¿ÉÒÔÍ¨¹ýÔËÐÐÃüÁî ls »ò ls -l ÁÐ³öÏêÏ¸ÐÅÏ¢À´¼ì²éÍ¨¹ýÉÏÃæÁ½ÖÖ·½Ê½´´½¨µÄÎÄ¼þ¡£
+$ touch -- -abc.txt     [æ–¹æ³• #1]
+$ touch ./-abc.txt      [æ–¹æ³• #2]
+ä½ å¯ä»¥é€šè¿‡è¿è¡Œå‘½ä»¤ ls æˆ– ls -l åˆ—å‡ºè¯¦ç»†ä¿¡æ¯æ¥æ£€æŸ¥é€šè¿‡ä¸Šé¢ä¸¤ç§æ–¹å¼åˆ›å»ºçš„æ–‡ä»¶ã€‚
 
 $ ls -l
  
 total 0
 -rw-r--r-- 1 avi avi 0 Jun  8 11:05 -abc.txt
-Òª±à¼­ÉÏÊöÎÄ¼þ¿ÉÒÔÕâÑù£º
+è¦ç¼–è¾‘ä¸Šè¿°æ–‡ä»¶å¯ä»¥è¿™æ ·ï¼š
 
 $ nano -- -abc.txt 
-»òÕß 
+æˆ–è€… 
 $ nano ./-abc.txt 
-×¢Òâ£ºÄã¿ÉÒÔ½« nano Ìæ»»ÎªÈÎºÎÆäËûÄãÏ²»¶µÄ±à¼­Æ÷±ÈÈçËµ vim£º
+æ³¨æ„ï¼šä½ å¯ä»¥å°† nano æ›¿æ¢ä¸ºä»»ä½•å…¶ä»–ä½ å–œæ¬¢çš„ç¼–è¾‘å™¨æ¯”å¦‚è¯´ vimï¼š
 
 $ vim -- -abc.txt 
-»òÕß 
+æˆ–è€… 
 $ vim ./-abc.txt 
-Èç¹ûÖ»ÊÇ¼òµ¥µØÒÆ¶¯ÎÄ¼þ¿ÉÒÔÕâÑù£º
+å¦‚æžœåªæ˜¯ç®€å•åœ°ç§»åŠ¨æ–‡ä»¶å¯ä»¥è¿™æ ·ï¼š
 
 $ mv -- -abc.txt -a.txt
-»òÕß
+æˆ–è€…
 $ mv -- -a.txt -abc.txt
-É¾³ýÕâÖÖÎÄ¼þ£¬¿ÉÒÔÕâÑù£º
+åˆ é™¤è¿™ç§æ–‡ä»¶ï¼Œå¯ä»¥è¿™æ ·ï¼š
 
 $ rm -- -abc.txt
-»òÕß
+æˆ–è€…
 $ rm ./-abc.txt 
-Èç¹ûÒ»¸öÄ¿Â¼ÏÂÓÐ´óÁ¿ÕâÖÖÃû×Ö°üº¬ÆÆÕÛºÅµÄÎÄ¼þ£¬ÒªÒ»´ÎÈ«²¿É¾³ýµÄ»°£¬¿ÉÒÔÕâÑù£º
+å¦‚æžœä¸€ä¸ªç›®å½•ä¸‹æœ‰å¤§é‡è¿™ç§åå­—åŒ…å«ç ´æŠ˜å·çš„æ–‡ä»¶ï¼Œè¦ä¸€æ¬¡å…¨éƒ¨åˆ é™¤çš„è¯ï¼Œå¯ä»¥è¿™æ ·ï¼š
 
 $ rm ./-*
-ÖØÒª£º
+é‡è¦ï¼š
 
-ÉÏÃæÌÖÂÛµÄ¹æÔò¿ÉÒÔÍ¬ÑùÓ¦ÓÃÓÚÃû×ÖÖÐ°üº¬ÈÎÒâÊýÁ¿ÒÔ¼°ÈÎÒâÎ»ÖÃµÄÁ¬½Ó·ûºÅµÄÎÄ¼þ¡£¾ÍÊÇËµ£¬-a-b-c.txt£¬ab-c.txt£¬abc-.txt£¬µÈµÈ¡£
+ä¸Šé¢è®¨è®ºçš„è§„åˆ™å¯ä»¥åŒæ ·åº”ç”¨äºŽåå­—ä¸­åŒ…å«ä»»æ„æ•°é‡ä»¥åŠä»»æ„ä½ç½®çš„è¿žæŽ¥ç¬¦å·çš„æ–‡ä»¶ã€‚å°±æ˜¯è¯´ï¼Œ-a-b-c.txtï¼Œab-c.txtï¼Œabc-.txtï¼Œç­‰ç­‰ã€‚
 
-ÉÏÃæÌÖÂÛµÄ¹æÔò¿ÉÒÔÍ¬ÑùÓ¦ÓÃÓÚÃû×ÖÖÐ°üº¬ÈÎÒâÊýÁ¿ÒÔ¼°ÈÎÒâÎ»ÖÃÁ¬½Ó·ûºÅµÄÎÄ¼þ¼Ð£¬³ýÁËÒ»ÖÖÇé¿ö£¬ÔÚÉ¾³ýÒ»¸öÎÄ¼þ¼ÐµÄÊ±ºòÄãµÃÕâÑùÊ¹ÓÃrm -rf£º
+ä¸Šé¢è®¨è®ºçš„è§„åˆ™å¯ä»¥åŒæ ·åº”ç”¨äºŽåå­—ä¸­åŒ…å«ä»»æ„æ•°é‡ä»¥åŠä»»æ„ä½ç½®è¿žæŽ¥ç¬¦å·çš„æ–‡ä»¶å¤¹ï¼Œé™¤äº†ä¸€ç§æƒ…å†µï¼Œåœ¨åˆ é™¤ä¸€ä¸ªæ–‡ä»¶å¤¹çš„æ—¶å€™ä½ å¾—è¿™æ ·ä½¿ç”¨rm -rfï¼š
 
-$ rm -rf -- -abc »òÕß $ rm -rf ./-abc
+$ rm -rf -- -abc æˆ–è€… $ rm -rf ./-abc
 
-´¦ÀíÃû×Ö°üº¬¾®ºÅ(#)µÄÎÄ¼þ
-·ûºÅ#ÔÚ BASH ÀïÓÐ·Ç³£ÌØ±ðµÄº¬Òå¡£#Ö®ºóµÄÒ»ÇÐ¶¼»á±»ÈÏÎªÊÇÆÀÂÛ£¬Òò´Ë»á±» BASH ºöÂÔ¡£
+å¤„ç†åå­—åŒ…å«äº•å·(#)çš„æ–‡ä»¶
+ç¬¦å·#åœ¨ BASH é‡Œæœ‰éžå¸¸ç‰¹åˆ«çš„å«ä¹‰ã€‚#ä¹‹åŽçš„ä¸€åˆ‡éƒ½ä¼šè¢«è®¤ä¸ºæ˜¯è¯„è®ºï¼Œå› æ­¤ä¼šè¢« BASH å¿½ç•¥ã€‚
 
-Í¨¹ýÀý×ÓÀ´¼ÓÉîÀí½â£º
+é€šè¿‡ä¾‹å­æ¥åŠ æ·±ç†è§£ï¼š
 
-´´½¨Ò»¸öÃû×ÖÊÇ #abc.txt µÄÎÄ¼þ£º
+åˆ›å»ºä¸€ä¸ªåå­—æ˜¯ #abc.txt çš„æ–‡ä»¶ï¼š
 
 $ touch #abc.txt
-²âÊÔÊä³ö
+æµ‹è¯•è¾“å‡º
 touch: missing file operand
 Try 'touch --help' for more information.
-³öÏÖÉÏÃæ´íÎóµÄÔ­ÒòÊÇ£¬BASH ½« #abc.txt ½âÊÍÎªÆÀÂÛ¶øºöÂÔÁË¡£ËùÒÔÃüÁî touchÃ»ÓÐÊÕµ½ÈÎºÎÎÄ¼þ×÷Îª²ÎÊý£¬ËùÒÔµ¼ÖÂÕâ¸ö´íÎó¡£
+å‡ºçŽ°ä¸Šé¢é”™è¯¯çš„åŽŸå› æ˜¯ï¼ŒBASH å°† #abc.txt è§£é‡Šä¸ºè¯„è®ºè€Œå¿½ç•¥äº†ã€‚æ‰€ä»¥å‘½ä»¤ touchæ²¡æœ‰æ”¶åˆ°ä»»ä½•æ–‡ä»¶ä½œä¸ºå‚æ•°ï¼Œæ‰€ä»¥å¯¼è‡´è¿™ä¸ªé”™è¯¯ã€‚
 
-Òª½â¾öÕâ¸öÎÊÌâ£¬Äã¿ÉÄÜÐèÒª¸æËß BASH ²»Òª½« # ½âÊÍÎªÆÀÂÛ¡£
+è¦è§£å†³è¿™ä¸ªé—®é¢˜ï¼Œä½ å¯èƒ½éœ€è¦å‘Šè¯‰ BASH ä¸è¦å°† # è§£é‡Šä¸ºè¯„è®ºã€‚
 
 $ touch ./#abc.txt
-»òÕß
+æˆ–è€…
 $ touch '#abc.txt'
-¼ì²é¸Õ´´½¨µÄÎÄ¼þ£º
+æ£€æŸ¥åˆšåˆ›å»ºçš„æ–‡ä»¶ï¼š
 
 $ ls -l
  
 total 0
 -rw-r--r-- 1 avi avi 0 Jun  8 12:14 #abc.txt
-ÏÖÔÚ´´½¨Ãû×ÖÖÐ³ýÁË¿ªÍ·µÄÆäËûµØ·½°üº¬ # µÄÎÄ¼þ¡£
+çŽ°åœ¨åˆ›å»ºåå­—ä¸­é™¤äº†å¼€å¤´çš„å…¶ä»–åœ°æ–¹åŒ…å« # çš„æ–‡ä»¶ã€‚
 
 $ touch ./a#bc.txt
 $ touch ./abc#.txt    
-»òÕß
+æˆ–è€…
 $ touch 'a#bc.txt'
 $ touch 'abc#.txt'
-ÔËÐÐ ¡®ls -l¡® À´¼ì²é£º
+è¿è¡Œ â€˜ls -lâ€˜ æ¥æ£€æŸ¥ï¼š
 
 $ ls -l
  
 total 0
 -rw-r--r-- 1 avi avi 0 Jun  8 12:16 a#bc.txt
 -rw-r--r-- 1 avi avi 0 Jun  8 12:16 abc#.txt
-Èç¹ûÍ¬Ê±´´½¨Á½¸öÎÄ¼þ£¨±ÈÈç a ºÍ #bc£©»áÔõÃ´Ñù£º
+å¦‚æžœåŒæ—¶åˆ›å»ºä¸¤ä¸ªæ–‡ä»¶ï¼ˆæ¯”å¦‚ a å’Œ #bcï¼‰ä¼šæ€Žä¹ˆæ ·ï¼š
 
 $ touch a.txt #bc.txt
-¼ì²é¸Õ´´½¨µÄÎÄ¼þ£º
+æ£€æŸ¥åˆšåˆ›å»ºçš„æ–‡ä»¶ï¼š
 
 $ ls -l
  
 total 0
 -rw-r--r-- 1 avi avi 0 Jun  8 12:18 a.txt
-ºÜÃ÷ÏÔÉÏÃæµÄÀý×ÓÖÐÖ»´´½¨ÁËÎÄ¼þ a ¶øÎÄ¼þ #bc ±»ºöÂÔÁË¡£¶ÔÓÚÉÏÃæµÄÇé¿öÎÒÃÇ¿ÉÒÔÕâÑù×ö£¬
+å¾ˆæ˜Žæ˜¾ä¸Šé¢çš„ä¾‹å­ä¸­åªåˆ›å»ºäº†æ–‡ä»¶ a è€Œæ–‡ä»¶ #bc è¢«å¿½ç•¥äº†ã€‚å¯¹äºŽä¸Šé¢çš„æƒ…å†µæˆ‘ä»¬å¯ä»¥è¿™æ ·åšï¼Œ
 
 $ touch a.txt ./#bc.txt
-»òÕß
+æˆ–è€…
 $ touch a.txt '#bc.txt'
-¼ì²éÒ»ÏÂ£º
+æ£€æŸ¥ä¸€ä¸‹ï¼š
 
 $ ls -l
  
 total 0
 -rw-r--r-- 1 avi avi 0 Jun  8 12:20 a.txt
 -rw-r--r-- 1 avi avi 0 Jun  8 12:20 #bc.txt
-¿ÉÒÔÕâÑùÒÆ¶¯ÎÄ¼þ£º
+å¯ä»¥è¿™æ ·ç§»åŠ¨æ–‡ä»¶ï¼š
 
 $ mv ./#bc.txt ./#cd.txt
-»òÕß
+æˆ–è€…
 $ mv '#bc.txt' '#cd.txt'
-ÕâÑù¿½±´£º
+è¿™æ ·æ‹·è´ï¼š
 
 $ cp ./#cd.txt ./#de.txt
-»òÕß
+æˆ–è€…
 $ cp '#cd.txt' '#de.txt'
-¿ÉÒÔÊ¹ÓÃÄãÏ²»¶µÄ±à¼­Æ÷À´±à¼­ÎÄ¼þ£º
+å¯ä»¥ä½¿ç”¨ä½ å–œæ¬¢çš„ç¼–è¾‘å™¨æ¥ç¼–è¾‘æ–‡ä»¶ï¼š
 
 $ vi ./#cd.txt
-»òÕß
+æˆ–è€…
 $ vi '#cd.txt'
  
 $ nano ./#cd.txt
-»òÕß
+æˆ–è€…
 $ nano '#cd.txt'
-ÕâÑùÉ¾³ý£º
+è¿™æ ·åˆ é™¤ï¼š
 
 $ rm ./#bc.txt 
-»òÕß
+æˆ–è€…
 $ rm '#bc.txt'
-ÒªÉ¾³ýËùÓÐÒÔ¾®ºÅ£¨#£©¿ªÍ·µÄÎÄ¼þ£¬¿ÉÒÔÕâÑù£º
+è¦åˆ é™¤æ‰€æœ‰ä»¥äº•å·ï¼ˆ#ï¼‰å¼€å¤´çš„æ–‡ä»¶ï¼Œå¯ä»¥è¿™æ ·ï¼š
 
 # rm ./#*
-´¦ÀíÃû×Ö°üº¬·ÖºÅ(;)µÄÎÄ¼þ
-Èç¹ûÄã»¹²»ÖªµÀµÄ»°£¬·ÖºÅÔÚ BASH ÀïÆðµ½ÃüÁî·Ö¸ôµÄ×÷ÓÃ£¬ÆäËû shell ¿ÉÄÜÒ²ÊÇÒ»ÑùµÄ¡£·ÖºÅ×÷Îª·Ö¸ô·û¿ÉÒÔÈÃÄãÒ»´ÎÖ´ÐÐ¼¸¸öÃüÁî¡£ÄãÅöµ½¹ýÃû×Ö°üº¬·ÖºÅµÄÎÄ¼þÂð£¿Èç¹ûÃ»ÓÐµÄ»°£¬ÕâÀïÓÐÀý×Ó¡£
+å¤„ç†åå­—åŒ…å«åˆ†å·(;)çš„æ–‡ä»¶
+å¦‚æžœä½ è¿˜ä¸çŸ¥é“çš„è¯ï¼Œåˆ†å·åœ¨ BASH é‡Œèµ·åˆ°å‘½ä»¤åˆ†éš”çš„ä½œç”¨ï¼Œå…¶ä»– shell å¯èƒ½ä¹Ÿæ˜¯ä¸€æ ·çš„ã€‚åˆ†å·ä½œä¸ºåˆ†éš”ç¬¦å¯ä»¥è®©ä½ ä¸€æ¬¡æ‰§è¡Œå‡ ä¸ªå‘½ä»¤ã€‚ä½ ç¢°åˆ°è¿‡åå­—åŒ…å«åˆ†å·çš„æ–‡ä»¶å—ï¼Ÿå¦‚æžœæ²¡æœ‰çš„è¯ï¼Œè¿™é‡Œæœ‰ä¾‹å­ã€‚
 
-´´½¨Ò»¸öÃû×Ö°üº¬·ÖºÅµÄÎÄ¼þ¡£
+åˆ›å»ºä¸€ä¸ªåå­—åŒ…å«åˆ†å·çš„æ–‡ä»¶ã€‚
 
 $ touch ;abc.txt
-²âÊÔÊä³ö
+æµ‹è¯•è¾“å‡º
 touch: missing file operand
 Try 'touch --help' for more information.
 bash: abc.txt: command not found
-³öÏÖÉÏÃæ´íÎóµÄÔ­ÒòÊÇ£¬ÔÚÔËÐÐÉÏÃæÃüÁîµÄÊ±ºò BASH »á°Ñ touch ½âÊÍÎªÒ»¸öÃüÁîµ«ÊÇÔÚ·ÖºÅÇ°Ã»ÓÐÈÎºÎÎÄ¼þ²ÎÊý£¬ËùÒÔ±¨¸æ´íÎó¡£È»ºó±¨¸æµÄÁíÒ»¸ö´íÎóÕÒ²»µ½ÃüÁî abc.txt£¬Ö»ÊÇÒòÎªÔÚ·ÖºÅºó BASH »áÆÚÍûÁíÒ»¸öÐÂµÄÃüÁî£¬¶ø abc.txt ²¢²»ÊÇÒ»¸öÃüÁî¡£
+å‡ºçŽ°ä¸Šé¢é”™è¯¯çš„åŽŸå› æ˜¯ï¼Œåœ¨è¿è¡Œä¸Šé¢å‘½ä»¤çš„æ—¶å€™ BASH ä¼šæŠŠ touch è§£é‡Šä¸ºä¸€ä¸ªå‘½ä»¤ä½†æ˜¯åœ¨åˆ†å·å‰æ²¡æœ‰ä»»ä½•æ–‡ä»¶å‚æ•°ï¼Œæ‰€ä»¥æŠ¥å‘Šé”™è¯¯ã€‚ç„¶åŽæŠ¥å‘Šçš„å¦ä¸€ä¸ªé”™è¯¯æ‰¾ä¸åˆ°å‘½ä»¤ abc.txtï¼Œåªæ˜¯å› ä¸ºåœ¨åˆ†å·åŽ BASH ä¼šæœŸæœ›å¦ä¸€ä¸ªæ–°çš„å‘½ä»¤ï¼Œè€Œ abc.txt å¹¶ä¸æ˜¯ä¸€ä¸ªå‘½ä»¤ã€‚
 
-Òª½â¾öÕâ¸öÎÊÌâ£¬ÎÒÃÇµÃ¸æËß BASH ²»Òª½«·ÖºÅ½âÊÍÎªÃüÁî·Ö¸ô·û£¬ÀýÈç£º
+è¦è§£å†³è¿™ä¸ªé—®é¢˜ï¼Œæˆ‘ä»¬å¾—å‘Šè¯‰ BASH ä¸è¦å°†åˆ†å·è§£é‡Šä¸ºå‘½ä»¤åˆ†éš”ç¬¦ï¼Œä¾‹å¦‚ï¼š
 
 $ touch ./';abc.txt'
-»òÕß
+æˆ–è€…
 $ touch ';abc.txt'
-×¢Òâ£ºÎÒÃÇ½«ÎÄ¼þÃûÓÃµ¥ÒýºÅ '' °üº¬ÆðÀ´¡£ÕâÑù¿ÉÒÔ¸æËß BASH ·ÖºÅ ; ÊÇÎÄ¼þÃûµÄÒ»²¿·Ö¶ø²»ÊÇÃüÁî·Ö¸ô·û¡£
+æ³¨æ„ï¼šæˆ‘ä»¬å°†æ–‡ä»¶åç”¨å•å¼•å· '' åŒ…å«èµ·æ¥ã€‚è¿™æ ·å¯ä»¥å‘Šè¯‰ BASH åˆ†å· ; æ˜¯æ–‡ä»¶åçš„ä¸€éƒ¨åˆ†è€Œä¸æ˜¯å‘½ä»¤åˆ†éš”ç¬¦ã€‚
 
-¶ÔÃû×Ö°üº¬·ÖºÅµÄÎÄ¼þºÍÎÄ¼þ¼ÐµÄÆäËû²Ù×÷£¨¾ÍÊÇ£¬¿½±´¡¢ÒÆ¶¯¡¢É¾³ý£©¿ÉÒÔÖ±½Ó½«Ãû×ÖÓÃµ¥ÒýºÅ°üº¬ÆðÀ´¾ÍºÃÁË¡£
+å¯¹åå­—åŒ…å«åˆ†å·çš„æ–‡ä»¶å’Œæ–‡ä»¶å¤¹çš„å…¶ä»–æ“ä½œï¼ˆå°±æ˜¯ï¼Œæ‹·è´ã€ç§»åŠ¨ã€åˆ é™¤ï¼‰å¯ä»¥ç›´æŽ¥å°†åå­—ç”¨å•å¼•å·åŒ…å«èµ·æ¥å°±å¥½äº†ã€‚
 
-´¦ÀíÃû×Ö°üº¬ÆäËûÌØÊâ×Ö·ûµÄÎÄ¼þ/ÎÄ¼þ¼Ð
-ÎÄ¼þÃû°üº¬¼ÓºÅ (+)
-²»ÐèÒªÈÎºÎÌØÊâ´¦Àí£¬°´Æ½Ê±µÄ·½Ê½×ö¾ÍºÃÁË£¬±ÈÈçÏÂÃæ²âÊÔµÄÎÄ¼þÃû¡£
+å¤„ç†åå­—åŒ…å«å…¶ä»–ç‰¹æ®Šå­—ç¬¦çš„æ–‡ä»¶/æ–‡ä»¶å¤¹
+æ–‡ä»¶ååŒ…å«åŠ å· (+)
+ä¸éœ€è¦ä»»ä½•ç‰¹æ®Šå¤„ç†ï¼ŒæŒ‰å¹³æ—¶çš„æ–¹å¼åšå°±å¥½äº†ï¼Œæ¯”å¦‚ä¸‹é¢æµ‹è¯•çš„æ–‡ä»¶åã€‚
 
 $ touch +12.txt 
-ÎÄ¼þÃû°üº¬ÃÀÔª·û ($)
-ÄãÐèÒª½«ÎÄ¼þÃûÓÃµ¥ÒýºÅÀ¨ÆðÀ´£¬Ïñ´¦Àí·ÖºÅÄÇÑùµÄ·½Ê½¡£È»ºó¾ÍºÜ¼òµ¥ÁË¡£
+æ–‡ä»¶ååŒ…å«ç¾Žå…ƒç¬¦ ($)
+ä½ éœ€è¦å°†æ–‡ä»¶åç”¨å•å¼•å·æ‹¬èµ·æ¥ï¼Œåƒå¤„ç†åˆ†å·é‚£æ ·çš„æ–¹å¼ã€‚ç„¶åŽå°±å¾ˆç®€å•äº†ã€‚
 
 $ touch '$12.txt'
-ÎÄ¼þÃû°üº¬°Ù·ÖºÅ (%)
-²»ÐèÒªÈÎºÎÌØÊâ´¦Àí£¬µ±×÷Ò»¸öÆÕÍ¨ÎÄ¼þ¾Í¿ÉÒÔÁË¡£
+æ–‡ä»¶ååŒ…å«ç™¾åˆ†å· (%)
+ä¸éœ€è¦ä»»ä½•ç‰¹æ®Šå¤„ç†ï¼Œå½“ä½œä¸€ä¸ªæ™®é€šæ–‡ä»¶å°±å¯ä»¥äº†ã€‚
 
 $ touch %12.txt
-ÎÄ¼þÃû°üº¬ÐÇºÅ (*)
-ÐèÒªÓÃµ¥ÒýºÅÀ¨ÆðÀ´»òÊ¹ÓÃ·´Ð±¸Ü×ªÒå¡££¨LCTT Òë×¢£º´Ë´¦Ô­ÎÄÓÐÎó£¬ÒÑÐÞ¸Ä¡££©
+æ–‡ä»¶ååŒ…å«æ˜Ÿå· (*)
+éœ€è¦ç”¨å•å¼•å·æ‹¬èµ·æ¥æˆ–ä½¿ç”¨åæ–œæ è½¬ä¹‰ã€‚ï¼ˆLCTT è¯‘æ³¨ï¼šæ­¤å¤„åŽŸæ–‡æœ‰è¯¯ï¼Œå·²ä¿®æ”¹ã€‚ï¼‰
 
 $ touch *12.txt
-×¢Òâ£ºµ±ÄãÐèÒªÉ¾³ýÐÇºÅ¿ªÍ·µÄÎÄ¼þÊ±£¬Ç§Íò²»ÒªÓÃÀàËÆÏÂÃæµÄÃüÁî¡£
+æ³¨æ„ï¼šå½“ä½ éœ€è¦åˆ é™¤æ˜Ÿå·å¼€å¤´çš„æ–‡ä»¶æ—¶ï¼Œåƒä¸‡ä¸è¦ç”¨ç±»ä¼¼ä¸‹é¢çš„å‘½ä»¤ã€‚
 
 $ rm *
-»òÕß
+æˆ–è€…
 $ rm -rf *
-¶øÊÇÓÃÕâÑùµÄÃüÁî£¬(LCTT Òë×¢£º´Ë´¦Ô­ÎÄÓÐÎó£¬ÒÑÐÞ¸Ä£©
+è€Œæ˜¯ç”¨è¿™æ ·çš„å‘½ä»¤ï¼Œ(LCTT è¯‘æ³¨ï¼šæ­¤å¤„åŽŸæ–‡æœ‰è¯¯ï¼Œå·²ä¿®æ”¹ï¼‰
 
 $ rm ./'*.txt'
-ÎÄ¼þÃû°üº¬Ì¾ºÅ (!)
-Ö»Òª½«ÎÄ¼þÃûÓÃµ¥ÒýºÅÀ¨ÆðÀ´£¬ÆäËûµÄ¾ÍÒ»ÑùÁË¡£
+æ–‡ä»¶ååŒ…å«å¹å· (!)
+åªè¦å°†æ–‡ä»¶åç”¨å•å¼•å·æ‹¬èµ·æ¥ï¼Œå…¶ä»–çš„å°±ä¸€æ ·äº†ã€‚
 
 $ touch '!12.txt'
-ÎÄ¼þÃû°üº¬Ð¡ÀÏÊó (@)
-Ã»ÓÐÊ²Ã´ÌØ±ðµÄ£¬¿ÉÒÔ½«Ãû×Ö°üº¬Ð¡ÀÏÊóµÄÎÄ¼þµ±×÷ÆÕÍ¨ÎÄ¼þ¡£
+æ–‡ä»¶ååŒ…å«å°è€é¼  (@)
+æ²¡æœ‰ä»€ä¹ˆç‰¹åˆ«çš„ï¼Œå¯ä»¥å°†åå­—åŒ…å«å°è€é¼ çš„æ–‡ä»¶å½“ä½œæ™®é€šæ–‡ä»¶ã€‚
 
 $ touch '@12.txt'
-ÎÄ¼þÃû°üº¬ ^
-²»ÐèÒªÌØÊâ´¦Àí¡£¿ÉÒÔ½«Ãû×Ö°üº¬ ^ µÄÎÄ¼þµ±×÷ÆÕÍ¨ÎÄ¼þ¡£
+æ–‡ä»¶ååŒ…å« ^
+ä¸éœ€è¦ç‰¹æ®Šå¤„ç†ã€‚å¯ä»¥å°†åå­—åŒ…å« ^ çš„æ–‡ä»¶å½“ä½œæ™®é€šæ–‡ä»¶ã€‚
 
 $ touch ^12.txt
-ÎÄ¼þÃû°üº¬ (&)
-½«ÎÄ¼þÃûÓÃµ¥ÒýºÅÀ¨ÆðÀ´£¬È»ºó¾Í¿ÉÒÔ²Ù×÷ÁË¡£
+æ–‡ä»¶ååŒ…å« (&)
+å°†æ–‡ä»¶åç”¨å•å¼•å·æ‹¬èµ·æ¥ï¼Œç„¶åŽå°±å¯ä»¥æ“ä½œäº†ã€‚
 
 $ touch '&12.txt'
-ÎÄ¼þÃû°üº¬À¨ºÅ ()
-Èç¹ûÎÄ¼þÃû°üº¬À¨ºÅ£¬ÄãÐèÒª½«ÎÄ¼þÃûÓÃµ¥ÒýºÅÀ¨ÆðÀ´¡£
+æ–‡ä»¶ååŒ…å«æ‹¬å· ()
+å¦‚æžœæ–‡ä»¶ååŒ…å«æ‹¬å·ï¼Œä½ éœ€è¦å°†æ–‡ä»¶åç”¨å•å¼•å·æ‹¬èµ·æ¥ã€‚
 
 $ touch '(12.txt)'
-ÎÄ¼þÃû°üº¬»¨À¨ºÅ {}
-ÓÃµ¥ÒýºÅÀ¨ÆðÀ´»òÊ¹ÓÃ·´Ð±¸Ü×ªÒå¡££¨LCTT Òë×¢£º´Ë´¦Ô­ÎÄÓÐÎó£¬ÒÑÐÞ¸Ä£©
+æ–‡ä»¶ååŒ…å«èŠ±æ‹¬å· {}
+ç”¨å•å¼•å·æ‹¬èµ·æ¥æˆ–ä½¿ç”¨åæ–œæ è½¬ä¹‰ã€‚ï¼ˆLCTT è¯‘æ³¨ï¼šæ­¤å¤„åŽŸæ–‡æœ‰è¯¯ï¼Œå·²ä¿®æ”¹ï¼‰
 
 $ touch '{12.txt}'
-ÎÄ¼þÃû°üº¬¼âÀ¨ºÅ <>
-Ãû×Ö°üº¬¼âÀ¨ºÅµÄÎÄ¼þÐèÒªÓÃµ¥ÒýºÅÀ¨ÆðÀ´¡£
+æ–‡ä»¶ååŒ…å«å°–æ‹¬å· <>
+åå­—åŒ…å«å°–æ‹¬å·çš„æ–‡ä»¶éœ€è¦ç”¨å•å¼•å·æ‹¬èµ·æ¥ã€‚
 
 $ touch '<12.txt>'
-ÎÄ¼þÃû°üº¬·½À¨ºÅ [ ]
-ÓÃµ¥ÒýºÅÀ¨ÆðÀ´»òÊ¹ÓÃ·´Ð±¸Ü×ªÒå¡££¨LCTT Òë×¢£º´Ë´¦Ô­ÎÄÓÐÎó£¬ÒÑÐÞ¸Ä£©
+æ–‡ä»¶ååŒ…å«æ–¹æ‹¬å· [ ]
+ç”¨å•å¼•å·æ‹¬èµ·æ¥æˆ–ä½¿ç”¨åæ–œæ è½¬ä¹‰ã€‚ï¼ˆLCTT è¯‘æ³¨ï¼šæ­¤å¤„åŽŸæ–‡æœ‰è¯¯ï¼Œå·²ä¿®æ”¹ï¼‰
 
 $ touch '[12.txt]'
-ÎÄ¼þÃû°üº¬ÏÂ»®Ïß (_)
-Õâ¸ö·Ç³£ÆÕ±é£¬²»ÐèÒªÌØÊâ¶Ô´ý¡£µ±×÷ÆÕÍ¨ÎÄ¼þËæÒâ´¦Àí¡£
+æ–‡ä»¶ååŒ…å«ä¸‹åˆ’çº¿ (_)
+è¿™ä¸ªéžå¸¸æ™®éï¼Œä¸éœ€è¦ç‰¹æ®Šå¯¹å¾…ã€‚å½“ä½œæ™®é€šæ–‡ä»¶éšæ„å¤„ç†ã€‚
 
 $ touch _12.txt
-ÎÄ¼þÃû°üº¬µÈºÅ (=)
-ÓÃµ¥ÒýºÅÀ¨ÆðÀ´»òÊ¹ÓÃ·´Ð±¸Ü×ªÒå¡££¨LCTT Òë×¢£º´Ë´¦Ô­ÎÄÓÐÎó£¬ÒÑÐÞ¸Ä£©
+æ–‡ä»¶ååŒ…å«ç­‰å· (=)
+ç”¨å•å¼•å·æ‹¬èµ·æ¥æˆ–ä½¿ç”¨åæ–œæ è½¬ä¹‰ã€‚ï¼ˆLCTT è¯‘æ³¨ï¼šæ­¤å¤„åŽŸæ–‡æœ‰è¯¯ï¼Œå·²ä¿®æ”¹ï¼‰
 
 $ touch '=12.txt'
-´¦Àí·´Ð±¸Ü ()
-·´Ð±¸Ü»á¸æËß shell ºöÂÔºóÃæ×Ö·ûµÄÌØÊâº¬Òå¡£Äã±ØÐë½«ÎÄ¼þÃûÓÃµ¥ÒýºÅÀ¨ÆðÀ´£¬¾ÍÏñ´¦Àí·ÖºÅÄÇÑù¡£ÆäËûµÄ¾ÍÃ»Ê²Ã´ÁË¡£
+å¤„ç†åæ–œæ  ()
+åæ–œæ ä¼šå‘Šè¯‰ shell å¿½ç•¥åŽé¢å­—ç¬¦çš„ç‰¹æ®Šå«ä¹‰ã€‚ä½ å¿…é¡»å°†æ–‡ä»¶åç”¨å•å¼•å·æ‹¬èµ·æ¥ï¼Œå°±åƒå¤„ç†åˆ†å·é‚£æ ·ã€‚å…¶ä»–çš„å°±æ²¡ä»€ä¹ˆäº†ã€‚
 
 $ touch '\12.txt'
-°üº¬Ð±¸ÜµÄÌØÊâÇéÐÎ
-³ý·ÇÄãµÄÎÄ¼þÏµÍ³ÓÐÎÊÌâ£¬·ñÔòÄã²»ÄÜ´´½¨Ãû×Ö°üº¬Ð±¸ÜµÄÎÄ¼þ¡£Ã»°ì·¨×ªÒåÐ±¸Ü¡£
+åŒ…å«æ–œæ çš„ç‰¹æ®Šæƒ…å½¢
+é™¤éžä½ çš„æ–‡ä»¶ç³»ç»Ÿæœ‰é—®é¢˜ï¼Œå¦åˆ™ä½ ä¸èƒ½åˆ›å»ºåå­—åŒ…å«æ–œæ çš„æ–‡ä»¶ã€‚æ²¡åŠžæ³•è½¬ä¹‰æ–œæ ã€‚
 
-ËùÒÔÈç¹ûÄãÄÜ´´½¨ÀàËÆ ¡®/12.txt¡¯ »òÕß ¡®b/c.txt¡¯ ÕâÑùµÄÎÄ¼þ£¬ÄÇÒªÃ´ÄãµÄÎÄ¼þÏµÍ³ÓÐÎÊÌâ£¬»òÕßÖ§³Ö Unicode£¬ÕâÑùÄã¿ÉÒÔ´´½¨°üº¬Ð±¸ÜµÄÎÄ¼þ¡£Ö»ÊÇÕâÑù²¢²»ÊÇÕæµÄÐ±¸Ü£¬¶øÊÇÒ»¸ö¿´ÆðÀ´ÏñÐ±¸ÜµÄ Unicode ×Ö·û¡£
+æ‰€ä»¥å¦‚æžœä½ èƒ½åˆ›å»ºç±»ä¼¼ â€˜/12.txtâ€™ æˆ–è€… â€˜b/c.txtâ€™ è¿™æ ·çš„æ–‡ä»¶ï¼Œé‚£è¦ä¹ˆä½ çš„æ–‡ä»¶ç³»ç»Ÿæœ‰é—®é¢˜ï¼Œæˆ–è€…æ”¯æŒ Unicodeï¼Œè¿™æ ·ä½ å¯ä»¥åˆ›å»ºåŒ…å«æ–œæ çš„æ–‡ä»¶ã€‚åªæ˜¯è¿™æ ·å¹¶ä¸æ˜¯çœŸçš„æ–œæ ï¼Œè€Œæ˜¯ä¸€ä¸ªçœ‹èµ·æ¥åƒæ–œæ çš„ Unicode å­—ç¬¦ã€‚
 
-ÎÄ¼þÃû°üº¬ÎÊºÅ (?)
-ÓÃµ¥ÒýºÅÀ¨ÆðÀ´»òÊ¹ÓÃ·´Ð±¸Ü×ªÒå¡££¨LCTT Òë×¢£º´Ë´¦Ô­ÎÄÓÐÎó£¬ÒÑÐÞ¸Ä£©
+æ–‡ä»¶ååŒ…å«é—®å· (?)
+ç”¨å•å¼•å·æ‹¬èµ·æ¥æˆ–ä½¿ç”¨åæ–œæ è½¬ä¹‰ã€‚ï¼ˆLCTT è¯‘æ³¨ï¼šæ­¤å¤„åŽŸæ–‡æœ‰è¯¯ï¼Œå·²ä¿®æ”¹ï¼‰
 
 $ touch '?12.txt'
-ÎÄ¼þÃû°üº¬µã (.)
-ÔÚ Linux ÀïÒÔµã (.) ¿ªÍ·µÄÎÄ¼þ·Ç³£ÌØ±ð£¬±»³ÆÎªµãÎÄ¼þ¡£ËüÃÇÍ¨³£ÊÇÒþ²ØµÄÅäÖÃÎÄ¼þ»òÏµÍ³ÎÄ¼þ¡£ÄãÐèÒªÊ¹ÓÃ ls ÃüÁîµÄ ¡®-a¡® »ò ¡®-A¡® ¿ª¹ØÀ´²é¿´ÕâÖÖÎÄ¼þ¡£
+æ–‡ä»¶ååŒ…å«ç‚¹ (.)
+åœ¨ Linux é‡Œä»¥ç‚¹ (.) å¼€å¤´çš„æ–‡ä»¶éžå¸¸ç‰¹åˆ«ï¼Œè¢«ç§°ä¸ºç‚¹æ–‡ä»¶ã€‚å®ƒä»¬é€šå¸¸æ˜¯éšè—çš„é…ç½®æ–‡ä»¶æˆ–ç³»ç»Ÿæ–‡ä»¶ã€‚ä½ éœ€è¦ä½¿ç”¨ ls å‘½ä»¤çš„ â€˜-aâ€˜ æˆ– â€˜-Aâ€˜ å¼€å…³æ¥æŸ¥çœ‹è¿™ç§æ–‡ä»¶ã€‚
 
-´´½¨£¬±à¼­£¬ÖØÃüÃûºÍÉ¾³ýÕâÖÖÎÄ¼þºÜÖ±½Ó¡£
+åˆ›å»ºï¼Œç¼–è¾‘ï¼Œé‡å‘½åå’Œåˆ é™¤è¿™ç§æ–‡ä»¶å¾ˆç›´æŽ¥ã€‚
 
 $ touch .12.txt
-×¢Òâ£ºÔÚ Linux ÀïÄã¿ÉÄÜÅöµ½Ãû×Ö°üº¬Ðí¶àµã (.) µÄÎÄ¼þ¡£²»ÏñÆäËû²Ù×÷ÏµÍ³£¬ÎÄ¼þÃûÀïµÄµã²¢²»ÒâÎ¶×Å·Ö¸ôÃû×ÖºÍÀ©Õ¹ºó×º¡£Äã¿ÉÒÔ´´½¨Ãû×Ö°üº¬¶à¸öµãµÄÎÄ¼þ£º
+æ³¨æ„ï¼šåœ¨ Linux é‡Œä½ å¯èƒ½ç¢°åˆ°åå­—åŒ…å«è®¸å¤šç‚¹ (.) çš„æ–‡ä»¶ã€‚ä¸åƒå…¶ä»–æ“ä½œç³»ç»Ÿï¼Œæ–‡ä»¶åé‡Œçš„ç‚¹å¹¶ä¸æ„å‘³ç€åˆ†éš”åå­—å’Œæ‰©å±•åŽç¼€ã€‚ä½ å¯ä»¥åˆ›å»ºåå­—åŒ…å«å¤šä¸ªç‚¹çš„æ–‡ä»¶ï¼š
 
 $ touch 1.2.3.4.5.6.7.8.9.10.txt
-¼ì²éÒ»ÏÂ£º
+æ£€æŸ¥ä¸€ä¸‹ï¼š
 
 $ ls -l
  
 total 0
 -rw-r--r-- 1 avi avi 0 Jun  8 14:32 1.2.3.4.5.6.7.8.9.10.txt
-ÎÄ¼þÃû°üº¬¶ººÅ (,)
-Äã¿ÉÒÔÔÚÎÄ¼þÃûÖÐÊ¹ÓÃ¶ººÅ£¬¿ÉÒÔÓÐÈÎÒâ¶à¸ö¶ø²»ÓÃÌØÊâ¶Ô´ý¡£¾ÍÏñÆ½Ê±ÆÕÍ¨Ãû×ÖÎÄ¼þÄÇÑù´¦Àí¡£
+æ–‡ä»¶ååŒ…å«é€—å· (,)
+ä½ å¯ä»¥åœ¨æ–‡ä»¶åä¸­ä½¿ç”¨é€—å·ï¼Œå¯ä»¥æœ‰ä»»æ„å¤šä¸ªè€Œä¸ç”¨ç‰¹æ®Šå¯¹å¾…ã€‚å°±åƒå¹³æ—¶æ™®é€šåå­—æ–‡ä»¶é‚£æ ·å¤„ç†ã€‚
 
 $ touch ,12.txt
-»òÕß
+æˆ–è€…
 $ touch ,12,.txt
-ÎÄ¼þÃû°üº¬Ã°ºÅ (:)
-ÓÃµ¥ÒýºÅÀ¨ÆðÀ´»òÊ¹ÓÃ·´Ð±¸Ü×ªÒå¡££¨LCTT Òë×¢£º´Ë´¦Ô­ÎÄÓÐÎó£¬ÒÑÐÞ¸Ä£©
+æ–‡ä»¶ååŒ…å«å†’å· (:)
+ç”¨å•å¼•å·æ‹¬èµ·æ¥æˆ–ä½¿ç”¨åæ–œæ è½¬ä¹‰ã€‚ï¼ˆLCTT è¯‘æ³¨ï¼šæ­¤å¤„åŽŸæ–‡æœ‰è¯¯ï¼Œå·²ä¿®æ”¹ï¼‰
 
 $ touch ':12.txt'
-»òÕß
+æˆ–è€…
 $ touch ':12:.txt'
-ÎÄ¼þÃû°üº¬ÒýºÅ£¨µ¥ÒýºÅºÍË«ÒýºÅ£©
-ÒªÔÚÎÄ¼þÃûÀïÊ¹ÓÃÒýºÅ£¬ÎÒÃÇÐèÒªÊ¹ÓÃ½»Ìæ¹æÔò¡£ÀýÈç£¬Èç¹ûÄãÐèÒªÔÚÎÄ¼þÃûÀïÊ¹ÓÃµ¥ÒýºÅ£¬ÄÇ¾ÍÓÃË«ÒýºÅ°ÑÎÄ¼þÃûÀ¨ÆðÀ´¡£¶øÈç¹ûÄãÐèÒªÔÚÎÄ¼þÃûÀïÊ¹ÓÃË«ÒýºÅ£¬ÄÇ¾ÍÓÃµ¥ÒýºÅ°ÑÎÄ¼þÃûÀ¨ÆðÀ´¡££¨LCTT Òë×¢£º»òÕßÈç¹ûµ¥ÒýºÅºÍË«ÒýºÅ»ìÔÓµÄÇé¿ö£¬ÄãÒ²¿ÉÒÔÓÃ·´Ð±¸Ü×ªÒå¡££©
+æ–‡ä»¶ååŒ…å«å¼•å·ï¼ˆå•å¼•å·å’ŒåŒå¼•å·ï¼‰
+è¦åœ¨æ–‡ä»¶åé‡Œä½¿ç”¨å¼•å·ï¼Œæˆ‘ä»¬éœ€è¦ä½¿ç”¨äº¤æ›¿è§„åˆ™ã€‚ä¾‹å¦‚ï¼Œå¦‚æžœä½ éœ€è¦åœ¨æ–‡ä»¶åé‡Œä½¿ç”¨å•å¼•å·ï¼Œé‚£å°±ç”¨åŒå¼•å·æŠŠæ–‡ä»¶åæ‹¬èµ·æ¥ã€‚è€Œå¦‚æžœä½ éœ€è¦åœ¨æ–‡ä»¶åé‡Œä½¿ç”¨åŒå¼•å·ï¼Œé‚£å°±ç”¨å•å¼•å·æŠŠæ–‡ä»¶åæ‹¬èµ·æ¥ã€‚ï¼ˆLCTT è¯‘æ³¨ï¼šæˆ–è€…å¦‚æžœå•å¼•å·å’ŒåŒå¼•å·æ··æ‚çš„æƒ…å†µï¼Œä½ ä¹Ÿå¯ä»¥ç”¨åæ–œæ è½¬ä¹‰ã€‚ï¼‰
 
 $ touch "15'.txt"
  
-ÒÔ¼°
+ä»¥åŠ
  
 $ touch '15".txt'
-ÎÄ¼þÃû°üº¬²¨ÀËºÅ (~)
-Linux ÏÂÒ»Ð©Ïñ emacs ÕâÑùµÄÎÄ±¾±à¼­Æ÷ÔÚ±à¼­ÎÄ¼þµÄÊ±ºò»á´´½¨±¸·ÝÎÄ¼þ¡£Õâ¸ö±¸·ÝÎÄ¼þµÄÃû×ÖÊÇÔÚÔ­ÎÄ¼þÃûºóÃæ¸½¼ÓÒ»¸ö²¨ÀËºÅ¡£Äã¿ÉÒÔÔÚÎÄ¼þÃûÈÎÒâÎ»ÖÃÊ¹ÓÃ²¨ÀËºÅ£¬ÀýÈç£º
+æ–‡ä»¶ååŒ…å«æ³¢æµªå· (~)
+Linux ä¸‹ä¸€äº›åƒ emacs è¿™æ ·çš„æ–‡æœ¬ç¼–è¾‘å™¨åœ¨ç¼–è¾‘æ–‡ä»¶çš„æ—¶å€™ä¼šåˆ›å»ºå¤‡ä»½æ–‡ä»¶ã€‚è¿™ä¸ªå¤‡ä»½æ–‡ä»¶çš„åå­—æ˜¯åœ¨åŽŸæ–‡ä»¶ååŽé¢é™„åŠ ä¸€ä¸ªæ³¢æµªå·ã€‚ä½ å¯ä»¥åœ¨æ–‡ä»¶åä»»æ„ä½ç½®ä½¿ç”¨æ³¢æµªå·ï¼Œä¾‹å¦‚ï¼š
 
 $ touch ~1a.txt
-»òÕß
+æˆ–è€…
 $touch 2b~.txt
-ÎÄ¼þÃû°üº¬¿Õ¸ñ
-´´½¨Ãû×ÖµÄ×Ö·û/µ¥´ÊÖ®¼ä°üº¬¿Õ¸ñµÄÎÄ¼þ£¬±ÈÈç ¡°hi my name is avishek.txt¡±¡£
+æ–‡ä»¶ååŒ…å«ç©ºæ ¼
+åˆ›å»ºåå­—çš„å­—ç¬¦/å•è¯ä¹‹é—´åŒ…å«ç©ºæ ¼çš„æ–‡ä»¶ï¼Œæ¯”å¦‚ â€œhi my name is avishek.txtâ€ã€‚
 
-×îºÃ²»ÒªÔÚÎÄ¼þÃûÀïÊ¹ÓÃ¿Õ¸ñ£¬Èç¹ûÄã±ØÐëÒª·Ö¸ô¿É¶ÁµÄÃû×Ö£¬¿ÉÒÔÊ¹ÓÃÏÂ»®Ïß»òºá¸Ü¡£²»¹ý£¬Äã»¹ÊÇÐèÒª´´½¨ÕâÑùµÄÎÄ¼þµÄ»°£¬Äã¿ÉÒÔÓÃ·´Ð±¸ÜÀ´×ªÒåÏÂÒ»¸ö×Ö·û¡£Òª´´½¨ÉÏÃæÃû×ÖµÄÎÄ¼þ¿ÉÒÔÕâÑù×ö¡£
+æœ€å¥½ä¸è¦åœ¨æ–‡ä»¶åé‡Œä½¿ç”¨ç©ºæ ¼ï¼Œå¦‚æžœä½ å¿…é¡»è¦åˆ†éš”å¯è¯»çš„åå­—ï¼Œå¯ä»¥ä½¿ç”¨ä¸‹åˆ’çº¿æˆ–æ¨ªæ ã€‚ä¸è¿‡ï¼Œä½ è¿˜æ˜¯éœ€è¦åˆ›å»ºè¿™æ ·çš„æ–‡ä»¶çš„è¯ï¼Œä½ å¯ä»¥ç”¨åæ–œæ æ¥è½¬ä¹‰ä¸‹ä¸€ä¸ªå­—ç¬¦ã€‚è¦åˆ›å»ºä¸Šé¢åå­—çš„æ–‡ä»¶å¯ä»¥è¿™æ ·åšã€‚
 
 $ touch hi\ my\ name\ is\ avishek.txt
  
 hi my name is avishek.txt
-ÎÒÒÑ¾­³¢ÊÔ¸²¸ÇÄã¿ÉÄÜÅöµ½µÄËùÓÐÇé¿ö¡£ÉÏÃæ´ó¶àÊý²âÊÔ¶¼ÔÚ BASH Shell ÀïÍê³É£¬¿ÉÄÜÔÚÆäËû shell ÏÂ»áÓÐ²îÒì¡£
+æˆ‘å·²ç»å°è¯•è¦†ç›–ä½ å¯èƒ½ç¢°åˆ°çš„æ‰€æœ‰æƒ…å†µã€‚ä¸Šé¢å¤§å¤šæ•°æµ‹è¯•éƒ½åœ¨ BASH Shell é‡Œå®Œæˆï¼Œå¯èƒ½åœ¨å…¶ä»– shell ä¸‹ä¼šæœ‰å·®å¼‚ã€‚
 
-Èç¹ûÄã¾õµÃÎÒÒÅÂ©ÁËÊ²Ã´£¨ÕâºÜÕý³£Ò²·ûºÏÈËÐÔ£©£¬Çë°ÑÄãµÄ½¨Òé·¢±íµ½ÏÂÃæµÄÆÀÂÛÀï¡£±£³ÖÁªÏµ£¬¶àÆÀÂÛ¡£²»Òª×ß¿ª£¡ÇóµãÔÞÇó·ÖÏíÇóÀ©É¢£¡
+å¦‚æžœä½ è§‰å¾—æˆ‘é—æ¼äº†ä»€ä¹ˆï¼ˆè¿™å¾ˆæ­£å¸¸ä¹Ÿç¬¦åˆäººæ€§ï¼‰ï¼Œè¯·æŠŠä½ çš„å»ºè®®å‘è¡¨åˆ°ä¸‹é¢çš„è¯„è®ºé‡Œã€‚ä¿æŒè”ç³»ï¼Œå¤šè¯„è®ºã€‚ä¸è¦èµ°å¼€ï¼æ±‚ç‚¹èµžæ±‚åˆ†äº«æ±‚æ‰©æ•£ï¼
