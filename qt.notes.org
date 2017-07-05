@@ -108,6 +108,12 @@ collect2: error: ld returned 1 exit status
 3. 源码阅读，知其所以然。
 
 * 资料
+ qt http://blog.csdn.net/horizons_kong/article/category/6500071
+   http://blog.chinaunix.net/uid-20507206-id-1939717.html
+   http://blog.csdn.net/lostown/article/details/658654
+   http://www3.telus.net/public/robark/
+   http://www.muquit.com/muquit/software/fluid_hack/fluid_hack.html
+
   Qt 使用Poppler实现pdf阅读器 http://blog.csdn.net/chy555chy/article/details/51613545
 
   Qt5中可以用QPdfWriter实现 http://doc.qt.io/qt-5/qpdfwriter.html

@@ -1,3 +1,6 @@
+* TODO pdf tool: View and Edit, pdfVE
+  读写 pdf，显示内部数据
+  poppler 文档 https://freedesktop.org/wiki/Software/poppler/
 * 程序主要参考项目 poppler, xpdf
   “GNU PDF”	GNU GPL	开发中的开源C语言库；完成时会提供实现PDF 1.7规范所有特性的功能。
   （由于Poppler的可用性，2011年10月6日，GNU PDF不再被FSF列为“高优先级计划”。）
@@ -390,3 +393,17 @@ endobj
 /Last 27 0 R ——如果当前结点非叶子结点，则表明“子孙结点的结束” 
 /Count 1 ——如果当前结点非叶子结点，则表明“子孙结点的总数” 
 /Dest [ 3 0 R /XYZ null 680 null ] —— 定位页面。
+* PDF 2017-04-21 09:20:16 资源: pdf & UI
+1. PoDoFo viewer, creater
+   http://blog.csdn.net/XING2005112117/article/details/6291025
+   http://podofo.sourceforge.net/
+2. xpdf viewer
+3. mupdf viewer
+   http://blog.chinaunix.net/uid-20680966-id-1896586.html
+4. Poppler creater
+   生成 PDF 的C++类库，从xpdf 继承而来。
+   https://people.freedesktop.org/~aacid/docs/qt5/
+   The Poppler Qt5 interface library, libpoppler-qt5, is a library that allows Qt5 programmers to easily load and render PDF files.  
+5. libHaru
+   http://www.cnblogs.com/lfsblack/p/5227637.html
+
