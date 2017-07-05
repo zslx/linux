@@ -1,0 +1,184 @@
+* 时间戳（time-stamp）
+** Verify RFC 3161 trusted timestamp
+	So far, I've figured out how to extract the signature itself,
+	the public cert, the time the timestamp was created,
+	and the message imprint digest and nonce that I sent (for build-time validation).
+	What I can't figure out is how to put this data together to generate
+	the data that was hashed and signed.
+	# OK
+	I finally figured it out myself. It should come as no surprise,
+	but the answer is nauseatingly complex and indirect.
+
+	The missing pieces to the puzzle were in RFC 5652.
+	I didn't really understand the TimeStampResp structure until I read(well, skimmed through) that document.
+
+	Let me describe in brief the TimeStampReq and TimeStampResp structures.
+	The interesting fields of the request are:
+
+a "message imprint", which is the hash of the data to be timestamped
+the OID of the hash algorithm used to create the message imprint
+an optional "nonce", which is a client-chosen identifier used to verify that the response is generated specifically for this request.This is effectively just a salt, used to avoid replay attacks and to detect errors.
+
+The meat of the response is a CMS SignedData structure. Among the fields in this structure are:
+
+the certificate(s) used to sign the response
+an EncapsulatedContentInfo member containing a TSTInfo structure. This structure, importantly, contains:
+   the message imprint that was sent in the request
+   the nonce that was sent in the request
+   the time certified by the TSA
+a set of SignerInfo structures, with typically just one structure in the set. For each SignerInfo, the interesting fields within the structure are:
+   a sequence of "signed attributes". The DER-encoded BLOB of this sequence is what is actually signed. Among these attributes are:
+     the time certified by the TSA (again)
+	 a hash of the DER-encoded BLOB of the TSTInfo structure
+   an issuer and serial number or subject key identifier that identifies the signer's certificate from the set of certificates found in the SignedData structure
+   the signature itself
+
+The basic process of validating the timestamp is as follows:
+
+  Read the data that was timestamped, and recompute the message imprint using the same hashing algorithm used in the timestamp request.
+  Read the nonce used in the timestamp request, which must be stored along with the timestamp for this purpose.
+  Read and parse the TimeStampResp structure.
+  Verify that the TSTInfo structure contains the correct message imprint and nonce.
+  From the TimeStampResp, read the certificate(s).
+  For each SignerInfo:
+    Find the certificate for that signer (there should be exactly one).
+	Verify the certificate.
+	Using that certificate, verify the signer's signature.
+	Verify that the signed attributes contain the correct hash of the TSTInfo structure
+If everything is okay, then we know that all signed attributes are valid, since they're signed, and since those attributes contain a hash of the TSTInfo structure, then we know that's okay, too. We have therefore validated that the timestamped data is unchanged since the time given by the TSA.
+
+Because the signed data is a DER-encoded BLOB (which contains a hash of the different DER-encoded BLOB containing the information the verifier actually cares about), there's no getting around having some sort of library on the client (verifier) that understands X.690 encoding and ASN.1 types. Therefore, I conceded to including Bouncy Castle in the client as well as in the build process, since there's no way I have time to implement those standards myself.
+
+My code to add and verify timestamps is similar to the following:
+
+
+** 可信时间戳验证中心  http://verify.tsa.cn/
+	# 国家授时中心，签名服务器，数据库
+** 时间戳服务器
+   免费时间戳URL
+   http://www.opentsa.org/
+   http://zeitstempel.dfn.de/
+   http://timestamp.wosign.com/
+   http://copyright.tsa.cn/dealer.do?method=myDealer
+   zslnow all@now 163 http://copyright.tsa.cn/tsaIndex.jsp
+   "http://timestamp.tsa.cn/tsa"
+   目前列出的时间戳服务都在国外；在添加时间戳的时候，要确保的你的网络能访问国外，否则会签名不成功。
+   Verisign 时间戳URL： http://timestamp.verisign.com/scripts/timstamp.dll
+   Comodo 时间戳URL： http://timestamp.comodoca.com/authenticode
+   GeoTrust/TrustCenter： http://www.trustcenter.de/codesigning/timestamp
+
+   时间戳在代码签名证书中的应用 http://www.willrey.com/faq/timestamp.html
+       VeriSign 或 Thawte代码签名证书可支持一到三年有效期。
+   一般我们开发的软件的生命周期都会更长，为了保证用数字证书签名后的软件代码在证书到期后仍然有效，我们就必须使用时间戳技术。
+   当我们对代码进行数字签名时，将会产生希哈值发送给时间戳服务器进行时间戳反签名。这样，当用户下载签名代码后，IE等网络浏览器将进行鉴别：
+
+   (a) 如果是代码签名证书已经过期，用该证书签名的软件代码将不会被信任；
+
+   (b) 用有效的代码签名证书签名的代码，即使代码签名证书已经到期，但代码仍然是可信的。维瑞代理VeriSign、Thawte代码签名证书免费为客户提供时间戳服务，是为了方便软件开发商可以不用担心由于代码签名证书过期而影响在有效期内已经签名的代码的正常的使用，也就是说，在代码签名证书有效期内签名的代码使用时间戳后永远不会过期。
+
+6. 时间戳服务的详细流程
+   TSA详细流程: https://en.wikipedia.org/wiki/Trusted_timestamping
+   盖时间戳：
+   (1) 对欲发送的文件做Hash得到消息摘要
+   (2) 将消息摘要发送给TSA
+   (3) TSA把 (消息摘要+当前时间)—》Hash = 带有时间戳的消息摘要的hash值
+   (4) 将带有时间戳的消息摘要hash值 用TSA的私钥加密
+   (5) 将 私钥加密后的数据 + 明文时间 (就是第3步的那个“当前时间”) 返回给用户A
+   (6) 用户A爱怎么玩怎么玩。。。
+   时间戳验证：
+   (1) 用户B收到了用户A加入了TSA私钥加密的消息时间摘要的消息，把这个TSA时间戳拿出来(涉及其他解密，这里略去)
+   (2) 接下来这步在我们个人的简易实现里是没有的： 将TSA私钥加密的消息时间摘要重新发回TSA验证此摘要真实性。
+   (3) 验证真的是那个TSA发布的，然后就拿TSA的公钥对 "TSA私钥加密的消息时间摘要"中的“私钥加密后的数据”进行解密，明文时间留着备用
+   (4) 解密完得到“带有时间戳的消息摘要的hash值”(标准值)
+   (5) 使用收到的文件解密完再次hash得到消息摘要
+   (6)  (消息摘要+当前时间)—》Hash = 带有时间戳的消息摘要的hash值 (验证值)
+   (7) 标准值 ?= 验证值 可以验证消息是否受到重放攻击等
+** 定义 标准
+   	可信时间戳是数据电文（电子文件）产生时间、内容完整性及不可否认性的有效电子凭证，
+   	由时间戳服务中心颁发、国家授时中心保障其时间的权威和准确。
+   	电子文件加盖可信时间戳，能有效证明电子文件权属、产生时间及电子文件是否被篡改。
+
+   	据国际电子时戳标准规范《RFC3161》，
+   	《GB/T20520-2006 信息安全技术-公钥基础设施-时间戳规范》
+   	可信时间戳服务的本质是将用户的电子数据的Hash值和权威时间源绑定，
+   	在此基础上通过时间戳服务中心数字签名，产生不可伪造的时间戳文件。
+
+   	Time Stamp Authority (TSA)
+   	https://tools.ietf.org/html/rfc3161
+   	X.509 Certificate (PEM)
+   	X.509 Certificate (DER)
+   	X.509 Certificate (PKCS#7)
+   	https://github.com/openssl/openssl
+   	ASN1说明和开源代码 https://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One
+   	DER is a type-length-value encoding
+   	
+   	Ok, I did find the answer: http://tsa.safecreative.org/
+   	After much googling, I started to get the impression that although posts like this one this one and this one and this one and especially this one made it seem like GlobalSign and Verisign and friends each run a free timestamping server, I am now under the impression that they're not really free. I think it's a free "add on" to some other products they sell, perhaps. It is possible for anybody to get a timestamp from their servers, but I can't validate that timestamp without their certificate, which does not seem to be freely available. If anybody knows otherwise, they are free to correct me.
+   	On the other hand, http://tsa.safecreative.org/ is an actually free website (or, up to 5 stamps per day per IP address free), where anybody can download their certificate to verify the timestamp. That's exactly what I was looking for.
+   	
+   	pdf pkcs#7 时间戳
+   	Time stamp information as an unsigned attribute (PDF 1.6):
+   	The timestamp token must conform to RFC 3161 and must be computed
+   	and embedded into the PKCS#7 object as described in Appendix A of RFC 3161.
+   	
+
+   	时间戳（time-stamp）是一个经加密后形成的凭证文档, 它包括三个部分：
+   	（1）需加时间戳的文件的摘要（digest）；
+   	（2）DTS收到文件的日期和时间；
+   	（3）DTS的数字签名。
+   	一般时间戳产生的过程为：首先将需要加时间戳的文件用Hash编码加密形成摘要，
+   	然后将该摘要发送到DTS，DTS在加入了收到文件摘要的日期和时间信息后再对该文件加密（数字签名），
+   	然后送回用户。
+   	书面签署文件的时间是由签署人自己写上的，而数字时间戳则不然，
+   	它是由认证单位DTS来加的，以DTS收到文件的时间为依据。
+
+* curl 网络库
+  # curl 编译通过(依赖 openssl, libssl2, zlib)
+  https://curl.haxx.se/libcurl/c/curl_easy_setopt.html
+
+* openssl 内存泄漏检查
+  # 编译时需要设置，加入内存检测函数，默认是去掉的。
+CRYPTO_set_mem_debug(1);
+CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ON);
+  // FILE *pf = fopen("d:/mem_leaks", "wb");
+  // int noleak = CRYPTO_mem_leaks_fp(pf);
+  // fclose(pf);
+  # 何时释放？
+
+* 签名证书过期后时间戳所起的作用？
+这是许多用户经常提出的问题。首先，让我们了解一下时间戳的作用： 任何数字证书都是有有效期的， WoSign代码签名证书支持 1-3 年有效期。 然而，您的软件的生命周期一般都会更长，为了避免签名证书到期后需要重签软件和重新发布， 必须使用免费提供的时间戳服务，WoSign提供免费时间戳服务。当您对代码签名时，代码产生的哈希值将发送给 WoSign 时间戳服务器进行时间戳反签名。这样，当用户下载签名代码后， IE 浏览器将进行鉴别： 
+(1) 用已经吊销的代码签名证书签名的代码不会被信任； 
+(2) 用有效的代码签名证书签名的代码，即使代码签名证书已经到被吊销，但代码仍然是可以信任的。这意味着您不用担心代码签名证书吊销后需要重新签名代码。 
+时间戳服务是WoSign代码签名证书免费配套服务，是为了方便软件开发商可以不用担心由于代码签名证书过期而影响在有效期内已经签名的代码的正常的使用，也就是说，在代码签名证书有效期内签名的代码永远不会过期。 WoSign免费时间戳URL为： http://timestamp.wosign.com/timestamp
+* Openssl源代码整理学习
+http://www.cnblogs.com/testlife007/p/6699566.html
+# ts既然也是 pkcs7 就可以照样输出来
+# 对比普通签名和时间戳
+http://baike.baidu.com/item/x509
+C++&数字安全 http://blog.csdn.net/yyfzy
+X509数字证书结构和实例 https://wenku.baidu.com/view/988c262aed630b1c59eeb56b.html
+** 全面概览 openssl 编程
+使用 OpenSSL API 进行安全编程
+https://www.ibm.com/developerworks/cn/linux/l-openssl.html
+Openssl源代码整理学习
+http://www.cnblogs.com/testlife007/p/6699566.html
+QT开发（一）Vs2013集成 QT5.3.1
+http://www.cnblogs.com/aoldman/p/3860837.html
+VS2013中编译openssl的步骤和使用设置，openssl-1.0.1l 源代码。如果对openssl不熟悉，可以先参考以下网址：
+http://blog.csdn.net/u010725842/article/details/50295235
+参考网址：
+http://www.qmailer.net/archives/216.html  
+http://blog.csdn.net/fenghaibo00/article/details/17248381
+http://blog.sina.com.cn/s/blog_436fe8b10100r5p3.html
+http://blog.csdn.net/gdwzh/article/details/19229
+http://blog.chinaunix.net/uid-16515626-id-2741894.html
+http://blog.csdn.net/sooner01/article/details/4418898 
+http://www.cnblogs.com/emyueguang/p/4028992.html   
+http://blog.csdn.net/kkxgx/article/details/19850509  
+http://blog.csdn.net/ghevinn/article/details/12909557 
+
+* 工具 资料 openssl
+   命令行工具 http://52explore.com/article/103
+   参考手册 https://wiki.openssl.org/index.php/Main_Page
+   https://www.openssl.org/docs/
+   https://www.ibm.com/developerworks/cn/linux/l-openssl.html
