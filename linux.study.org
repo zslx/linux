@@ -113,6 +113,7 @@ useradd可用来建立用户账号，他和adduser命令是相同的。账号建
 find . -type f -name \*.h
 
 * git & hub
+  # local git server. 方便使用版本管理功能：比较、备份、还原、共享。
    https://git-scm.com/book/zh/v2
    https://git-scm.com/downloads
    https://man.openbsd.org/sshd
@@ -399,6 +400,25 @@ m ——创建标记
   "m" 'bookmark-set
   "b" 'bookmark-jump)
 
+  # try
+(require 'evil-leader)
+(setq evil-leader/in-all-states t)
+(evil-mode nil)
+(global-evil-leader-mode 1)
+(evil-mode 1)
+
+# my keys
+(evil-leader/set-key "f" 'find-file)
+(evil-leader/set-key "w" 'save-buffer)
+(evil-leader/set-key "o" 'other-frame)
+;; "b" 'switch-to-buffer
+;; "k" 'kill-buffer)
+(evil-leader/set-key
+  "l" 'bookmark-bmenu-list
+  "m" 'bookmark-set
+  "b" 'bookmark-jump)
+
+
 * emacs
   # 我的 GitHub 积累与分享。
   https://github.com/lujun9972/emacs-document
@@ -438,6 +458,55 @@ C-x r i X	insert-register	在光标处插入寄存器 X 的内容。
    删除一个书签，键入 C-x bookmark-delete 并按 Enter
 
    bookmark-save 将所有的书签保存到书签文件 ~/.emac.bmk 中。
+
+   # visual bookmark, highlight bookmark line
+ http://www.gnu.org/software/emacs/manual/html_node/elisp/Finding-Overlays.html
+ http://raebear.net/comp/emacscolors.html
+
+(progn  (goto-line 462)
+(let
+     ((overlay-highlight (make-overlay
+						  (+ 10 (line-beginning-position))
+						  (- (line-end-position) 10))))
+  (overlay-put overlay-highlight 'face '(:background "green"))
+  (overlay-put overlay-highlight 'line-highlight-overlay-marker t))) (remove-overlays (line-beginning-position) (+ 1 (line-end-position)))
+
+(remove-overlays (point-min) (point-max))
+(goto-char 11184)
+
+1. 读取 bookmarks 文件
+   bookmark-default-file
+   (bookmark-all-names)
+   (nth 3 (bookmark-all-names))
+   (bookmark-get-bookmark (nth 3 (bookmark-all-names)))
+   (bookmark-get-bookmark (car (bookmark-all-names)))
+   (bookmark-get-bookmark-record (car (bookmark-all-names)))
+   (bookmark-get-position (nth 3 (bookmark-all-names)))
+   (bookmark-get-handler (car (bookmark-all-names)))
+2. 查看当前文件是否有书签
+   (buffer-file-name)
+   (bookmark-get-filename (car (bookmark-all-names)))
+3. 调用高亮书签的函数
+(highlight-bookmarks-the-buffer)
+(mapcar
+ (lambda (bmk)
+   (if (string= (buffer-file-name) (bookmark-get-filename bmk))
+	   (let ((pos (bookmark-get-position (nth 3 (bookmark-all-names))))
+	   hlpos
+			 )
+		 (setq hlpos (make-overlay pos (+ 3 pos)))
+		 (prin1 hlpos)
+		 (overlay-put hlpos 'face '(:background "green"))
+		 (overlay-put hlpos 'line-highlight-overlay-marker t))
+	 (message bmk)
+	 ))
+	 (bookmark-all-names))
+   
+(defun highlight-bookmarks-the-buffer ()
+    (mapcar ...)
+)
+
+4. 如果一打开就高亮，则需要buffer hook
 
 ** 编码
 1.查看当前buffer的编码：M-x describe-coding-system
