@@ -317,16 +317,18 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
  小番茄 http://www.wholetomato.com/
  
 * 2017-06-26 08:50:35 本周目标：动态库，可以用openssl添加签名，添加盖章
-* 2017-07-11 09:23:23 周二 添加签名
-2. openssl.pkcs7sign
-   1) get ByteRange and data, 用 PDFDoc 对象操作, 从原始长度往后查找
-   2) openssl sign, with cert OK
-   3) write to pdf, 现有代码就可以?
-  # openssl 算个签名放进去试试
+* 2017-07-12 08:45:30 周三 签名验证失败的原因？
+  SaveConentToFile_SpecifiedPos 函数有疑问？
   ~/study/openssl
   # 图片调整正常
   # 印章库
 
+* 2017-07-11 09:23:23 周二 添加签名
+2. openssl.pkcs7sign
+   1) get ByteRange and data, 用 PDFDoc 对象操作, 从原始长度往后查找 OK
+   2) openssl sign, with cert OK
+   3) write to pdf, 现有代码就可以?  做了个精简版 OK
+  # openssl 算个签名放进去试试
 * 2017-07-10 08:54:24 周一 本周目标：
 1. openssl.sha1 OK
 2. openssl.pkcs7sign

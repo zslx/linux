@@ -656,7 +656,12 @@ doc/*.txt
 doc/**/*.pdf
 
 
-* vi, evil
+* vi
+** leader 快捷键
+长久以来我都是使用 , 做为Leader，直到我意识到我可以使用键盘上更加好用的捷按键：空格键（<Space>）。
+let mapleader = "\<Space>"
+这个完全颠覆了我的 Vim 操作效率，我现在可以使用双手任何一个大拇指进行操作，同时其它手指可以保持在键盘的主键区。
+
 ** 寄存器 reg
 一：官方帮助手册
 :help registers
@@ -842,41 +847,30 @@ m ——创建标记
 :delmarks ——删除指定标记
 :delmarks! ——删除所有标记
 
-** leader 可绑定 Emacs 命令
-(require 'evil-leader)
-;; (evil-leader/set-leader ",")
-(setq evil-leader/in-all-states 1)
-(global-evil-leader-mode)
+* emacs, evil(vi)
+** keys
+clear 多个空格  M-SPC just-one-space| M-\ delete-horizontal-space
+*** evil keys same to vim
+*** leader keys
+(evil-leader/set-leader "<SPC>")
+(setq evil-leader/non-normal-prefix "M-")
 
-(evil-leader/set-key "f" 'find-file)
-  ;; "b" 'switch-to-buffer
-  ;; "k" 'kill-buffer)
-  ;; "w" 'save-buffer)
-(evil-leader/set-key
-  "l" 'bookmark-bmenu-list
-  "m" 'bookmark-set
-  "b" 'bookmark-jump)
-
-  # try
-(require 'evil-leader)
-(setq evil-leader/in-all-states t)
-(evil-mode nil)
-(global-evil-leader-mode 1)
-(evil-mode 1)
-
-# my keys
+(evil-leader/set-key "k" 'kill-buffer)
 (evil-leader/set-key "f" 'find-file)
 (evil-leader/set-key "w" 'save-buffer)
 (evil-leader/set-key "o" 'other-frame)
+(evil-leader/set-key "h" 'previous-buffer)
+(evil-leader/set-key "l" 'next-buffer)
+# (evil-leader/set-key "n" 'evil-normal-state)
+(evil-leader/set-key "<SPC>" 'evil-normal-state)
 ;; "b" 'switch-to-buffer
-;; "k" 'kill-buffer)
 (evil-leader/set-key
+  "hl" 'highlight-bookmarks-the-buffer
+  "hh" 'highlight-bookmarks-clean
   "l" 'bookmark-bmenu-list
   "m" 'bookmark-set
   "b" 'bookmark-jump)
 
-
-* emacs
 ** 不断进化，且具有强大的进化能力
   https://github.com/lujun9972/emacs-document
   # 在emacs中运行Linux shell命令：M-!
@@ -976,6 +970,147 @@ C-x r i X	insert-register	在光标处插入寄存器 X 的内容。
 3.以指定编码重读当前buffer：C-x <RET> r utf-8，（revert-buffer-with-coding-system）
 4.改变当前buffer的编码：C-x <RET> f utf-8，（set-buffer-file-coding-system）
 5.设定下一步操作的编码格式：C-x <RET> c，（universal-coding-system-argument）
+
+** Evil 将 Emacs变为Vim
+   https://github.com/emacs-evil/evil
+   Evil-mode出现了. 它完美的模拟了Vim.
+   Evil-mode的开发者公开宣称Evil-mode应该与Vim一模一样,
+   任何不一样的地方都视为BUG.
+   然后有一些相熟的资深Vim党也开始用这个Evil-mode,于是我知道了,这个mode确实很棒.
+   https://github.com/lujun9972/emacs-document
+
+   Emacs默认文本对象能力不强, 有了evil的拓展 C-o di" 轻轻松松搞定~
+   http://www.kuqin.com/shuoit/20150727/347223.html
+  (require 'package)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  (package-initialize)
+Then:
+  M-x package-refresh-contents
+  M-x package-install RET evil
+
+ (require 'evil)
+ (evil-mode 1)
+
+ Thanks Evil, 把 Emacs 打造成了理想的 “Vim 化的 Emacs Editor” 
+ 然后还在 .bashrc 里添加了alias vi='emacs -nw'，
+ 不要纠结是 Vim, Emacs 还是 Evil，他只是我的编辑器。
+
+ 默认配置完全模拟 Vim，除了用 Ctr-z 来切换模式。
+ 调整成在 Insert 模式下恢复 Emacs 键绑定，用 Esc 退到 Normal 模式。
+ 
+ <N>C-e/C-y, <E>M-n/M-p
+ <E>C-y/M-y yank, yank-pop
+
+ Enable evil
+ (setq evil-toggle-key "")
+ ; remove default evil-toggle-key C-z, manually setup later
+ (setq evil-want-C-i-jump nil)
+; don't bind [tab] to evil-jump-forward
+ (require 'evil)
+ (evil-mode 1)
+ ;; remove all keybindings from insert-state keymap, use emacs-state when editing
+ (setcdr evil-insert-state-map nil)
+ ;; ESC to switch back normal-state
+ (define-key evil-insert-state-map [escape] 'evil-normal-state)
+ ;; TAB to indent in normal-state
+ (define-key evil-normal-state-map (kbd "TAB") 'indent-for-tab-command)
+ ;; Use j/k to move one visual line insted of gj/gk
+ (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+ (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+ (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
+ (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
+ 
+** leader 可绑定 Emacs 命令
+# try
+(require 'evil-leader)
+(setq evil-leader/in-all-states t)
+(evil-mode nil)
+(global-evil-leader-mode 1)
+(evil-mode 1)
+
+(evil-leader/set-key "f" 'find-file)
+;; "b" 'switch-to-buffer
+;; "k" 'kill-buffer)
+(evil-leader/set-key
+  "l" 'bookmark-bmenu-list
+  "m" 'bookmark-set
+  "b" 'bookmark-jump)
+
+** 复制粘贴
+1、在网上广为流传的一种让emacs和系统剪切板共享的方法是在.emacs文件中加入
+
+(setq x-select-enable-clipboard t)
+这种方法仅对图形化emacs有效，如果用 emacs -nw 命令打开emacs的话，在命令行中是无效的，因为在命令行下没有权限访问 X 的剪切板（http://unix.stackexchange.com/questions/72605/emacs-copy-and-paste）。
+
+2、正因为第1点，所以网上同时流传着另一种方法：
+
+;;start 设置剪切板共享 
+
+(defun copy-from-osx () 
+
+(shell-command-to-string "pbpaste")) 
+
+(defun paste-to-osx (text &optional push) 
+
+(let ((process-connection-type nil)) 
+
+(let ((proc (start-process"pbcopy" "*Messages*" "pbcopy"))) 
+
+(process-send-string proc text) 
+
+(process-send-eof proc)))) 
+
+(setq interprogram-cut-function 'paste-to-osx) 
+
+(setq interprogram-paste-function 'copy-from-osx) 
+
+;;end 设置剪切板共享 
+
+这种方法确实可用，但是里面的pbpaste和pbcopy命令根本不是Linux下的，而是mac下的。所以在linux下应该找到等效的命令替换它们。
+
+3、linux下的剪切板操作命令
+
+找到了两种：xclip和xsel
+
+这两个命令linux不自带，需要安装。两种命令的具体使用方法不做介绍，总之nicek在网上找到了一个适用于linux下的配置（http://hugoheden.wordpress.com/2009/03/08/copypaste-with-emacs-in-terminal/）：
+
+;; http://hugoheden.wordpress.com/2009/03/08/copypaste-with-emacs-in-terminal/
+;; I prefer using the "clipboard" selection (the one the
+;; typically is used by c-c/c-v) before the primary selection
+;; (that uses mouse-select/middle-button-click)
+(setq x-select-enable-clipboard t)
+
+;; If emacs is run in a terminal, the clipboard- functions have no
+;; effect. Instead, we use of xsel, see
+;; http://www.vergenet.net/~conrad/software/xsel/ -- "a command-line
+;; program for getting and setting the contents of the X selection"
+(unless window-system
+ (when (getenv "DISPLAY")
+  ;; Callback for when user cuts
+  (defun xsel-cut-function (text &optional push)
+    ;; Insert text to temp-buffer, and "send" content to xsel stdin
+    (with-temp-buffer
+      (insert text)
+      ;; I prefer using the "clipboard" selection (the one the
+      ;; typically is used by c-c/c-v) before the primary selection
+      ;; (that uses mouse-select/middle-button-click)
+      (call-process-region (point-min) (point-max) "xsel" nil 0 nil "--clipboard" "--input")))
+  ;; Call back for when user pastes
+  (defun xsel-paste-function()
+    ;; Find out what is current selection by xsel. If it is different
+    ;; from the top of the kill-ring (car kill-ring), then return
+    ;; it. Else, nil is returned, so whatever is in the top of the
+    ;; kill-ring will be used.
+    (let ((xsel-output (shell-command-to-string "xsel --clipboard --output")))
+      (unless (string= (car kill-ring) xsel-output)
+	xsel-output )))
+  ;; Attach callbacks to hooks
+  (setq interprogram-cut-function 'xsel-cut-function)
+  (setq interprogram-paste-function 'xsel-paste-function)
+  ;; Idea from
+  ;; http://shreevatsa.wordpress.com/2006/10/22/emacs-copypaste-and-x/
+  ;; http://www.mail-archive.com/help-gnu-emacs@gnu.org/msg03577.html
+ ))
 ** elisp
 You can evaluate an expression and see its result in any of several ways, including:
 + Put your cursor after the last close-paren and type C-j (control + j)
@@ -1262,54 +1397,6 @@ since it's a bit faster that way. Typically you should write your code for clari
    |          | |____________| |_____________| | |
    |          |________________________________| |
    |_____________________________________________|
-
-** Evil 将 Emacs变为Vim
-   Evil-mode出现了. 它完美的模拟了Vim.
-   Evil-mode的开发者公开宣称Evil-mode应该与Vim一模一样,
-   任何不一样的地方都视为BUG.
-   然后有一些相熟的资深Vim党也开始用这个Evil-mode,于是我知道了,这个mode确实很棒.
-   https://github.com/lujun9972/emacs-document
-
-   Emacs默认文本对象能力不强, 有了evil的拓展 C-o di" 轻轻松松搞定~
-   http://www.kuqin.com/shuoit/20150727/347223.html
-  (require 'package)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-  (package-initialize)
-Then:
-  M-x package-refresh-contents
-  M-x package-install RET evil
-
- (require 'evil)
- (evil-mode 1)
-
- Thanks Evil, 把 Emacs 打造成了理想的 “Vim 化的 Emacs Editor” 
- 然后还在 .bashrc 里添加了alias vi='emacs -nw'，
- 不要纠结是 Vim, Emacs 还是 Evil，他只是我的编辑器。
-
- 默认配置完全模拟 Vim，除了用 Ctr-z 来切换模式。
- 调整成在 Insert 模式下恢复 Emacs 键绑定，用 Esc 退到 Normal 模式。
- 
- <N>C-e/C-y, <E>M-n/M-p
- <E>C-y/M-y yank, yank-pop
-
- Enable evil
- (setq evil-toggle-key "")
- ; remove default evil-toggle-key C-z, manually setup later
- (setq evil-want-C-i-jump nil)
-; don't bind [tab] to evil-jump-forward
- (require 'evil)
- (evil-mode 1)
- ;; remove all keybindings from insert-state keymap, use emacs-state when editing
- (setcdr evil-insert-state-map nil)
- ;; ESC to switch back normal-state
- (define-key evil-insert-state-map [escape] 'evil-normal-state)
- ;; TAB to indent in normal-state
- (define-key evil-normal-state-map (kbd "TAB") 'indent-for-tab-command)
- ;; Use j/k to move one visual line insted of gj/gk
- (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
- (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
- (define-key evil-motion-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
- (define-key evil-motion-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
 
 ** Ivy 只完成一件事，以及。。。
    https://github.com/lujun9972/emacs-document/blob/master/advertisement/%E6%89%8B%E6%8A%8A%E6%89%8B%E6%95%99%E4%BD%A0%E4%BB%8EVim%E8%BF%81%E7%A7%BB%E5%88%B0Emacs+Evil.org
