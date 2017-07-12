@@ -10,6 +10,49 @@
  
 
 * users
+** 改错 sudoer
+sudo -i
+也无法切换到root，无奈只能求助全能的谷歌，使用如下命令
+pkexec visudo
+便可已编辑sudoers了
+# 改错了用户组
+# 危险命令 usermod -a -G sudo username
+zsl@ubuntu:~$ grep zsl /etc/passwd
+zsl:x:1000:1000:ubuntu64zsl,,,:/home/zsl:/bin/bash
+
+zsl@ubuntu:~$ grep zsl /etc/group
+
+adm:x:4:syslog,zsl
+cdrom:x:24:zsl
+sudo:x:27:zsl
+dip:x:30:zsl
+plugdev:x:46:zsl
+lpadmin:x:121:zsl
+zsl:x:1000:
+sambashare:x:131:zsl
+
+zsl@ubuntu:~$ less /etc/sudoers
+/etc/sudoers: Permission denied
+
+
+当时的场景:root无密码,另外只有fick用户可以登录,而fick用户已经不属于sudo组,尝试结果发现某网友的方案是对的:
+
+重启系统进入ubuntu的恢复模式(至于如何进,网上也有各种说法,有的说开机时按shift键,有的说按ESC键,我的是过完自检后立即按ESC键起作用的);
+在恢复模式下,进入root shell界面;
+关键:恢复模式下,filesystem为只读的,需要以读写模式重新挂载根目录,执行命令如下:
+mount -o remount,rw /
+再用以下命令给用户添加sudo组
+usermod -a -G adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare username
+
+OK,万事大吉了.这个时候可以su到自己的用户下,通过id命令查看所属组.
+你应该也注意到了,为指定用户添加指定组的命令要加-a选项才是添加,如果不加该选项,就直接覆盖了.
+疑惑，这不是安全漏洞吗？
+
+另一个修改读写权限的方法：
+进入GRUB菜单，在高级选择中选择Recovery mode模式，键盘按“e”键进入编辑模式。
+在编辑模式中通过上下键寻找到RO修改为RW模式(可写入恢复模式)。如下图，然后按crtl+X进入系统。
+通过上下键选择root命令行，点击enter键。
+
 ** 用户和组的概念
 1. 用户
    用户是能够获取系统资源的权限的集合.
@@ -851,6 +894,9 @@ m ——创建标记
 ** keys
 clear 多个空格  M-SPC just-one-space| M-\ delete-horizontal-space
 *** evil keys same to vim
+  	(setq evil-want-C-i-jump nil) ; don't bind [tab] to evil-jump-forward
+	(define-key evil-normal-state-map (kbd "TAB") 'indent-for-tab-command) ;; TAB to indent in normal-state
+	
 *** leader keys
 (evil-leader/set-leader "<SPC>")
 (setq evil-leader/non-normal-prefix "M-")
@@ -859,17 +905,19 @@ clear 多个空格  M-SPC just-one-space| M-\ delete-horizontal-space
 (evil-leader/set-key "f" 'find-file)
 (evil-leader/set-key "w" 'save-buffer)
 (evil-leader/set-key "o" 'other-frame)
-(evil-leader/set-key "h" 'previous-buffer)
-(evil-leader/set-key "l" 'next-buffer)
-# (evil-leader/set-key "n" 'evil-normal-state)
 (evil-leader/set-key "<SPC>" 'evil-normal-state)
-;; "b" 'switch-to-buffer
+  ;; "b" 'switch-to-buffer
 (evil-leader/set-key
-  "hl" 'highlight-bookmarks-the-buffer
-  "hh" 'highlight-bookmarks-clean
-  "l" 'bookmark-bmenu-list
-  "m" 'bookmark-set
-  "b" 'bookmark-jump)
+  "mh" 'highlight-bookmarks-the-buffer
+  "mc" 'highlight-bookmarks-clean
+  "ml" 'bookmark-bmenu-list
+  "mm" 'bookmark-set
+  "mb" 'bookmark-jump)
+
+(evil-leader/set-key
+"h" 'previous-buffer
+"l" 'next-buffer)
+"b" 'ido-switch-buffer)
 
 ** 不断进化，且具有强大的进化能力
   https://github.com/lujun9972/emacs-document
@@ -992,8 +1040,7 @@ Then:
  (evil-mode 1)
 
  Thanks Evil, 把 Emacs 打造成了理想的 “Vim 化的 Emacs Editor” 
- 然后还在 .bashrc 里添加了alias vi='emacs -nw'，
- 不要纠结是 Vim, Emacs 还是 Evil，他只是我的编辑器。
+ 然后还在 .bashrc 里添加了alias vi='emacs -nw'， 不要纠结是 Vim, Emacs 还是 Evil，他只是我的编辑器。
 
  默认配置完全模拟 Vim，除了用 Ctr-z 来切换模式。
  调整成在 Insert 模式下恢复 Emacs 键绑定，用 Esc 退到 Normal 模式。
@@ -1001,19 +1048,14 @@ Then:
  <N>C-e/C-y, <E>M-n/M-p
  <E>C-y/M-y yank, yank-pop
 
- Enable evil
- (setq evil-toggle-key "")
- ; remove default evil-toggle-key C-z, manually setup later
- (setq evil-want-C-i-jump nil)
-; don't bind [tab] to evil-jump-forward
+ (setq evil-toggle-key "") ; remove default evil-toggle-key C-z, manually setup later
+ (setq evil-want-C-i-jump nil) ; don't bind [tab] to evil-jump-forward
  (require 'evil)
  (evil-mode 1)
- ;; remove all keybindings from insert-state keymap, use emacs-state when editing
- (setcdr evil-insert-state-map nil)
- ;; ESC to switch back normal-state
- (define-key evil-insert-state-map [escape] 'evil-normal-state)
- ;; TAB to indent in normal-state
- (define-key evil-normal-state-map (kbd "TAB") 'indent-for-tab-command)
+ (setcdr evil-insert-state-map nil) ;; remove all keybindings from insert-state keymap, use emacs-state when editing
+ (define-key evil-insert-state-map [escape] 'evil-normal-state) ;; ESC to switch back normal-state
+ (define-key evil-normal-state-map (kbd "TAB") 'indent-for-tab-command) ;; TAB to indent in normal-state
+
  ;; Use j/k to move one visual line insted of gj/gk
  (define-key evil-normal-state-map (kbd "<remap> <evil-next-line>") 'evil-next-visual-line)
  (define-key evil-normal-state-map (kbd "<remap> <evil-previous-line>") 'evil-previous-visual-line)
@@ -1485,6 +1527,14 @@ byte-recompile-file
 ** 新终端： Tilda， F1一键呼出的终端。
 ** 添加完字体后, 可以用 xlsfonts 命令检查一下是否添加成功
 
+
+* tools
+** 快速使用http方式共享目录
+   #进入需要共享的目录后运行: 
+   python -m SimpleHTTPServer
+   #其它电脑使用http://ip:8000 来访问
+   #自定义端口为8080: 
+   python -m SimpleHTTPServer 8080
 
 * 安装谷歌浏览器，只需要三行代码： 
 打开终端，输入 

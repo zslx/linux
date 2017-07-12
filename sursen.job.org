@@ -317,7 +317,10 @@ int append_tsp_token(PKCS7_SIGNER_INFO *sinfo, unsigned char *token, int token_l
  小番茄 http://www.wholetomato.com/
  
 * 2017-06-26 08:50:35 本周目标：动态库，可以用openssl添加签名，添加盖章
+* 
+  # 使用了印章库的哪些数据？ 图片、证书？
 * 2017-07-12 08:45:30 周三 签名验证失败的原因？
+  # 比较未签名、有空白签名、以及带签名的文件
   SaveConentToFile_SpecifiedPos 函数有疑问？
   ~/study/openssl
   # 图片调整正常
