@@ -2,21 +2,53 @@
  # emacs, notes.org
  # git
  # Vipassana
+ # 长期使用emacs会导致左手小拇指健康状况恶化，甚至肌肉萎缩（众所周知vim是esc到死，而emacs是ctrl到死）
 * 开源世界 http://docs.huihoo.com/open-source/guide/
+* Wine的真实意思应当是是Windows Environment的缩写，即WinE
+  Wine （“Wine Is Not an Emulator” 的首字母缩写）
+  是一个能够在多种 POSIX-compliant 操作系统（诸如 Linux，macOS 及 BSD 等）上运行 Windows 应用的兼容层。
+
+GUI方法。
+具体方法如下：
+1. 点击Applications（应用程序）菜单。
+2. 输入software。
+3. 点击Software & Updates（软件和更新）。
+4. 点击Other Software（其他软件）选项卡。
+5. 点击Add（添加）。
+6．在APT行部分输入ppa:ubuntu-wine/ppa（见图2）。
+7. 点击Add Source（添加来源）。
+8. 输入你的sudo密码。
+9. 点击Authenticate（验证）。
+10. 点击Close（关闭）。
+11. 出现提示后，点击Reload（重新装入）。
+12. 打开Software Center（软件中心）。
+13. 搜索Wine。
+14. 点击Wine项，然后点击Install（安装）。
+15. 让安装完成。
+
+安装和运行应用程序
+不妨安装一个非常受编程人员欢迎的记事本：Notepad++。你需要从不包括第三方应用程序安装选项的位置下载文件（这可能会导致应用程序安装失败）。为了保险起见，从Filehippo（http://www.filehippo.com/zh/download_notepad）下载Notepad++安装程序。你会在Downloads目录下找到Notepad的.exe文件。右击该文件，选择Open in Wine Windows Program Loader（使用Wine Windows程序装载器打开，图3）。
+
+白金级（Platinum）：直接就可以无缝运行的应用程序。
+黄金级（Gold）：进行一些必要的改动后才能运行的应用程序。
+白银级（Silver）：运行时会出现小问题的应用程序，但并不影响使用。
+你还会发现有些应用程序被列为垃圾（Garbage），这意味着它们没法安装及/或没法运行。
+
 * MinGW: Minimalist GNUfor Windows。
    它是一个可自由使用和自由发布的Windows特定头文件和使用GNU工具集导入库的集合，
    允许你在GNU/Linux和Windows平台生成本地的Windows程序,
    而不需要第三方C运行时（C Runtime）库。
  
 
+* 开发环境：git emacs gcc qmake sshd
 * users
-** 改错 sudoer
+** 灾难：把自己从sudo组删除了！
+# 危险命令 usermod -a -G xyz username 忘了加 -a
 sudo -i
 也无法切换到root，无奈只能求助全能的谷歌，使用如下命令
 pkexec visudo
 便可已编辑sudoers了
 # 改错了用户组
-# 危险命令 usermod -a -G sudo username
 zsl@ubuntu:~$ grep zsl /etc/passwd
 zsl:x:1000:1000:ubuntu64zsl,,,:/home/zsl:/bin/bash
 
@@ -120,7 +152,6 @@ OK,万事大吉了.这个时候可以su到自己的用户下,通过id命令查�
               1．-r ：连同家目录一起删除
        例如删除用户wendy及家目录
            #userdel –r wendy
-** 开发环境：git emacs gcc qmake sshd
 ** useradd
 1.作用
 useradd命令用来建立用户帐号和创建用户的起始目录，使用权限是终极用户。
@@ -153,8 +184,18 @@ useradd可用来建立用户账号，他和adduser命令是相同的。账号建
 ＃useradd tomcat  -d /var/servlet/service -s /sbin/nologin
 无法使用shell，且其用户目录至/var/servlet/service
 
+** others
+chmod - modify file access rights
+su - temporarily become the superuser
+sudo - temporarily become the superuser
+chown - change file ownership
+chgrp - change a file's group ownership
 
-* commands
+* commands   http://linuxcommand.org/index.php
+  type - Display information about command type
+  which - Locate a command
+  help - Display reference page for shell builtin
+  man - Display an on-line command reference
 find . -type f -name \*.h
 ** awk , sed , grep 利器
   gerp 查找, sed 编辑, awk 根据内容分析并处理.
@@ -304,9 +345,9 @@ test/files/install_file
 # xargs -i 等同于 -exec
 cat args.txt|xargs -i echo {}
 
+scp getSealPicture.rar zsl@10.11.11.79:/home/zsl/codes/
 * 如何处理包含空格和特殊字符的文件名
-包含特殊字符的文件名的例子，并不常见：
-
+  包含特殊字符的文件名的例子，并不常见：
 #232.txt
 #bkf.txt
 #bjsd3469.txt
@@ -619,6 +660,11 @@ hi my name is avishek.txt
    git clone /home/git/project.git
    git clone ssh://user@host/home/git/project.git
    # git config --global core.editor "vim"
+** 本地使用 git 无需服务器，用于版本管理和比较
+git init .
+git status
+git add .
+git commit -m"last op"
 ** git server and users
 ** .gitignore
 	首先要强调一点，这个文件的完整文件名就是“.gitignore”，注意最前面有个“.”。
@@ -711,7 +757,6 @@ let mapleader = "\<Space>"
 :help :registers
 
 二： 寄存器分类
-
 1.无名（unnamed）寄存器：""，缓存最后一次操作内容；
 
 2.数字（numbered）寄存器："0 ～ "9，缓存最近操作内容，复制与删除有别, "0寄存器缓存最近一次复制的内容，"1-"9缓存最近9次删除内容
@@ -730,11 +775,9 @@ let mapleader = "\<Space>"
 
 9.模式寄存器（last search pattern）："/，缓存最近的搜索模式。
 
-
 三：查看寄存器内容
 :reg         查看所有寄存器内容
 :reg 寄存器名  查看单个寄存器内容   比如 :reg _        :reg *            :reg 1           :reg 9          :reg a 等等
-
 
 数字寄存器，也是最常用的 从0-9。 如果不指定寄存器的名字，那么删除的内容，vim默认是存到 1 ，复制内容是存到 0 号寄存器。 如果继续删除，那么原来 1 的内容就转到 2，类推，当删除超过9的时候， 原先的 8号数字寄存器就转到9， 原先9的数字寄存器内容就会丢失。
 
@@ -892,32 +935,41 @@ m ——创建标记
 
 * emacs, evil(vi)
 ** keys
-clear 多个空格  M-SPC just-one-space| M-\ delete-horizontal-space
-*** evil keys same to vim
+*** elisp keys
+1. clear 多个空格
+   M-SPC just-one-space
+   M-\ delete-horizontal-space
+2. <f12> runs the command repeat,a Lisp function in ‘repeat.el’.
+   It is bound to <f12>, C-x z. (repeat REPEAT-ARG)
+
+*** evil keys : vim
+1) . evil-repeat Repeat the last editing command
+2) <N>C-e/C-y, <E>M-n/M-p
+3) <N>y*/p,    <E>M-w, C-k / C-y, M-y yank, yank-pop
   	(setq evil-want-C-i-jump nil) ; don't bind [tab] to evil-jump-forward
 	(define-key evil-normal-state-map (kbd "TAB") 'indent-for-tab-command) ;; TAB to indent in normal-state
-	
+
 *** leader keys
 (evil-leader/set-leader "<SPC>")
 (setq evil-leader/non-normal-prefix "M-")
 
-(evil-leader/set-key "k" 'kill-buffer)
-(evil-leader/set-key "f" 'find-file)
 (evil-leader/set-key "w" 'save-buffer)
+(evil-leader/set-key "f" 'find-file)
 (evil-leader/set-key "o" 'other-frame)
 (evil-leader/set-key "<SPC>" 'evil-normal-state)
-  ;; "b" 'switch-to-buffer
-(evil-leader/set-key
-  "mh" 'highlight-bookmarks-the-buffer
-  "mc" 'highlight-bookmarks-clean
-  "ml" 'bookmark-bmenu-list
-  "mm" 'bookmark-set
-  "mb" 'bookmark-jump)
 
 (evil-leader/set-key
-"h" 'previous-buffer
-"l" 'next-buffer)
-"b" 'ido-switch-buffer)
+  "ml" 'bookmark-bmenu-list
+  "mm" 'bookmark-set
+  "mb" 'bookmark-jump
+  "mh" 'highlight-bookmarks-the-buffer
+  "mc" 'highlight-bookmarks-clean)
+
+(evil-leader/set-key
+  "h" 'previous-buffer
+  "l" 'next-buffer
+  "b" 'ido-switch-buffer)
+;; "b" 'switch-to-buffer
 
 ** 不断进化，且具有强大的进化能力
   https://github.com/lujun9972/emacs-document
@@ -1021,9 +1073,7 @@ C-x r i X	insert-register	在光标处插入寄存器 X 的内容。
 
 ** Evil 将 Emacs变为Vim
    https://github.com/emacs-evil/evil
-   Evil-mode出现了. 它完美的模拟了Vim.
-   Evil-mode的开发者公开宣称Evil-mode应该与Vim一模一样,
-   任何不一样的地方都视为BUG.
+   Evil-mode 的开发者公开宣称 Evil-mode 应该与 Vim 一模一样, 任何不一样的地方都视为BUG.
    然后有一些相熟的资深Vim党也开始用这个Evil-mode,于是我知道了,这个mode确实很棒.
    https://github.com/lujun9972/emacs-document
 
@@ -1045,13 +1095,9 @@ Then:
  默认配置完全模拟 Vim，除了用 Ctr-z 来切换模式。
  调整成在 Insert 模式下恢复 Emacs 键绑定，用 Esc 退到 Normal 模式。
  
- <N>C-e/C-y, <E>M-n/M-p
- <E>C-y/M-y yank, yank-pop
-
  (setq evil-toggle-key "") ; remove default evil-toggle-key C-z, manually setup later
  (setq evil-want-C-i-jump nil) ; don't bind [tab] to evil-jump-forward
- (require 'evil)
- (evil-mode 1)
+
  (setcdr evil-insert-state-map nil) ;; remove all keybindings from insert-state keymap, use emacs-state when editing
  (define-key evil-insert-state-map [escape] 'evil-normal-state) ;; ESC to switch back normal-state
  (define-key evil-normal-state-map (kbd "TAB") 'indent-for-tab-command) ;; TAB to indent in normal-state
@@ -1456,6 +1502,24 @@ since it's a bit faster that way. Typically you should write your code for clari
    cat *.el | wc -l
    # => 7526
 
+** title full file name
+PROMPT_COMMAND is issued before a prompt is set based on the PS1 variable.
+ Probably you have some character sequence in PS1 which sets your windows title.
+
+ You may invoke unset PS1 or set it to some other value:
+
+export PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+
+Alternatively you can set window title in your PS1 variable:
+
+export PS1='\[\e]0;myWindowTitle\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w\$'
+
+case $TERM in
+  (xterm*) set_title='\[\e]0;\u@\h: \w\a\]';;
+  (*) set_title=
+esac
+PS1=$set_title'\[\e[0;36m\]\T \[\e[1;30m\]\[\e[0;34m\]\u@\H\[\e[1;30m\] \[\e[0;32m\]\[\e[1;37m\]\w\[\e[0;37m\] \$ '
+
 ** 扩展推荐
    https://www.zhihu.com/question/21943533/answer/22145491
    company 取代auto-complete,更新很频繁
@@ -1577,3 +1641,8 @@ extern "C" void destroy(shape* p) {
 
 * libtool link warning xxx was moved.
   打开 xxx.la 查看 libdir 的路径是否正确？
+
+* so 相关
+  LD_LIBRARY_PATH=/home/zsl/codes/sursen/sep4
+  export LD_LIBRARY_PATH
+  # 上面的 = 两边不可以有空格

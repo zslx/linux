@@ -1,4 +1,4 @@
-;; 2017-07-06 14:24:05 zsl
+;; 2017-07-06 14:24:05 zsl ∏ﬂ¡¡œ‘ æ È«©
 (defun highlight-bookmarks-the-buffer ()
   (interactive)
   (mapcar
