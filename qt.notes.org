@@ -350,6 +350,8 @@ Qt Quick 简单教程
 http://blog.csdn.net/foruok/article/details/28859415
 
 
+* Qt的4个图像类QImage/QPixmap/QBitmap/QPicture
+
 * 笔记
 ** QT开发，有如下三种方式： 哪种兼容性最好呢？
 1、使用QT GUI框架，单纯硬编码
@@ -449,7 +451,7 @@ Qt Quick 包含下列主题：
     m_quickWidget->setSource(source);
     ui->dynamicQmlEmber->addWidget(m_quickWidget);
 	
-
+	
 * 实例
 ** widgets + QML
 1. 窗口 + 按钮 + ？

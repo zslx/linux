@@ -41,6 +41,72 @@ GUI方法。
  
 
 * 开发环境：git emacs gcc qmake sshd
+** 内存检查
+http://valgrind.org/downloads/current.html
+** gdb program core
+  要定位进程挂在哪一行只需要3个操作:
+  ulimit -c unlimited
+  gcc -o main -g a.c
+  gdb main /tmp/core-main-10815 
+  就可以啦。
+  
+GDB中的命令固然很多，但我们只需掌握其中十个左右的命令，就大致可以完成日常的基本的程序调试工作。
+(gdb) bt
+(gdb) where
+(gdb) list
+
+ 命令	 解释	 示例
+file <文件名>	加载被调试的可执行程序文件。
+因为一般都在被调试程序所在目录下执行GDB，因而文本名不需要带路径。	(gdb) file gdb-sample
+
+r	Run的简写，运行被调试的程序。
+如果此前没有下过断点，则执行完整个程序；如果有断点，则程序暂停在第一个可用断点处。	(gdb) r
+
+c	Continue的简写，继续执行被调试程序，直至下一个断点或程序结束。	(gdb) c
+
+b <行号>
+b <函数名称>
+b *<函数名称>
+b *<代码地址>
+d [编号]
+b: Breakpoint的简写，设置断点。两可以使用“行号”“函数名称”“执行地址”等方式指定断点位置。
+其中在函数名称前面加“*”符号表示将断点设置在“由编译器生成的prolog代码处”。如果不了解汇编，可以不予理会此用法。
+d: Delete breakpoint的简写，删除指定编号的某个断点，或删除所有断点。断点编号从1开始递增。
+
+(gdb) b 8
+(gdb) b main
+(gdb) b *main
+(gdb) b *0x804835c
+(gdb) d
+
+s, n
+s: 执行一行源程序代码，如果此行代码中有函数调用，则进入该函数； 相当于其它调试器中的“Step Into (单步跟踪进入)”；
+n: 执行一行源程序代码，此行代码中的函数调用也一并执行。相当于其它调试器中的“Step Over (单步跟踪)”。
+这两个命令必须在有源代码调试信息的情况下才可以使用（GCC编译时使用“-g”参数）。
+(gdb) s
+(gdb) n
+
+si, ni	si命令类似于s命令，ni命令类似于n命令。所不同的是，这两个命令（si/ni）所针对的是汇编指令，而s/n针对的是源代码。	(gdb) si
+(gdb) ni
+
+p <变量名称>	Print的简写，显示指定变量（临时变量或全局变量）的值。	(gdb) p i
+(gdb) p nGlobalVar
+
+display ...
+undisplay <编号>
+# display，设置程序中断后欲显示的数据及其格式。
+例如，如果希望每次程序中断后可以看到即将被执行的下一条汇编指令，可以使用命令
+“display /i $pc”
+其中 $pc 代表当前汇编指令，/i 表示以十六进行显示。当需要关心汇编代码时，此命令相当有用。
+undispaly，取消先前的display设置，编号从1开始递增。
+(gdb) display /i $pc
+(gdb) undisplay 1
+
+i	Info的简写，用于显示各类信息，详情请查阅“help i”。	(gdb) i r
+q	Quit的简写，退出GDB调试环境。	(gdb) q
+help [命令名称]	GDB帮助命令，提供对GDB名种命令的解释说明。
+如果指定了“命令名称”参数，则显示该命令的详细说明；如果没有指定参数，则分类显示所有GDB命令，供用户进一步浏览和查询。	(gdb) help display
+
 * users
 ** 灾难：把自己从sudo组删除了！
 # 危险命令 usermod -a -G xyz username 忘了加 -a
@@ -192,6 +258,7 @@ chown - change file ownership
 chgrp - change a file's group ownership
 
 * commands   http://linuxcommand.org/index.php
+  http://man.linuxde.net/yum
   type - Display information about command type
   which - Locate a command
   help - Display reference page for shell builtin
@@ -1554,6 +1621,23 @@ PS1=$set_title'\[\e[0;36m\]\T \[\e[1;30m\]\[\e[0;34m\]\u@\H\[\e[1;30m\] \[\e[0;3
 byte-compile-file
 byte-recompile-file
 
+** eww 内置浏览器
+   http://www.gnu.org/software/emacs/manual/html_node/eww/Basics.html
+   EWW, 是 Emacs Web Wowser 的缩写(下边也写作 eww), Wowser 直译是”令人印象深刻的事物”的意思.
+   是 2013 年出现, Emacs 24.4 开始内置的文本型浏览器.
+
+   不同于传统的 Emacs 常见浏览器方案 w3m 需要外部工具支持, eww 不需要外部工具支持.
+   另外不支持 js 以及外部引入 css , 损失了页面效果的同时, 也减少了很多 http 请求, 加载速度非常快.
+
+   # 基本使用
+   M-x eww ENTER emacsist.com 即可访问 Emacs 爱好者站点 Emacsist.com.
+   打开网页以后, 显示界面上一般按单个字母即可进行操作, 比如 q 为退出, 也支持简单的书签和浏览历史等功能,
+   如果当前网页用 eww 查看起来实在糟糕, 则可以用按 & 调用 eww-browse-with-external-browser 的配置在外部浏览器打开当前页面.
+   更详细的操作指引可以 C-h m 查看.
+
+   默认配置下, 如果 M-x eww 回车后输入的内容被检测出来是网址,自动打开, 否则会调用 DuckDuckGo 进行搜索.
+   前文的 eww-search-preifx 配置即为修改默认搜索方式. 要打开本地文件用 file:// 开头或者 M-x eww-open-file.
+
 * Makefile
 
 * xwindow 和 字符界面切换
@@ -1646,3 +1730,5 @@ extern "C" void destroy(shape* p) {
   LD_LIBRARY_PATH=/home/zsl/codes/sursen/sep4
   export LD_LIBRARY_PATH
   # 上面的 = 两边不可以有空格
+
+  使用ldd -r xxx.so或者 nm -A xxx.so等命令，查看so有哪些符号未定义的。
