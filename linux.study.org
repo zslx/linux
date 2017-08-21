@@ -4,7 +4,7 @@
  # Vipassana
  # 长期使用emacs会导致左手小拇指健康状况恶化，甚至肌肉萎缩（众所周知vim是esc到死，而emacs是ctrl到死）
 * 开源世界 http://docs.huihoo.com/open-source/guide/
-* Wine的真实意思应当是是Windows Environment的缩写，即WinE
+* Wine的真实意思应当是Windows Environment的缩写，即WinE
   Wine （“Wine Is Not an Emulator” 的首字母缩写）
   是一个能够在多种 POSIX-compliant 操作系统（诸如 Linux，macOS 及 BSD 等）上运行 Windows 应用的兼容层。
 
