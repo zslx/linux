@@ -1,3 +1,27 @@
+* libpng
+http://www.libpng.org/pub/png/libpng-manual.txt
+
+【C】libpng的使用  https://www.0xaa55.com/forum.php?mod=viewthread&tid=425&extra=page%3D1&page=1
+ bmp2png---using libpng http://blog.csdn.net/pubhobo/article/details/6308298
+
+Linux下利用libjpeg实现bmp与jpg相互转换C代码
+http://www.360doc.com/content/15/1030/17/18945873_509488187.shtml
+
+* openCV
+  Release OpenCV 3.3.0  ．OpenCV.org．2017-08-3[引用日期2017-08-7]
+  http://opencv.org/opencv-3-3.html
+  https://github.com/opencv/opencv/releases/tag/3.3.0
+  You should convert the image format within OpenCV, since different libraries have their own decoding and representing methods.
+
+Try the following codes:
+
+Mat image = imread("fruit.png", -1);
+Mat image_bmp;
+image.convertTo(image_bmp, CV_8UC3);
+imwrite("fruit.bmp", image_bmp);
+
+You can specify in which format you want to save your image by .bmp or .jpg in the filename.
+
 * http://cimg.eu/
   https://github.com/dtschump/CImg
   The CImg Library is a small, open-source, and modern C++ toolkit

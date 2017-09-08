@@ -1,0 +1,98 @@
+Inxi：一个功能强大的获取 Linux 系统信息的命令行工具
+编译自：http://www.tecmint.com/inxi-command-to-find-linux-system-information/作者： Aaron Kili
+原创：LCTT https://linux.cn/article-8424-1.html 译者： vim-kakali
+本文地址：https://linux.cn/article-8424-1.html
+使用 Inxi 可以很容易的获取所有的硬件信息：硬盘、声卡、显卡、网卡、CPU 和 RAM 等。
+同时也能够获取大量的操作系统信息，比如硬件驱动、Xorg 、桌面环境、内核、GCC 版本，进程，开机时间和内存等信息。
+
+
+
+https://xcb.freedesktop.org/
+通过xcb库读取屏幕大小
+#include <stdio.h>
+#include <xcb/xcb.h>
+int  main (){
+/* Open the connection to the X server. Use the DISPLAY environment variable */
+int i, screenNum;
+xcb_connection_t *connection = xcb_connect (NULL, &screenNum);
+/* Get the screen whose number is screenNum */ 
+const xcb_setup_t *setup = xcb_get_setup (connection);
+xcb_screen_iterator_t iter = xcb_setup_roots_iterator (setup);  
+// we want the screen at index screenNum of the iterator
+for (i = 0; i < screenNum; ++i) {
+xcb_screen_next (&iter);
+}
+xcb_screen_t *screen = iter.data;
+/* report */
+printf ("\n");
+printf ("Informations of screen %ld:\n", screen->root);
+printf ("  width.........: %d\n", screen->width_in_pixels);
+printf ("  height........: %d\n", screen->height_in_pixels);
+printf ("  white pixel...: %ld\n", screen->white_pixel);
+printf ("  black pixel...: %ld\n", screen->black_pixel);
+printf ("\n");
+return 0;
+}
+
+
+
+
+
+
+
+直接用xlib:
+    char *display_name = getenv("DISPLAY"); 
+    unsigned int display = XOpenDisplay(display_name);
+    int screen_num = DefaultScreen(display);
+    unsigned int display_width = DisplayWidth(display, screen_num);
+    unsigned int display_height = DisplayHeight(display, screen_num);
+    printf("w=%d h=%d\n", display_width, display_height);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+把这个程序运行下字符终端下到分辨率就出来了。
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <linux/fb.h>
+#include <sys/mman.h>
+#include <math.h>
+
+int w,h ,bpp;
+
+int *fbmem;
+
+int main(int argc , char *argv[]) 
+{
+int fd;
+struct fb_var_screeninfo fb_var;
+
+fd = open("/dev/fb0",O_RDWR);
+//
+//screen w , h , bpp
+//get screen information
+ioctl (fd,FBIOGET_VSCREENINFO,&fb_var);
+w = fb_var.xres;
+h = fb_var.yres;
+bpp = fb_var.bits_per_pixel;
+printf ("Framebuffer %d*%d-%dbpp\n",w,h,bpp);
+
+//fbmem = Framebuffer address
+fbmem = mmap (0,w*h*bpp/8,PROT_WRITE|PROT_READ,
+MAP_SHARED,fd,0);
+//y = 10,x = 200, color = 0xF800;
+
+return 0；
+}

@@ -4,6 +4,12 @@
    https://www.nodebeginner.org/index-zh-cn.html#making-the-request-handlers-respond
    HTTPS server: http://cnodejs.org/topic/54745ac22804a0997d38b32d
 
+* 免费SSL证书
+https://www.sslforfree.com/
+
+  http://www.chinaz.com/web/2016/0216/504896.shtml
+  http://blog.csdn.net/enweitech/article/details/53213862 八大免费SSL证书-给你的网站免费添加Https安全加密
+
 * websocket
   https://github.com/websockets/ws
   并发量？ 多少链接？
