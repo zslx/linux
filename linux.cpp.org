@@ -7,7 +7,51 @@ Inxi：一个功能强大的获取 Linux 系统信息的命令行工具
 
 
 
+In X on Linux, call XOpenDisplay() to get the Display,
+ then use DisplayWidthMM() and DisplayHeightMM()
+ together with DisplayWidth() and DisplayHeight() to compute the DPI.
+
+I cobbled this together from xdpyinfo...
+Compile with: gcc -Wall -o getdpi getdpi.c -lX11
+/* Get dots per inch */
+static void get_dpi(int *x, int *y)
+{
+    double xres, yres;
+    Display *dpy;
+    char *displayname = NULL;
+    int scr = 0; /* Screen number */
+
+    if( (NULL == x) || (NULL == y)){ return ; }
+
+    dpy = XOpenDisplay (displayname);
+
+    /*
+     * there are 2.54 centimeters to an inch; so there are 25.4 millimeters.
+     *
+     *     dpi = N pixels / (M millimeters / (25.4 millimeters / 1 inch))
+     *         = N pixels / (M inch / 25.4)
+     *         = N * 25.4 pixels / M inch
+     */
+    xres = ((((double) DisplayWidth(dpy,scr)) * 25.4) / 
+        ((double) DisplayWidthMM(dpy,scr)));
+    yres = ((((double) DisplayHeight(dpy,scr)) * 25.4) / 
+        ((double) DisplayHeightMM(dpy,scr)));
+
+    *x = (int) (xres + 0.5);
+    *y = (int) (yres + 0.5);
+
+    XCloseDisplay (dpy);
+}
+
+
+
 https://xcb.freedesktop.org/
+https://www.x.org/releases/current/doc/libxcb/tutorial/index.html
+估计现在已经没有谁使用XCB这么底层的库写应用程序了，要用也是用经过精心封装的Motif, LessTiff, GTK, Qt, EWL,  ETK或者Cairo等高层次的库。我之所以这么费心地去折腾XCB，其实主要也是为了学习。毕竟，使用最接近底层的UI库写代码是学习X协议及GUI编程原理的最好方法。
+XCB的主要教程可以参考这里：http://xcb.freedesktop.org/tutorial/
+和X协议有关的文档，在这里：http://www.x.org/releases/X11R7.7/doc/
+使用XCB編寫X Window程序 http://www.xlgps.com/article/43810.html
+
 通过xcb库读取屏幕大小
 #include <stdio.h>
 #include <xcb/xcb.h>

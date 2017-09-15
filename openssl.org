@@ -230,3 +230,16 @@ http://blog.csdn.net/ghevinn/article/details/12909557 
    参考手册 https://wiki.openssl.org/index.php/Main_Page
    https://www.openssl.org/docs/
    https://www.ibm.com/developerworks/cn/linux/l-openssl.html
+
+* 免费SSL证书
+  https://www.sslforfree.com/ ssl_certificate文件需要合并ca_bundle.crt + ca_bundle.crt 文件. 执行命令
+  http://www.chinaz.com/web/2016/0216/504896.shtml
+  http://blog.csdn.net/enweitech/article/details/53213862 八大免费SSL证书-给你的网站免费添加Https安全加密
+
+  
+* 使用key和crt文件转换为tomcat用到的jks格式证书
+1. openssl pkcs12 -export -chain -CAfile gd_bundle.crt  -in server.crt -inkey server.key -out server.p12 -name "server" 
+1. openssl pkcs12 -export -CAfile gd_bundle.crt  -in server.crt -inkey server.key -out server.p12 -name "server" 
+2. keytool -rfc -list -keystore server.p12 -storetype pkcs12 
+3. keytool -importkeystore -v -srckeystore  server.p12 -srcstoretype pkcs12 -srcstorepass changeit -destkeystore server.keystore -deststoretype jks -deststorepass changeit
+4. keytool -list -keystore server.keystore

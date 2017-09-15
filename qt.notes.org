@@ -1,4 +1,7 @@
 # (insert "\n" buffer-file-name)
+Qt学习之路(59)
+http://devbean.blog.51cto.com/448512/308358
+
 * qmake: makefile, cmake , 用 QT：qmake 生成 makefile 文件
    # some.pro 文件例子。 查看 QT Creator 的帮助。
 QT += core
