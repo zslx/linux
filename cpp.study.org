@@ -1,3 +1,121 @@
+* 目前，使用Java程序调用系统中非JNI的so文件中的内容，好像只有Java——>系统中的JNI so——>系统中的非JNI so文件，这一种方法吧？
+** 1. 编写HelloJNI.java代码，用native声明需要用C实现的函数。
+public class HelloJNI
+{
+    static
+    {//需要加载的so库文件的名称,在linux中会在上前缀"lib"+库文件的名称.
+        System.loadLibrary("goodluck");
+    }
+    // 用native声明需要用C实现的函数。
+    public native static int get();
+    public native static void set(int i);
+
+    public static void main(String[] args)
+    {
+        HelloJNI test = new HelloJNI();
+        test.set(10);
+        System.out.println(test.get());
+    }
+}
+
+# 第一步, HiJNI.java
+public class JavaToCTest
+{
+private native void sayHello();//声明本地方法.
+static
+{
+System.loadLibrary("JavaToCTest");//需要加载的so库文件的名称,在linux中会在上前缀"lib"+库文件的名称.
+}
+public static void main(String[] args)
+{
+new JavaToCTest().sayHello();
+}
+}
+
+** 2. 在HelloJNI.java文件所在目录下编译.java文件。
+javac HelloJNI.java
+** 3. 编译上一步中生成的.class文件，生成对应的.h头文件,本例中生成的头文件名为 net_wangliping_HelloJNI.h
+javah net.wangliping.HelloJNI
+
+# 第二步,在linux系统中使用如下方法生成头文件.
+javah -jni  JavaToCTest         生成的文件是: JavaToCTest.h
+
+** 4. 编写HelloJNI.c文件，实现引用第4步中生成的.h头文件，并实现其中声明的方法。
+   
+# 第三步,编写 c 代码, 该文件的名称为 JavaToCTest.c
+内容如下:
+#include <stdio.h>
+#include <jni.h>
+#include "JavaToCTest.h"
+
+JNIEXPORT void JNICALL Java_JavaToCTest_sayHello(JNIEnv *env ,jobject obj)
+{
+printf("Java To C !!!!!   \n");
+return;
+}
+
+** 5. 将第5步中编写的HelloJNI.c文件，编译成.o文件
+gcc -fPIC -D_REENTRANT -I/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/include -I/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/include/linux -c HelloJNI.c
+注:/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/include 是jni.h头文件所在的路径
+/usr/lib/jvm/java-1.5.0-sun-1.5.0.19/include/linux 是jni_md.h所在的路径
+
+# 第四步，编译生成库文件. 这个文件的文件名称为: libJavaToCTest.so
+ gcc -I/usr/lib/jvm/java-6-openjdk/include/linux -I/usr/lib/jvm/java-6-openjdk/include/ -fPIC -shared -o  libJavaToCTest.so  JavaToCTest.c
+
+** 6. 将上一步中生成的HelloJNI.o文件编译成.so库文件
+gcc -shared HelloJNI.o -o libgoodluck.so
+注:和windows下不同，linux的库文件必须是以libxxx.so形式命令的(或者 libxxx.so.y，y是版本号)，
+lib前缀是为了系统能够识别它，xxx是java代码System.loadLibrary("xxx");中引用库的名字。
+
+** 7. 将第6步中生成的libgoodluck.so文件拷贝到java的加载库LD_LIBRARY_PATH指向的路径中。
+前提是你有足够的权限，如果没有sudo权限的同学，用下面的方法：
+1) 在/home下建立一个用来存放.so库文件的目录，比如/home/swan/lib
+2) 把libgoodluck.so文件拷贝到该目录下
+3）打开Terminal，运行如下命令
+export LD_LIBRARY_PATH=/home/swan/lib
+只在当前shell下有效
+# 补充：以下方法可以直接利用绝对路径来load这个so库文件，从而无需做上述的放置path或者更改库路径的动作。
+static {
+    System.load("/home/swan/test/libgoodluck.so");
+}
+
+# 第五步: 运行java文件.
+为了让java找到此so，运行：export LD_LIBRARY_PATH=.，将当前目录加入此环境变量。
+# javac HiJNI.java
+java  JavaToCTest
+如果看到 java To C 说明调用成功.
+
+** 8. 在运行HelloJNI.class
+java net.wangliping.HelloJNI
+一切正常后，可以看到运行結果是输出了10，其值是由C语言代码实现并返回的。
+
+** JNI基本数据类型及对应的长度
+Java类型	JNI类型	描述
+boolean	jboolean	unsigned 8 bits
+byte	jbyte	signed 8 bits
+char	jchar	unsigned 16 bits
+short	jshort	signed 16 bits
+int	jint	signed 32 bits
+long	jlong	signed 64 bits
+float	jfloat	32 bits
+double	jdouble	64 bits
+void	void	void
+
+** JNI除了基本数据类型，还按照了Java的规范定义了若干引用类型：
+jobject 
+  jclass (java.lang.Class objects)
+  jstring (java.lang.String objects)
+  jarray (arrays) 
+    jobjectArray (object arrays)
+    jbooleanArray (boolean arrays)
+    jbyteArray (byte arrays)
+    jcharArray (char arrays)
+    jshortArray (short arrays)
+    jintArray (int arrays)
+    jlongArray (long arrays)
+    jfloatArray (float arrays)
+    jdoubleArray (double arrays)
+  jthrowable (java.lang.Throwable objects)
 * C和C++混合编程
 1、#ifdef _cplusplus/#endif _cplusplus及发散
 
@@ -22,7 +140,6 @@
 下面我们就以C++语言为例，看看究竟如何“发明重复使用的轮子”。
 
  
-
 第一重境界：代码重用
 最简单的当然就是代码重用了：写一段公共代码，然后放到各个项目里面去编译。
 这种方式最直观，但如果你真的在实践中如此应用，那么将面临如下问题（假设3个项目共用）：

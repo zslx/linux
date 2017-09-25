@@ -6,7 +6,42 @@ http://www.libpng.org/pub/png/libpng-manual.txt
 
 Linux下利用libjpeg实现bmp与jpg相互转换C代码
 http://www.360doc.com/content/15/1030/17/18945873_509488187.shtml
+ 
+# libpng实现内存内位图的压缩及解压缩
+在网上找了半天，关于jpeg的内存解压缩的讨论还能看见几个的，但是关于png的却一篇没看见。
+这个问题折腾了我3天2夜，为了让大家别和我一样绕半天，就把我的一点成果和心得和大家分享下吧。
 
+libpng编解码完全使用内存接口的方法，主要是通过png_set_*_fn()函数和重载I/O处理的callback回调函数来实现的，
+libpng自带的文档里已经具体介绍了，当然也可以参见我的代码。在这里我只说必须注意的两点：
+
+1. 建议在重载I/O的同时，重载error handle出错处理的相关结构和回调函数。
+不然当出现错误的时候，libpng会使用默认的出错处理函数直接Abort()退出应用程序，
+一般我们都不希望这样，而是希望返回到我们指定的流程中处理这个错误。基本步骤如下：
+
+// 重载出错处理机制：
+png_set_error_fn(png_ptr, error_ptr, png_error, png_warning);
+
+//重写png_error()和png_warning()
+void png_warning(png_structp png_ptr, png_const_charp message)
+{
+   fprintf(stdout, "libpng warning: %s/n", message);
+}
+
+void png_error(png_structp png_ptr, png_const_charp message)
+{
+   png_warning(png_ptr, message);
+   longjmp(png_ptr->jmpbuf, 1);
+}
+
+2. 在标准I/O下，我们使用过png_sig_cmp(fp, (png_size_t)0, PNG_BYTES_TO_CHECK)函数后，
+libpng要求在其他后续的编解码操作之前必须使用png_set_sig_bytes(png_ptr, PNG_BYTES_TO_CHECK)
+来通知后续操作，以修正I/O指针的偏移。但是在我们使用内存方式重载标准I/O后，一般png_sig_cmp()
+并不会改变输入(输出)内存的首址指针。如果依照标准I/O时png_set_sig_bytes()方法反而会造成后续的
+操作函数出现内存偏移错误，所以当我们用内存方式重载了标准I/O后，我们在原来标准I/O使用png_set_sig_bytes()
+函数的位置，直接使用png_set_sig_bytes(png_ptr, 0)，这样就能保证内存偏移量的一致。
+
+现在看看，其实问题很简单，也许是当时我是犯傻了。希望大家别和我一样，有疑问的欢迎和我交流，祝你们顺利！
+ 
 * openCV
   Release OpenCV 3.3.0  ．OpenCV.org．2017-08-3[引用日期2017-08-7]
   http://opencv.org/opencv-3-3.html
@@ -129,3 +164,172 @@ Linux 编译总结：
 6、 CPPFLAGS="=-fPIC"   ./configure --with-extra-includes=/home/cximage599c/cximage/jasper/include/  
 CPPFLAGS 根据实际需要添加。  
 7、 make; make install
+* PNG格式的图片是支持透明通道的，BMP格式的图片是没有透明通道的，所以当PNG格式的图片转换为BMP格式时，对于PNG图片的透明背景就需要进行特别的处理。
+
+VC++中的HBITMAP是支持透明色的，如果HBITMAP是PNG格式图片的句柄，使用CImage:Save或其它方式保存到文件时，透明背景会变成黑色。
+
+解决这个问题可以用GDI+、LIBPNG等，最简单的方式是使用CImage，直接将图像数据中的透明部分替换为白色或其他颜色。
+
+优点：处理方法简单，效率高，只需CImage；
+
+缺点：在图片拐角处产生略微锯齿；
+
+贴出我写的函数，大家可以结合自己的需要决定是否使用：
+
+HBITMAP TransparentImage(HBITMAP hBitmap)
+{
+    CImage Image;
+    Image.Attach(hBitmap);
+    int nPitch = Image.GetPitch( ) , nBPP = Image.GetBPP( );
+    LPBYTE lpBits = reinterpret_cast< LPBYTE>( Image.GetBits( ) );
+ 
+    for( int yPos = 0 ; yPos < Image.GetHeight( ) ; yPos ++ )
+    {
+        LPBYTE lpBytes = lpBits + ( yPos * nPitch );
+        PDWORD lpLines = reinterpret_cast< PDWORD >( lpBytes );
+        for( int xPos = 0 ; xPos < Image.GetWidth( ) ; xPos ++ )
+        {
+            if( nBPP == 32 && lpLines[ xPos ] >> 24 != 0x000000FF)
+            {
+                lpLines[ xPos ] |= 0xFFFFFFFF ;
+            }
+        }
+    }
+ 
+    return Image.Detach();
+}
+lpLines[ xPos ] |= 0xFFFFFFFF为要替换成的颜色，设置为自定义颜色值即可。
+
+# ===============================================================
+透明显示原理及其实现 2013-01-29 23:28:52
+分类： Android平台
+图标显示原理
+其实,Windows中随处可见的图标就是一个透明位图的典型实例。
+图标是由两个单独的位图组成的。第一个位图是由黑色（颜色位全为0）背景与彩色图标图案组成的,
+该位图将与当前屏幕显示通过异或（XOR）操作结合起来,故称其为 XOR位图。
+第二个位图是由白色（颜色位全为1）背景与黑色（颜色位全为0）图标图案组成的,
+该位图将与当前屏幕显示通过与（AND）操作结合起来,故称 其为AND位图。图标的显示是通过两个步骤完成的：
+
+　　当前屏幕显示与AND位图通过AND操作结合起来；
+　　当前屏幕显示与XOR位图通过XOR操作结合起来。
+
+1与任何数值AND操作的结果将维持原数值,而0与任何数值AND操作的结果则是0,因此在步骤1中,
+AND位图中白色（1）与屏幕显示经过 AND操作后被原色彩屏蔽,而黑色（0）则将原色彩屏蔽。
+步骤1结束后,屏幕上将留下一个黑色的图标图案。在随后的步骤2中,由于0与任何数值异或的结果都将是原数值,
+因此,XOR位图与屏幕显示经过异或操作后,位图和屏幕中的黑色部分都将被各自对应的彩色部分屏蔽。
+步骤2结束后,一个形状不规则的图标图案就出现在屏幕上了。这就是图标显示的原理。
+
+实现代码(VC)
+画透明位图通常的方法是使用遮罩。所谓遮罩就是一张黑白双色的位图，
+他和要透明的位图是对应的，遮罩描述了位图中需要透明的部分，
+透明的部分是黑色的，而不透明的是白色的，白色的部分就是透明的部分。
+假设图A是要画的透明位图，图B是遮罩，图A上是一个大写字母A,字母是红色的，背景是黑色的，图B背景是白色的，上面有一个黑色的字母A和图A的形状是一样的。 
+比如我们要在一张蓝天白云的背景上透明地画图A，就是只把红色的字母A画上去。我们可以先将图B和背景进行与操作，再把图B和背景进行或操作就可以了。
+
+BOOL DrawTransparentBmp(HDC hdc, HBITMAP hbmp, RECT &rect, COLORREF colorTrans)
+{
+ HDC dcImage, dcTrans, dcImage24;
+ HBITMAP holdbmp24, hbmp24;
+ HBITMAP holdbmp;
+ HBITMAP hbmpTrans, holdbmpTrans;
+ 
+ // 创建内存DC
+ dcImage = CreateCompatibleDC(hdc);
+ dcTrans = CreateCompatibleDC(hdc);
+ dcImage24 = CreateCompatibleDC(hdc);
+ 
+ if (dcImage == NULL || dcTrans == NULL || dcImage24 == NULL)
+ // Error: can't create compatible dc
+ return FALSE;
+ // 获取图像属性
+ BITMAP bmp;
+ GetObject(hbmp, sizeof(bmp), &bmp);
+ 
+ // 选择图片到目标DC中
+ holdbmp = (HBITMAP)SelectObject(dcImage, hbmp);
+ 
+ // 创建24位图
+PBITMAPINFO lpBmpInfo;
+ 
+ lpBmpInfo = (BITMAPINFO*) new BYTE[sizeof(BITMAPINFOHEADER)];
+ 
+ lpBmpInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+ lpBmpInfo->bmiHeader.biPlanes = 1;
+ lpBmpInfo->bmiHeader.biBitCount = 24;//nBitCount;
+ lpBmpInfo->bmiHeader.biCompression = BI_RGB;
+ lpBmpInfo->bmiHeader.biSizeImage = 0;
+ lpBmpInfo->bmiHeader.biClrUsed = 0;
+ 
+ lpBmpInfo->bmiHeader.biWidth = bmp.bmWidth;
+ lpBmpInfo->bmiHeader.biHeight = bmp.bmHeight;
+ 
+ HDC dc = CreateCompatibleDC(NULL);
+ 
+ // 生成新图片
+ LPVOID lpBits;
+ hbmp24 =::CreateDIBSection(dc,lpBmpInfo,DIB_RGB_COLORS,
+ &lpBits,NULL,0);
+ 
+ DeleteDC(dc);
+ delete lpBmpInfo;
+ 
+ if (hbmp24 == NULL)
+  // Error
+  return FALSE;
+ 
+ //将24位图片选择到位图DC
+ 
+ldbmp24 = (HBITMAP)SelectObject(dcImage24, hbmp24);
+ 
+ // 将原图绘制到24位图中
+itBlt(dcImage24, 0, 0, bmp.bmWidth, bmp.bmHeight, dcImage, 0, 0, SRCCOPY);
+ 
+ // 创建Mask图
+ hbmpTrans = CreateBitmap(bmp.bmWidth, bmp.bmHeight, 1, 1, NULL);
+ if (hbmpTrans == NULL)
+  // Error
+  return FALSE;
+ 
+ // 选择Mask图到dcTrans中
+ holdbmpTrans = (HBITMAP)SelectObject(dcTrans, hbmpTrans);
+ 
+ // 创建掩码图像(基于指定的颜色),即AND Mask图
+ORREF oldbkcolor = SetBkColor(dcImage24, colorTrans);
+ BitBlt(dcTrans, 0, 0, bmp.bmWidth, bmp.bmHeight, dcImage24, 0, 0, SRCCOPY);
+ 
+ SetBkColor(dcImage24, RGB(0,0,0));
+ COLORREF oldtextcolor = SetTextColor(dcImage24, RGB(255,255,255));
+ BitBlt(dcImage24, 0, 0, bmp.bmWidth, bmp.bmHeight, dcTrans, 0, 0, SRCAND);
+ 
+ // 去除指定颜色
+ COLORREF crOldBack, crOldText;
+crOldBack = SetBkColor(hdc, RGB(255,255,255));
+crOldText = SetTextColor(hdc, RGB(0,0,0));
+ 
+ // 显示透明图
+ StretchBlt(hdc, rect.left, rect.top, rect.right - rect.left,rect.bottom - rect.top,
+ dcTrans, 0, 0, bmp.bmWidth, bmp.bmHeight, SRCAND);
+ StretchBlt(hdc, rect.left, rect.top, rect.right - rect.left,rect.bottom - rect.top,
+ dcImage24, 0, 0, bmp.bmWidth, bmp.bmHeight, SRCPAINT);
+ 
+ // 恢复设置及其释放资源
+ SelectObject(dcImage, holdbmp);
+ 
+ SelectObject(dcImage24, holdbmp24);
+ SelectObject(dcTrans, holdbmpTrans);
+ 
+ DeleteObject(hbmp24);
+ DeleteObject(hbmpTrans);
+ 
+ SetBkColor(hdc, crOldBack);
+ SetTextColor(hdc, crOldText);
+ 
+ SetBkColor(dcImage24, oldbkcolor);
+ SetTextColor(dcImage24, oldtextcolor);
+ 
+ DeleteDC(dcImage);
+ DeleteDC(dcImage24);
+ DeleteDC(dcTrans);
+ 
+ return TRUE;
+}
