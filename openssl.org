@@ -239,7 +239,11 @@ http://blog.csdn.net/ghevinn/article/details/12909557 
   
 * 使用key和crt文件转换为tomcat用到的jks格式证书
 1. openssl pkcs12 -export -chain -CAfile gd_bundle.crt  -in server.crt -inkey server.key -out server.p12 -name "server" 
+   # Error unable to get local issuer certificate getting chain.
+   # 解决方法 # cat ca_bundle.crt /etc/ssl/certs/ca-certificates.crt > allcacerts.crt  未成功
 1. openssl pkcs12 -export -CAfile gd_bundle.crt  -in server.crt -inkey server.key -out server.p12 -name "server" 
 2. keytool -rfc -list -keystore server.p12 -storetype pkcs12 
 3. keytool -importkeystore -v -srckeystore  server.p12 -srcstoretype pkcs12 -srcstorepass changeit -destkeystore server.keystore -deststoretype jks -deststorepass changeit
 4. keytool -list -keystore server.keystore
+   
+openssl pkcs12 -export -chain -CAfile allcacerts.crt -in ./1/certificate.crt -inkey ./1/private.key -out server.keystore -name "server" -passout pass:java4https
