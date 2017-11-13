@@ -3,6 +3,43 @@
    https://nodejs.org/en/download/releases/
    https://www.nodebeginner.org/index-zh-cn.html#making-the-request-handlers-respond
    HTTPS server: http://cnodejs.org/topic/54745ac22804a0997d38b32d
+
+* ajax XMLHttpRequest   
+https://segmentfault.com/a/1190000004322487
+：在CORS标准中做了规定，默认情况下，浏览器在发送跨域请求时，不能发送任何认证信息（credentials）如"cookies"和"HTTP authentication schemes"。除非xhr.withCredentials为true（xhr对象有一个属性叫withCredentials，默认值为false）。
+
+所以根本原因是cookies也是一种认证信息，在跨域请求中，client端必须手动设置xhr.withCredentials=true，且server端也必须允许request能携带认证信息（即response header中包含Access-Control-Allow-Credentials:true），这样浏览器才会自动将cookie加在request header中。
+
+另外，要特别注意一点，一旦跨域request能够携带认证信息，server端一定不能将Access-Control-Allow-Origin设置为*，而必须设置为请求页面的域名。
+
+
+1. XMLHttpRequestEventTarget接口定义了7个事件：
+   onloadstart
+   onprogress
+   onabort
+   ontimeout
+   onerror
+   onload
+   onloadend
+2. 每一个XMLHttpRequest里面都有一个upload属性，而upload是一个XMLHttpRequestUpload对象
+3. XMLHttpRequest和XMLHttpRequestUpload都继承了同一个XMLHttpRequestEventTarget接口，所以xhr和xhr.upload都有第一条列举的7个事件
+4. onreadystatechange是XMLHttpRequest独有的事件
+所以这么一看就很清晰了：
+xhr一共有8个相关事件：7个XMLHttpRequestEventTarget事件+1个独有的onreadystatechange事件；而xhr.upload只有7个XMLHttpRequestEventTarget事件。
+
+在哪个xhr事件中注册成功回调？
+从上面介绍的事件中，可以知道若xhr请求成功，就会触发xhr.onreadystatechange和xhr.onload两个事件。
+ 那么我们到底要将成功回调注册在哪个事件中呢？我倾向于 xhr.onload事件，
+因为xhr.onreadystatechange是每次xhr.readyState变化时都会触发，
+而不是xhr.readyState=4时才触发。
+
+ xhr.onload = function () {
+    //如果请求成功
+    if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+      //do successCallback
+    }
+  }
+
    
 * C++ 插件
 http://nodejs.cn/api/addons.html

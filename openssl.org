@@ -247,3 +247,10 @@ http://blog.csdn.net/ghevinn/article/details/12909557 
 4. keytool -list -keystore server.keystore
    
 openssl pkcs12 -export -chain -CAfile allcacerts.crt -in ./1/certificate.crt -inkey ./1/private.key -out server.keystore -name "server" -passout pass:java4https
+
+# 免费SSL证书 # https://www.sslforfree.com/ 
+SSL Certificates expire after 90 days so be sure to re-generate your SSL Certificate before then otherwise your website might stop working.
+ If you use IIS and need a PFX file then follow the instructions in the following link to convert the certificate and private key file into
+ a .PFX file - http://stackoverflow.com/a/17284371 (Install openssl and run openssl pkcs12 -export -out "certificate_combined.pfx" -inkey
+ "private.key" -in "certificate.crt" -certfile ca_bundle.crt in a command prompt with path
+ set to location of downloaded certificate files or use https://www.digicert.com/util/).
