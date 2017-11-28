@@ -49,6 +49,69 @@ delete document;
 3. 
 * pdf reference
 http://www.greatbear.cn/article/id153
+** 结构
+*** File Structure
+header: %PDF-1.0/1.7
+body : objects
+Cross-reference table: xref
+trailer: dictionary,startxref,location,%%EOF
+# or
+xref-stream: /Type/XRef,stream,startxref,location,%%EOF [no xref,trailer]
+*** Document Structure
+
+** 对象
+Boolean Objects（布尔对象）
+true或false
+
+Numeric Objects（数字对象）
+PDF提供两种数字对象，整数（integer）和实数（real）。
+123 43445 +17 ?98 0（整数）
+34.5 -3.62 +123.6 4. -.002 0.0（实数）
+
+String Objects（字符串对象）
+有两种惯例（convention）：
+文字串（literal character），用()括起来，如：(This is a string)；
+十六进制数据（hexadecimal data），用<>括起来，如：<4E6F762073686D6F7A206B6120706F702E>
+
+Name Objects（名称对象）
+由一串字符唯一定义（uniquely defined）的原子符号（atomic symbol），以"/"开头。简单的例子如：
+/Outlines
+就是一个名称对象。
+
+Array Objects（数组对象）
+对象的一维（one-dimensional collection）有序集合。
+数组对象的元素可以是numbers, strings, dictionaries或其他对象，甚至是另外的数组：
+[549 3.14 false (Ralph) /SomeName]
+
+Dictionary Objects（字典对象）
+由"对象对"组成的对象表。"对象对"的第一个称为"键"，第二个称为"值"。键必须是名称对象，值可以是任何对象。如：
+<</Length 4285/Filter/FlateDecode>>
+包含了两对键-值组。
+
+Stream Objects（流对象）
+类似字符串的字节序列，但可以增量读出（read incrementally）。而字符串只能作为一个整体一次读出。对象流具有如下的形式：
+dictionary
+stream
+…Zero or more bytes…
+endstream
+stream关键字之后应该有行结束符，形式为CRLF或LF，而不能只有一个CR。
+文档建议，流数据结束之前endstream关键字之后应该有行结束符。
+dictionary中指明了流数据的字节数，不包含行结束符。
+
+Null Object（空对象）
+空对象用null表示，引用一个不存在的对象相当于引用了null对象。如果将一个dictionary对象的条目值设为null，等同于忽略该条目。
+
+Indirect Objects（间接对象）
+"间接对象"，在字面意义上理解有些别扭。间接对象有如下的定义形式：
+12 0 obj
+(Brillig)
+endobj
+12是对象号，0是版本号。之所以称其为间接对象，是因为可以使用对象号和版本号引用它。如：
+/Outlines 1 0 R
+R为refer之意。似乎“间接对象”理解为“对对象的间接引用”比较合适，然而文档又指出上述“间接对象”的定义形式。总之，间接对象与上述对象并列。
+关于版本号，对于一个新建的文档，任何对象的版本号是0。简单的说，版本号记录利用某个对象号创建对象的次数。版本号在如下过程中递增：
+对象被删除后其定义仍然保留在文档中，但是交叉引用表中用于定位该对象的行改变，使用状态变为删除（f），且版本号加1。
+待使用该被删对象的对象号创建一个新的对象时，可重新利用交叉引用表中的相应行，新对象的版本号即该行所记录的版本号。
 ** 增量更新程序类
 1. PDF文件打开和解析
 2. 增量更新部分的生成：xref, trailer。计算偏移量
@@ -80,7 +143,7 @@ http://www.greatbear.cn/article/id153
 
 *** 26 0 obj /AcroForm, FDF(Forms Data Format)
 	# The contents and properties of a document’s interactive form shall be defined
-	# by an interactive form dictionarythat shall be referenced from the AcroForm entry in the document catalogue.
+	# by an interactive form dictionary that shall be referenced from the AcroForm entry in the document catalogue.
 	<</Fields[30 0 R]/DA(/Helv 0 Tf 0 g )/DR<</Font<</AdobeSongStd-Light 31 0 R/Helv 28 0 R/ZaDb 27 0 R>>
     /Encoding<</PDFDocEncoding 29 0 R>>>>>>endobj
 1. DR (Optional) A resource dictionary.
@@ -207,67 +270,6 @@ Root：根对象相关Encrypt：加密相关等。
 显然尾节点的trailer不含Perv项。
 读取交叉引用表应遍历此链表，且对于同一个对象的相应行，最近更新的那些行才是有效的。
 至此可以清晰的理解“增量”的含义，不得不说这是处理修改非常高效的方式。
-
-** 结构
-*** File Structure
-header: %PDF-1.0/1.7
-body : objects
-Cross-reference table: xref
-trailer: dictionary,startxref,location,%%EOF
-# or
-xref-stream: /Type/XRef,stream,startxref,location,%%EOF [no xref,trailer]
-*** Document Structure
-
-** 对象
-Boolean Objects（布尔对象）
-true或false
-
-Numeric Objects（数字对象）
-PDF提供两种数字对象，整数（integer）和实数（real）。
-123 43445 +17 ?98 0（整数）
-34.5 -3.62 +123.6 4. -.002 0.0（实数）
-
-String Objects（字符串对象）
-有两种惯例（convention）：
-文字串（literal character），用()括起来，如：(This is a string)；
-十六进制数据（hexadecimal data），用<>括起来，如：<4E6F762073686D6F7A206B6120706F702E>
-
-Name Objects（名称对象）
-由一串字符唯一定义（uniquely defined）的原子符号（atomic symbol），以"/"开头。简单的例子如：
-/Outlines
-就是一个名称对象。
-
-Array Objects（数组对象）
-对象的一维（one-dimensional collection）有序集合。
-数组对象的元素可以是numbers, strings, dictionaries或其他对象，甚至是另外的数组：
-[549 3.14 false (Ralph) /SomeName]
-
-Dictionary Objects（字典对象）
-由"对象对"组成的对象表。"对象对"的第一个称为"键"，第二个称为"值"。键必须是名称对象，值可以是任何对象。如：
-<</Length 4285/Filter/FlateDecode>>
-包含了两对键-值组。
-
-Stream Objects（流对象）
-类似字符串的字节序列，但可以增量读出（read incrementally）。而字符串只能作为一个整体一次读出。对象流具有如下的形式：
-dictionary
-stream
-…Zero or more bytes…
-endstream
-stream关键字之后应该有行结束符，形式为CRLF或LF，而不能只有一个CR。文档建议，流数据结束之前endstream关键字之后应该有行结束符。dictionary中指明了流数据的字节数，不包含行结束符。
-
-Null Object（空对象）
-空对象用null表示，引用一个不存在的对象相当于引用了null对象。如果将一个dictionary对象的条目值设为null，等同于忽略该条目。
-
-Indirect Objects（间接对象）
-"间接对象"，在字面意义上理解有些别扭。间接对象有如下的定义形式：
-12 0 obj
-(Brillig)
-endobj
-12是对象号，0是版本号。之所以称其为间接对象，是因为可以使用对象号和版本号引用它。如：
-/Outlines 1 0 R
-R为refer之意。似乎“间接对象”理解为“对对象的间接引用”比较合适，然而文档又指出上述“间接对象”的定义形式。总之，间接对象与上述对象并列。
-关于版本号，对于一个新建的文档，任何对象的版本号是0。简单的说，版本号记录利用某个对象号创建对象的次数。版本号在如下过程中递增：
-对象被删除后其定义仍然保留在文档中，但是交叉引用表中用于定位该对象的行改变，使用状态变为删除（f），且版本号加1。待使用该被删对象的对象号创建一个新的对象时，可重新利用交叉引用表中的相应行，新对象的版本号即该行所记录的版本号。
 
 * doit: PDF文件格式 sample, 见 PDF reference 的附录
 # 注释
@@ -576,3 +578,5 @@ endobj	// 对象定义开始
 
 将PDF每一页的内容（包括图像和文字）转成一个图像文件，从感觉上类似于对PDF Reader的显示区进行截屏。
 从PDF文件里找出原始图像数据流，然后转存成对应的图像文件。
+* TODO 2017-11-27 11:26:29 遍历 PDF 文档中的签名
+
