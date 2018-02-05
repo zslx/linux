@@ -204,3 +204,13 @@ wss.on( 'connection', function ( wsConnect ) {
   });  
   console.log("listening on port 80")  
   server.listen(80);
+* ES6, ES2015
+https://babeljs.cn/learn-es2015/
+http://www.ruanyifeng.com/blog/2016/01/babel.html
+http://es6.ruanyifeng.com/
+* chrome 插件
+  https://developer.chrome.com/extensions/getstarted.html
+  # 不翻墙看不了啊
+  http://www.cnblogs.com/liuxianan/p/chrome-plugin-develop.html
+
+
